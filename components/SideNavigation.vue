@@ -1,11 +1,11 @@
 <template>
-  <nav>
-    <ul class="space-y-2">
+  <nav class="w-10/12 h-full flex items-center justify-center">
+    <ul class="space-y-4">
       <li v-for="(item, index) in navItems" :key="index">
         <NuxtLink
           :to="item.to"
-          class="block py-2 px-4 rounded-md hover:bg-gray-200 transition-colors"
-          active-class="bg-primary-500 text-white hover:bg-primary-600"
+          class="header3 hover:text-secondary-accent text-disabled transition-colors"
+          active-class="text-primary-accent hover:bg-primary-600"
         >
           {{ item.label }}
         </NuxtLink>
@@ -17,6 +17,7 @@
 <script setup lang="ts">
 const navItems = [
   { label: "Home", to: "/" },
+  { label: "Highlights", to: "/highlights" },
   { label: "Activities", to: "/activities" },
   { label: "Teachers", to: "/teachers" },
   { label: "About Us", to: "/about" },
