@@ -159,9 +159,26 @@
         <h2 class="text-3xl font-bold mb-8 text-center text-primary-text">
           Featured Classes
         </h2>
-        <div class="grid md:grid-cols-3 gap-6">
+        <div v-if="activitiesLoading" class="text-center py-8">
+          <p class="text-secondary-text">Loading featured classes...</p>
+        </div>
+        <div v-else-if="activitiesError" class="text-center py-8 text-red-500">
+          <p>
+            There was an error loading the featured classes:
+            {{ activitiesError }}
+          </p>
+        </div>
+        <div
+          v-else-if="highlightedClassCards.length === 0"
+          class="text-center py-8"
+        >
+          <p class="text-secondary-text">
+            No featured classes available at the moment.
+          </p>
+        </div>
+        <div v-else class="grid md:grid-cols-3 gap-6">
           <UiClassCard
-            v-for="classItem in featuredClasses"
+            v-for="classItem in highlightedClassCards"
             :id="classItem.id"
             :key="classItem.id"
             :title="classItem.title"
@@ -188,15 +205,26 @@
           />
         </div>
 
-        <UiTeachersCarousel v-slot="{ cardWidth }">
+        <div v-if="teachersLoading" class="text-center py-8">
+          <p class="text-secondary-text">Loading teachers...</p>
+        </div>
+        <div v-else-if="teachersError" class="text-center py-8 text-red-500">
+          <p>There was an error loading the teachers: {{ teachersError }}</p>
+        </div>
+        <div v-else-if="teachers.length === 0" class="text-center py-8">
+          <p class="text-secondary-text">
+            No teachers available at the moment.
+          </p>
+        </div>
+        <UiTeachersCarousel v-else v-slot="{ cardWidth }">
           <UiTeacherCard
             v-for="teacher in teachers"
             :id="teacher.id"
             :key="teacher.id"
-            :name="teacher.name"
+            :name="teacher.fullName"
             :image-url="teacher.imageUrl"
             :card-width="cardWidth"
-            @click="navigateToTeacherDetail"
+            @click="navigateToTeacherDetail(teacher.id)"
           />
         </UiTeachersCarousel>
       </div>
@@ -232,147 +260,99 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { ClassCardItem } from "../types/activities.ts";
+import { ref, onMounted, computed } from "vue";
+import { useActivities } from "../composables/useActivities";
+import { useTeachers } from "../composables/useTeachers";
+import { navigateTo } from "nuxt/app";
+import type { TeacherCardItem } from "../types/teachers";
 
 // Define the arrow color directly
 const arrowColor = ref("var(--color-primary-text)");
 
-// Static data for featured classes with multiple schedules
-const featuredClasses = ref<ClassCardItem[]>([
-  {
-    id: 1,
-    title: "Morning Meditation",
-    description: "Start your day with mindfulness and intention",
-    schedules: [
-      {
-        time: "7:00",
-        days: ["Monday", "Wednesday", "Friday"],
-        professor: { id: 1, name: "Emma Wilson" },
-      },
-      {
-        time: "8:15",
-        days: ["Tuesday", "Thursday"],
-        professor: { id: 2, name: "Michael Chen" },
-      },
-    ],
-    image: "https://picsum.photos/200/300",
-    colorVariant: "primary",
-  },
-  {
-    id: 2,
-    title: "Gentle Flow",
-    description: "Reconnect with your body through gentle movements",
-    schedules: [
-      {
-        time: "18:00",
-        days: ["Tuesday", "Thursday"],
-        professor: { id: 3, name: "Sarah Johnson" },
-      },
-    ],
-    image: "https://picsum.photos/200/300",
-    colorVariant: "secondary",
-  },
-  {
-    id: 3,
-    title: "Deep Stretch",
-    description: "Release tension and improve flexibility",
-    schedules: [
-      {
-        time: "17:00",
-        days: ["Wednesday"],
-        professor: { id: 1, name: "Emma Wilson" },
-      },
-      {
-        time: "10:30",
-        days: ["Saturday"],
-        professor: { id: 4, name: "David Rodriguez" },
-      },
-      {
-        time: "19:15",
-        days: ["Monday", "Friday"],
-        professor: { id: 2, name: "Michael Chen" },
-      },
-    ],
-    image: "https://picsum.photos/200/300",
-    colorVariant: "third",
-  },
-]);
+// Use the activities composable
+const {
+  highlightedActivities,
+  isLoading: activitiesLoading,
+  error: activitiesError,
+  fetchHighlightedActivities,
+  activityToClassCard,
+} = useActivities();
 
-// Static data for teachers carousel
-const teachers = ref([
-  {
-    id: 1,
-    name: "Emma Wilson",
-    imageUrl:
-      "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=500&auto=format&fit=crop",
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    imageUrl:
-      "https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=500&auto=format&fit=crop",
-  },
-  {
-    id: 3,
-    name: "Sarah Johnson",
-    imageUrl:
-      "https://images.unsplash.com/photo-1529693662653-9d480530a697?q=80&w=500&auto=format&fit=crop",
-  },
-  {
-    id: 4,
-    name: "David Rodriguez",
-    imageUrl:
-      "https://images.unsplash.com/photo-1597586124394-fbd6ef244026?q=80&w=500&auto=format&fit=crop",
-  },
-  {
-    id: 5,
-    name: "Aisha Patel",
-    imageUrl:
-      "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=500&auto=format&fit=crop",
-  },
-  {
-    id: 6,
-    name: "James Taylor",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=500&auto=format&fit=crop",
-  },
-  {
-    id: 7,
-    name: "Olivia Brown",
-    imageUrl:
-      "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=500&auto=format&fit=crop",
-  },
-  {
-    id: 8,
-    name: "Liam Smith",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=500&auto=format&fit=crop",
-  },
-]);
+// Use the teachers composable
+const {
+  teachers: teachersData,
+  isLoading: teachersLoading,
+  error: teachersError,
+  fetchTeachers,
+  teacherToCardItem,
+} = useTeachers();
+
+// Transform highlighted activities into class cards with proper formatting, randomly selecting 3
+const highlightedClassCards = computed(() => {
+  const activities = highlightedActivities.value;
+
+  // If we have 3 or fewer activities, use them all
+  if (activities.length <= 3) {
+    return activities.map((activity, index) =>
+      activityToClassCard(activity, index)
+    );
+  }
+
+  // Otherwise, randomly select 3 activities
+  const randomActivities = [];
+  const usedIndices = new Set();
+
+  // Select 3 unique random activities
+  while (
+    randomActivities.length < 3 &&
+    randomActivities.length < activities.length
+  ) {
+    const randomIndex = Math.floor(Math.random() * activities.length);
+
+    // Make sure we don't select the same activity twice
+    if (!usedIndices.has(randomIndex)) {
+      usedIndices.add(randomIndex);
+      randomActivities.push(activities[randomIndex]);
+    }
+  }
+
+  // Transform selected activities into class cards
+  return randomActivities.map((activity, index) =>
+    activityToClassCard(activity, index)
+  );
+});
+
+// Transform teacher data to card items for the carousel
+const teachers = computed<TeacherCardItem[]>(() => {
+  return teachersData.value.map((teacher) => teacherToCardItem(teacher));
+});
+
+// Fetch highlighted activities and teachers when component mounts
+onMounted(async () => {
+  await Promise.all([fetchHighlightedActivities(), fetchTeachers()]);
+});
 
 // Handle Learn More button click
 const handleLearnMore = (id: number): void => {
   console.log(`Learn more about class with ID: ${id}`);
+  // Will be implemented for navigation to detail page
+  // navigateTo(`/activities/${id}`);
 };
 
 // Navigation functions for the teachers section
 const navigateToTeachers = () => {
   console.log("Navigating to all teachers page");
-  // Will be implemented when data fetching is added
-  // navigateTo('/teachers');
+  navigateTo("/teachers");
 };
 
 const navigateToTeacherDetail = (id: number) => {
   console.log(`Navigating to teacher with ID: ${id}`);
-  // Will be implemented when data fetching is added
-  // navigateTo(`/teachers/${id}`);
+  navigateTo(`/teachers/${id}`);
 };
 
 const navigateToActivities = () => {
   console.log("Navigating to all activities page");
-  // Will be implemented when data fetching is added
-  // navigateTo('/activities');
+  navigateTo("/activities");
 };
 
 // Handle Sign Up button click
