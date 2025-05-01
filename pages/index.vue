@@ -335,8 +335,7 @@ onMounted(async () => {
 // Handle Learn More button click
 const handleLearnMore = (id: number): void => {
   console.log(`Learn more about class with ID: ${id}`);
-  // Will be implemented for navigation to detail page
-  // navigateTo(`/activities/${id}`);
+  navigateTo(`/activitie/${id}`); // Added navigation and changed to /activitie/${id}
 };
 
 // Navigation functions for the teachers section
@@ -347,7 +346,7 @@ const navigateToTeachers = () => {
 
 const navigateToTeacherDetail = (id: number) => {
   console.log(`Navigating to teacher with ID: ${id}`);
-  navigateTo(`/teachers/${id}`);
+  navigateTo(`/teacher/${id}`); // Changed from /teachers/${id} to /teacher/${id}
 };
 
 const navigateToActivities = () => {
