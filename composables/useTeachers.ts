@@ -33,6 +33,8 @@ interface RawActivityData {
   short_desc: string;
   images: string[];
   highlighted: boolean;
+  difficulty_level: number; // Adding difficulty level field
+  icon_id: number; // Adding icon ID field
   [key: string]: unknown;
 }
 
@@ -135,6 +137,8 @@ export function useTeachers() {
           short_desc: ta.activity.short_desc,
           images: ta.activity.images,
           highlighted: ta.activity.highlighted,
+          difficulty_level: ta.activity.difficulty_level || 1, // Default to beginner (1) if not specified
+          icon_id: ta.activity.icon_id || 1, // Default to icon 1 if not specified
           schedules: [], // We'll handle this separately if needed
         },
       })) || [];
