@@ -1,8 +1,41 @@
 <template>
-  <div>
+  <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-6">Activities</h1>
-    <p>Discover our range of activities and classes.</p>
+    <p class="mb-6">Discover our range of activities and classes.</p>
+
+    <div v-if="isLoading" class="py-4">Loading activities...</div>
+    <div v-else-if="error" class="py-4 text-red-500">
+      Error: {{ error.message }}
+    </div>
+    <div v-else-if="activities.length === 0" class="py-4">
+      No activities found.
+    </div>
+    <div v-else>
+      <!-- Display the formatted JSON -->
+      <div class="bg-gray-100 p-4 rounded-lg overflow-auto max-h-[600px]">
+        <pre class="text-sm whitespace-pre-wrap">{{
+          formattedActivitiesData
+        }}</pre>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted, computed } from "vue";
+import { useActivities } from "../composables/useActivities";
+
+// Use the activities composable
+const { activities, isLoading, error, fetchActivities } = useActivities();
+
+// Format the activities data as a nicely indented JSON string
+const formattedActivitiesData = computed(() => {
+  if (!activities.value || activities.value.length === 0) return "";
+  return JSON.stringify(activities.value, null, 2);
+});
+
+// Fetch all activities when component mounts
+onMounted(async () => {
+  await fetchActivities();
+});
+</script>
