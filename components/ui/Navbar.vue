@@ -8,7 +8,7 @@
         <nuxt-img src="/images/logo.svg" alt="Logo" width="156" height="156" />
       </NuxtLink>
 
-      <h1 class="header1 text-primary-accent">Lotus Haven</h1>
+      <h1 class="header2 text-primary-accent">Lotus Haven</h1>
     </div>
     <!-- Navigation Links -->
     <SideNavigation />

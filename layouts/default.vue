@@ -3,7 +3,7 @@
     <!-- Left Sidebar -->
     <UiNavbar />
     <!-- Main Content -->
-    <div class="flex-1 p-6 overflow-auto">
+    <div class="flex-1 overflow-auto">
       <slot />
     </div>
   </div>
