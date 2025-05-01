@@ -12,13 +12,13 @@
       <h3 class="text-xl font-semibold mb-2">{{ title }}</h3>
       <p class="text-secondary-text mb-4 flex-grow">{{ description }}</p>
       <div class="flex justify-between items-center">
-        <span class="font-medium text-primary-accent">{{ time }}</span>
-        <button
-          class="text-sm bg-primary-accent text-white py-1 px-3 rounded hover:bg-secondary-accent transition-colors"
-          @click="handleLearnMore"
-        >
-          Learn More
-        </button>
+        <span class="font-medium text-primary-accent">
+          <span v-if="sessionCount > 0"
+            >{{ sessionCount }} sessions available</span
+          >
+          <span v-else>Check schedule</span>
+        </span>
+        <UiButton text="Learn More" size="sm" @click="handleLearnMore" />
       </div>
     </div>
   </div>
@@ -26,6 +26,16 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+
+// Define the type for a schedule
+interface Schedule {
+  time: string;
+  days: string[];
+  professor?: {
+    id: number;
+    name: string;
+  };
+}
 
 const props = defineProps({
   image: {
@@ -40,9 +50,9 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  time: {
-    type: String,
-    required: true,
+  schedules: {
+    type: Array as () => Schedule[],
+    default: () => [],
   },
   id: {
     type: [String, Number],
@@ -58,6 +68,11 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["learnMore"]);
+
+// Calculate the number of available sessions
+const sessionCount = computed(() => {
+  return props.schedules?.length || 0;
+});
 
 // Dynamic background color class based on colorVariant prop
 const backgroundColorClass = computed(() => {

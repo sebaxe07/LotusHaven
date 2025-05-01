@@ -14,6 +14,9 @@
   --color-secondary-accent: #5e7e79;
   --color-third-accent: #cfdad9;
   --color-disabled: #b1bdbb;
+
+  /* Rounded Corners */
+  --radius-base: 0.625rem; /* 10px */
 }
 
 @layer base {
