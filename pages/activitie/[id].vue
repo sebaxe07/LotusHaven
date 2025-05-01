@@ -9,6 +9,14 @@
       Error: {{ error.message }}
     </div>
     <div v-else-if="!selectedActivity" class="py-4">Activity not found.</div>
+    <div v-else>
+      <!-- Display the formatted JSON -->
+      <div class="bg-gray-100 p-4 rounded-lg overflow-auto max-h-[500px]">
+        <pre class="text-sm whitespace-pre-wrap">{{
+          formattedActivityData
+        }}</pre>
+      </div>
+    </div>
 
     <NuxtLink
       to="/activities"
@@ -31,6 +39,12 @@ const { selectedActivity, isLoading, error, fetchActivityById } =
 // Get the route to access parameters
 const route = useRoute();
 const activityId = computed(() => route.params.id);
+
+// Format the activity data as a nicely indented JSON string
+const formattedActivityData = computed(() => {
+  if (!selectedActivity.value) return "";
+  return JSON.stringify(selectedActivity.value, null, 2);
+});
 
 // Fetch activity data when the component mounts
 onMounted(async () => {

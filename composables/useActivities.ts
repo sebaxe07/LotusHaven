@@ -54,7 +54,7 @@ export function useActivities() {
           TeacherActivities(
             time,
             days,
-            teacher:Teachers(id, name)
+            teacher:Teachers(teacher_id, name)
           )
         `);
 
