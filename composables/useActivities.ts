@@ -187,6 +187,7 @@ export function useActivities() {
     return {
       id: activity.id,
       title: activity.title,
+      short_desc: activity.short_desc,
       description: activity.description,
       schedules: activity.schedules,
       image:

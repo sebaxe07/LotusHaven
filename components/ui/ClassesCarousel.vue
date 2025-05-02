@@ -3,26 +3,46 @@
     <!-- Left arrow navigation - only visible when not at left edge -->
     <div
       v-if="canScrollLeft"
-      class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 transition-opacity"
+      class="absolute left-2 top-1/2 -translate-y-1/2 z-10 transition-opacity"
       :class="{ 'opacity-0': !canScrollLeft, 'opacity-100': canScrollLeft }"
     >
       <UiCarouselArrow direction="left" :size="40" @click="scrollLeft" />
     </div>
 
     <!-- Carousel container with horizontal scrolling -->
-    <div
-      ref="carouselContainer"
-      class="carousel-container flex overflow-x-auto py-4 carousel-no-scrollbar snap-x"
-      @wheel="onWheel"
-      @scroll="handleScroll"
-    >
-      <slot v-bind="{ cardWidth }"></slot>
+    <div class="px-10 overflow-hidden">
+      <div
+        ref="carouselContainer"
+        class="carousel-container flex overflow-x-auto py-4 carousel-no-scrollbar snap-x"
+        @wheel="onWheel"
+        @scroll="handleScroll"
+      >
+        <div
+          v-for="activity in activities"
+          :key="activity.id"
+          :style="{ width: cardWidth, minWidth: cardWidth }"
+          class="px-2 snap-start"
+        >
+          <UiClassCard
+            :id="activity.id"
+            :title="activity.title"
+            :description="
+              activity.short_desc ||
+              activity.description.substring(0, 120) + '...'
+            "
+            :image="activity.image"
+            :schedules="activity.schedules"
+            :color-variant="activity.colorVariant"
+            @learn-more="$emit('learn-more', activity.id)"
+          />
+        </div>
+      </div>
     </div>
 
     <!-- Right arrow navigation - only visible when not at right edge -->
     <div
       v-if="canScrollRight"
-      class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 transition-opacity"
+      class="absolute right-2 top-1/2 -translate-y-1/2 z-10 transition-opacity"
       :class="{ 'opacity-0': !canScrollRight, 'opacity-100': canScrollRight }"
     >
       <UiCarouselArrow direction="right" :size="40" @click="scrollRight" />
@@ -32,6 +52,18 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import type { ClassCardItem } from "../../types/activities";
+
+defineProps({
+  activities: {
+    type: Array as () => ClassCardItem[],
+    required: true,
+  },
+});
+
+defineEmits<{
+  "learn-more": [id: number];
+}>();
 
 const carouselContainer = ref<HTMLElement | null>(null);
 const SCROLL_SENSITIVITY = 1.2;
@@ -47,24 +79,30 @@ const screenWidth = ref(
 
 // Determine number of cards to show based on screen width
 const cardsToShow = computed(() => {
-  if (screenWidth.value < 640) return 1.5; // Mobile: 1.5 cards
-  if (screenWidth.value < 768) return 2; // Small tablet: 2 cards
-  if (screenWidth.value < 1024) return 3; // Tablet: 3 cards
-  return 4; // Desktop: exactly 4 cards
+  if (screenWidth.value < 640) return 1.2; // Mobile: 1.2 cards
+  if (screenWidth.value < 768) return 1.5; // Small tablet: 1.5 cards
+  if (screenWidth.value < 1024) return 2; // Tablet: 2 cards
+  if (screenWidth.value < 1280) return 2.5; // Small desktop: 2.5 cards
+  return 3; // Desktop: 3 cards
 });
 
 // Calculate card width as percentage, accounting for margins
 const cardWidth = computed(() => {
-  // Account for the margins (mx-2 = 0.5rem on each side = 1rem total per card)
+  // Account for the margins (px-2 = 0.5rem on each side = 1rem total per card)
+  // Also account for the padding added for arrow space (px-10 = 2.5rem total)
   const containerWidth = 100; // 100%
 
-  // For exact fit, calculate width considering the margins
-  return `${containerWidth / cardsToShow.value}%`;
+  // Calculate available space percentage accounting for padding
+  return `calc(${containerWidth / cardsToShow.value}% - 1rem)`;
 });
 
 // Handle screen resize
 const handleResize = () => {
   screenWidth.value = window.innerWidth;
+  // Re-check scroll state on resize
+  setTimeout(() => {
+    handleScroll();
+  }, 100);
 };
 
 // Handle scroll events to update arrow visibility
@@ -74,12 +112,12 @@ const handleScroll = () => {
   const container = carouselContainer.value;
 
   // Check if we can scroll left (not at the start)
-  canScrollLeft.value = container.scrollLeft > 0;
+  canScrollLeft.value = container.scrollLeft > 5; // Small threshold to account for rounding errors
 
   // Check if we can scroll right (not at the end)
-  // Add small buffer (1px) to account for rounding errors
+  // Add small buffer (5px) to account for rounding errors
   canScrollRight.value =
-    container.scrollLeft < container.scrollWidth - container.clientWidth - 1;
+    container.scrollLeft < container.scrollWidth - container.clientWidth - 5;
 };
 
 // Function to scroll left with the arrow
@@ -108,7 +146,7 @@ const scrollRight = () => {
   }
 };
 
-// Wheel handler that prevents default if we should handle the scroll
+// Improved wheel handler with better cross-device compatibility
 const onWheel = (e: WheelEvent) => {
   if (!carouselContainer.value) return;
 
@@ -117,30 +155,29 @@ const onWheel = (e: WheelEvent) => {
 
   // Check if we're at the edges - let vertical scrolling happen there
   if (
-    (e.deltaY > 0 && container.scrollLeft >= maxScrollLeft) ||
-    (e.deltaY < 0 && container.scrollLeft <= 0)
+    (e.deltaY > 0 && container.scrollLeft >= maxScrollLeft - 5) || // Near right edge
+    (e.deltaY < 0 && container.scrollLeft <= 5) // Near left edge
   ) {
     return; // At edge, let default vertical scroll happen
   }
 
-  // For all other cases, we'll handle the scrolling horizontally
+  // Prevent default to avoid both vertical and horizontal scrolling simultaneously
   e.preventDefault();
 
   // Use dynamic sensitivity based on how fast the user is scrolling
   const deltaMagnitude = Math.abs(e.deltaY);
   const dynamicSensitivity =
-    SCROLL_SENSITIVITY * (1 + Math.min(2, deltaMagnitude / 100));
+    SCROLL_SENSITIVITY * (1 + Math.min(1.5, deltaMagnitude / 100));
 
+  // Apply smooth scrolling directly
   container.scrollLeft += e.deltaY * dynamicSensitivity;
 };
 
 onMounted(() => {
   const container = carouselContainer.value;
   if (container) {
-    // Remove the wheel event from the template and use direct listener
+    // Add passive: false to properly prevent default
     container.addEventListener("wheel", onWheel, { passive: false });
-    // Remove the smooth-scroll behavior which can cause lag
-    container.classList.remove("scroll-smooth");
   }
 
   // Add resize listener
@@ -151,7 +188,7 @@ onMounted(() => {
   // Initial check for scroll arrows
   setTimeout(() => {
     handleScroll();
-  }, 100); // Small delay to ensure content is rendered
+  }, 200); // Increased delay to ensure content is rendered
 });
 
 onBeforeUnmount(() => {
@@ -163,6 +200,20 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Add smooth scrolling behavior to container while avoiding lag */
+.carousel-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS devices */
+}
+
 .carousel-no-scrollbar {
   -ms-overflow-style: none !important; /* IE and Edge */
   scrollbar-width: none !important; /* Firefox */

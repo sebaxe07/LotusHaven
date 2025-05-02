@@ -248,11 +248,6 @@
             size="md"
             @click="signUp"
           />
-          <UiButton
-            text="Contact Us"
-            color="outline-white"
-            @click="$router.push('/contact')"
-          />
         </div>
       </div>
     </section>
@@ -357,7 +352,6 @@ const navigateToActivities = () => {
 // Handle Sign Up button click
 const signUp = () => {
   console.log("Opening sign up form");
-  // This will be implemented with actual sign up functionality
-  // For now it just logs to console
+  navigateTo("/signup");
 };
 </script>
