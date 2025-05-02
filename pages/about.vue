@@ -19,16 +19,18 @@
             <UiDecorativeIllustration />
           </div>
           <div>
-            <h2 class="header2 text-primary-text mb-6">Welcome to Lotus Haven</h2>
+            <h2 class="header2 text-primary-text mb-6">Our Philosophy</h2>
             <p class="paragraph text-secondary-text mb-4">
-              At Lotus Haven, we believe in creating a space where mind, body, and spirit 
-              align in perfect harmony. Our studio is more than just a place for yoga—it's 
-              a sanctuary where you can disconnect from the outside world and reconnect 
-              with yourself.
+              Since our founding, we've witnessed countless transformations as students discover 
+              their inner strength and peace through our holistic approach to wellness. Our 
+              experienced instructors draw from diverse yogic traditions, creating an 
+              environment where ancient wisdom meets modern practice.
             </p>
             <p class="paragraph text-secondary-text">
-              Founded with a vision of making yoga accessible to everyone, we've cultivated 
-              a community that celebrates growth, mindfulness, and personal transformation.
+              We believe that true wellness emerges from understanding and nurturing the 
+              connection between physical practice, mindful breathing, and spiritual growth. 
+              Through our carefully crafted programs and supportive community, we help you 
+              develop not just flexibility and strength, but also mental clarity and emotional balance.
             </p>
           </div>
         </div>
