@@ -16,14 +16,7 @@
         <!-- Introduction Section with Image -->
         <div class="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <NuxtImg 
-              src="/images/whoarewe1.png"
-              alt="About Lotus Haven"
-              class="rounded-lg shadow-lg w-full"
-              format="webp"
-              quality="90"
-              loading="eager"
-            />
+            <UiDecorativeIllustration />
           </div>
           <div>
             <h2 class="header2 text-primary-text mb-6">Welcome to Lotus Haven</h2>
