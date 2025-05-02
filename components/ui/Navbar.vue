@@ -196,6 +196,9 @@
 </template>
 
 <script setup>
+import { ref, watch, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
+
 const mobileMenuOpen = ref(false);
 
 // Close mobile menu when route changes
@@ -207,7 +210,7 @@ watch(
 );
 
 // Added client-side script for scroll handling
-if (import.meta.client) {
+if (typeof window !== "undefined") {
   // Create a debounced version of the scroll handler
   const closeMenuOnScroll = () => {
     if (mobileMenuOpen.value) {
@@ -262,7 +265,7 @@ if (import.meta.client) {
   transition: filter 0.2s ease;
 }
 
-.social-icon-link:hover .social-icon {
+social-icon-link:hover .social-icon {
   filter: brightness(0) invert(1); /* Make icon white on hover */
 }
 </style>
