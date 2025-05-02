@@ -20,6 +20,7 @@ export interface Activity {
 }
 
 export interface ClassCardItem {
+  short_desc: string;
   id: number;
   title: string;
   description: string;
