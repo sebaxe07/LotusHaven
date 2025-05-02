@@ -246,7 +246,7 @@
             text="Sign Up Now"
             color="white"
             size="md"
-            @click="signUp"
+            @click="contactUs"
           />
         </div>
       </div>
@@ -330,7 +330,7 @@ onMounted(async () => {
 // Handle Learn More button click
 const handleLearnMore = (id: number): void => {
   console.log(`Learn more about class with ID: ${id}`);
-  navigateTo(`/activitie/${id}`); // Added navigation and changed to /activitie/${id}
+  navigateTo(`/activity/${id}`); // Added navigation and changed to /activity/${id}
 };
 
 // Navigation functions for the teachers section
@@ -350,8 +350,8 @@ const navigateToActivities = () => {
 };
 
 // Handle Sign Up button click
-const signUp = () => {
+const contactUs = () => {
   console.log("Opening sign up form");
-  navigateTo("/signup");
+  navigateTo("/contact");
 };
 </script>

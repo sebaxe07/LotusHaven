@@ -259,7 +259,7 @@ const randomizeFeaturedActivity = () => {
 
 // Navigate to activity details page
 const navigateToActivity = (id: number) => {
-  router.push(`/activitie/${id}`);
+  router.push(`/activity/${id}`);
 };
 
 // Retry fetching in case of an error
