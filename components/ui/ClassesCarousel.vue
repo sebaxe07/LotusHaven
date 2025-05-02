@@ -13,7 +13,7 @@
     <div class="px-10 overflow-hidden">
       <div
         ref="carouselContainer"
-        class="carousel-container flex overflow-x-auto py-4 scrollbar-hide snap-x"
+        class="carousel-container flex overflow-x-auto py-4 carousel-no-scrollbar snap-x"
         @wheel="onWheel"
         @scroll="handleScroll"
       >
@@ -212,5 +212,26 @@ onBeforeUnmount(() => {
 .carousel-container {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS devices */
+}
+
+.carousel-no-scrollbar {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+
+.carousel-no-scrollbar::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari and Opera */
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Override global scrollbar styles specifically for this component */
+.carousel-no-scrollbar::-webkit-scrollbar-track,
+.carousel-no-scrollbar::-webkit-scrollbar-thumb,
+.carousel-no-scrollbar::-webkit-scrollbar-thumb:hover {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 </style>
