@@ -12,9 +12,10 @@
         loading="lazy"
       />
       <div
-        class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 text-white"
+        class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-4 text-white"
       >
         <h4 class="font-semibold text-lg">{{ name }}</h4>
+        <p v-if="description" class="text-sm text-white/90 mt-1">{{ description }}</p>
       </div>
     </div>
   </div>
@@ -25,11 +26,13 @@ interface TeacherCardProps {
   id: number;
   name: string;
   imageUrl: string;
+  description?: string;
   cardWidth?: string;
 }
 
 const props = withDefaults(defineProps<TeacherCardProps>(), {
   cardWidth: "25%", // Default to showing 4 cards
+  description: ""
 });
 
 const emit = defineEmits(["click"]);
