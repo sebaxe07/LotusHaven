@@ -2,11 +2,12 @@
   <div class="min-h-screen">
     <!-- Hero Section with Gradient and Logo -->
     <section
-      class="h-screen flex flex-col justify-center text-center relative"
+      class="h-screen lg:h-screen flex flex-col justify-center text-center relative"
       :style="{
         background: `linear-gradient(to bottom, 
                     var(--color-primary) 50%, 
                     var(--color-primary-accent) 100%)`,
+        height: isMobile ? 'calc(100vh - 64px)' : '100vh',
       }"
     >
       <div class="container mx-auto px-4">
@@ -15,7 +16,9 @@
           alt="Lotus Haven Logo"
           class="mx-auto w-40 h-40 mb-8"
         />
-        <h1 class="header1 mb-4 text-primary-text">Welcome to Lotus Haven</h1>
+        <h1 class="header1 mb-4 leading-10 text-primary-text">
+          Welcome to Lotus Haven
+        </h1>
         <p class="paragraph text-secondary-text mb-8">
           This is more than a yoga studio—it's a haven to reconnect, recharge,
           and rise. Join a community where movement, breath, and intention come
@@ -255,7 +258,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import { useActivities } from "../composables/useActivities";
 import { useTeachers } from "../composables/useTeachers";
 import { navigateTo } from "nuxt/app";
@@ -263,6 +266,34 @@ import type { TeacherCardItem } from "../types/teachers";
 
 // Define the arrow color directly
 const arrowColor = ref("var(--color-primary-text)");
+
+// Add mobile detection
+const isMobile = ref(false);
+
+// Check if device is mobile on component mount and on window resize
+onMounted(() => {
+  if (typeof window !== "undefined") {
+    // Initial check
+    checkIfMobile();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkIfMobile);
+  }
+});
+
+// Clean up event listener
+onUnmounted(() => {
+  if (typeof window !== "undefined") {
+    window.removeEventListener("resize", checkIfMobile);
+  }
+});
+
+// Function to check if viewport is mobile size
+const checkIfMobile = () => {
+  if (typeof window !== "undefined") {
+    isMobile.value = window.innerWidth < 1024; // 1024px is the lg breakpoint in Tailwind
+  }
+};
 
 // Use the activities composable
 const {

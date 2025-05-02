@@ -1,9 +1,9 @@
 <template>
   <div class="relative w-full">
-    <!-- Left arrow navigation - only visible when not at left edge -->
+    <!-- Left arrow navigation - responsive positioning -->
     <div
       v-if="canScrollLeft"
-      class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 transition-opacity"
+      class="absolute left-0 top-1/2 -translate-y-1/2 z-10 transition-opacity md:-translate-x-1/2"
       :class="{ 'opacity-0': !canScrollLeft, 'opacity-100': canScrollLeft }"
     >
       <UiCarouselArrow direction="left" :size="40" @click="scrollLeft" />
@@ -19,10 +19,10 @@
       <slot v-bind="{ cardWidth }"></slot>
     </div>
 
-    <!-- Right arrow navigation - only visible when not at right edge -->
+    <!-- Right arrow navigation - responsive positioning -->
     <div
       v-if="canScrollRight"
-      class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 transition-opacity"
+      class="absolute right-0 top-1/2 -translate-y-1/2 z-10 transition-opacity md:translate-x-1/2"
       :class="{ 'opacity-0': !canScrollRight, 'opacity-100': canScrollRight }"
     >
       <UiCarouselArrow direction="right" :size="40" @click="scrollRight" />
