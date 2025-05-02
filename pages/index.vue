@@ -15,7 +15,9 @@
           alt="Lotus Haven Logo"
           class="mx-auto w-40 h-40 mb-8"
         />
-        <h1 class="header1 mb-4 text-primary-text">Welcome to Lotus Haven</h1>
+        <h1 class="header1 mb-4 leading-10 text-primary-text">
+          Welcome to Lotus Haven
+        </h1>
         <p class="paragraph text-secondary-text mb-8">
           This is more than a yoga studio—it's a haven to reconnect, recharge,
           and rise. Join a community where movement, breath, and intention come
