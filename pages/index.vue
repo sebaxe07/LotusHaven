@@ -352,6 +352,6 @@ const navigateToActivities = () => {
 // Handle Sign Up button click
 const signUp = () => {
   console.log("Opening sign up form");
-  navigateTo("/contact");
+  navigateTo("/signup");
 };
 </script>
