@@ -13,17 +13,17 @@
       <div class="teachers-container">
         <TeachersCard2
           v-for="teacher in cardteachers"
-          :key="teacher.id"
           :id="teacher.id"
+          :key="teacher.id"
           :name="teacher.fullName"
-          :shortBio="teacher.shortBio"
-          :imageUrl="teacher.imageUrl"
+          :short-bio="teacher.shortBio"
+          :image-url="teacher.imageUrl"
           :activities="teacher.activities"
+          class="teacher-card-item"
           @click="navigateToTeacherDetail(teacher.id)"
           @activity-click="
             ({ teacherId, activityId }) => navigateToActivity(activityId)
           "
-          class="teacher-card-item"
         />
       </div>
     </div>

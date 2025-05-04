@@ -40,7 +40,7 @@
         <h3 class="font-semibold text-gray-800 text-base mb-2">Activities</h3>
         <div
           ref="activitiesCarousel"
-          class="flex gap-2 overflow-x-auto whitespace-nowrap hide-scrollbar activities-carousel"
+          class="flex gap-2 overflow-x-auto whitespace-nowrap carousel-no-scrollbar activities-carousel"
           @wheel.prevent="handleWheel"
         >
           <Button
@@ -117,19 +117,33 @@ const cardClasses = computed(() => {
 </script>
 
 <style scoped>
-.hide-scrollbar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+.carousel-no-scrollbar {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
+.carousel-no-scrollbar::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari and Opera */
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Override global scrollbar styles specifically for this component */
+.carousel-no-scrollbar::-webkit-scrollbar-track,
+.carousel-no-scrollbar::-webkit-scrollbar-thumb,
+.carousel-no-scrollbar::-webkit-scrollbar-thumb:hover {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
 .activities-carousel {
   scroll-behavior: smooth; /* Add smooth scrolling effect */
   scroll-padding: 0.5rem; /* Add padding when scrolling to elements */
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  mask-image: linear-gradient(to right, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
 }
 
 .teacher-card {
