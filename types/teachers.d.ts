@@ -25,3 +25,12 @@ export interface TeacherCardItem {
   imageUrl: string;
   shortBio?: string;
 }
+
+export interface teacherToCardItem2 {
+  id: number;
+  name: string;
+  fullName: string;
+  imageUrl: string;
+  shortBio: string;
+  activities: { id: number; title: string }[]; // optional fallback in case activities is undefined
+}
