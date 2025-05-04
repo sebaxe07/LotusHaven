@@ -4,6 +4,7 @@ import type {
   Teacher,
   TeacherActivity,
   TeacherCardItem,
+  teacherToCardItem2,
 } from "../types/teachers.ts";
 
 // Define types for the raw database responses
@@ -171,6 +172,24 @@ export function useTeachers() {
         (teacher.short_cv.length > 100 ? "..." : ""),
     };
   };
+/**
+  * Convert a Teacher to TeacherCardItem2 format for display
+  */
+const teacherToCardItem2 = (teacher: Teacher): teacherToCardItem2 => {
+  return {
+    id: teacher.id,
+    name: teacher.name,
+    fullName: `${teacher.name} ${teacher.surname}`,
+    imageUrl: teacher.photo_url,
+    shortBio:
+      teacher.short_cv.substring(0, 100) +
+      (teacher.short_cv.length > 100 ? "..." : ""),
+      activities: teacher.activities?.map((a) => ({
+        id: a.activity.id,
+        title: a.activity.title,
+      })) || [],
+    };
+  };
 
   return {
     teachers,
@@ -179,6 +198,7 @@ export function useTeachers() {
     error,
     fetchTeachers,
     fetchTeacherById,
+    teacherToCardItem2,
     teacherToCardItem,
   };
 }
