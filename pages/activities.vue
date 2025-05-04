@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { useActivities } from "../composables/useActivities"; // Adjust path if necessary
+import { useActivities } from "../composables/useActivities.js"; // Adjust path if necessary
 import type { Activity } from '../types/activities.js'; // Adjust path if necessary
 import SearchBar from '../components/ui/SearchBar.vue'; // Adjust path if necessary
 import ActivityCard from '../components/ui/ActivityCard.vue'; // Adjust path if necessary

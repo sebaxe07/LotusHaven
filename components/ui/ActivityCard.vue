@@ -1,12 +1,10 @@
 <template>
   <div class="p-6 transition-shadow duration-300 bg-gray-100 rounded-lg shadow-sm hover:shadow-md">
     <div class="flex items-start space-x-4">
-      <img
-          :src="getIconPath(activity.icon_id)"
-          alt="Activity Icon"
-          class="w-12 h-12 mt-1 text-teal-500"
-          aria-hidden="true"
-      />
+      <UiSvgIcon
+        :icon="getIconPath(activity.icon_id)"
+        class="w-12 h-12 mt-1 text-teal-500"
+        />
       <div class="flex-1">
         <h3 class="mb-2 text-xl font-semibold text-gray-800">{{ activity.title }}</h3>
         <p class="mb-4 text-sm text-gray-600">{{ activity.short_desc }}</p>
@@ -31,7 +29,7 @@ const props = defineProps<{
 const getIconPath = (iconId: number): string => {
   // Basic example, adjust path and extension as needed
   if (iconId >= 1 && iconId <= 6) {
-    return `/icons/icon-${iconId}.svg`; // Example path
+    return `/icons/activity-icon-${iconId}.svg`; // Example path
   }
   return '/icons/default-icon.svg'; // Fallback icon
 };
