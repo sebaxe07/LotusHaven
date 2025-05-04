@@ -8,7 +8,7 @@
       <div class="flex-1">
         <h3 class="mb-2 text-xl font-semibold text-gray-800">{{ activity.title }}</h3>
         <p class="mb-4 text-sm text-gray-600">{{ activity.short_desc }}</p>
-        <Button>Learn more</Button>
+        <Button @click="learnMore">Learn more</Button>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@ const getIconPath = (iconId: number): string => {
 const learnMore = () => {
   console.log('Learn more about:', props.activity.title);
   // Example navigation (if you have activity detail pages):
-  // useRouter().push(`/activities/${props.activity.id}`);
+  useRouter().push(`/activity/${props.activity.id}`);
 };
 </script>
 
