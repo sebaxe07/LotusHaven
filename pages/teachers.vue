@@ -58,7 +58,7 @@ const cardteachers = computed<teacherToCardItem2[]>(() => {
 });
 
 const navigateToActivity = (activityId: number) => {
-  navigateTo(`/activitie/${activityId}`);
+  navigateTo(`/activity/${activityId}`);
 };
 
 
