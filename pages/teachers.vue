@@ -9,19 +9,22 @@
     </div>
     <div v-else-if="teachers.length === 0" class="py-4">No teachers found.</div>
     <div v-else>
-
-      <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-items-center">
+      <!-- Flex container for the teachers -->
+      <div class="teachers-container">
         <TeachersCard2
           v-for="teacher in cardteachers"
-          :key="teacher.id"
           :id="teacher.id"
+          :key="teacher.id"
           :name="teacher.fullName"
-          :shortBio="teacher.shortBio"
-          :imageUrl="teacher.imageUrl"
+          :short-bio="teacher.shortBio"
+          :image-url="teacher.imageUrl"
           :activities="teacher.activities"
+          class="teacher-card-item"
           @click="navigateToTeacherDetail(teacher.id)"
-          @activity-click="({ teacherId, activityId }) => navigateToActivity(activityId)"
-          />
+          @activity-click="
+            ({ teacherId, activityId }) => navigateToActivity(activityId)
+          "
+        />
       </div>
     </div>
   </div>
@@ -41,13 +44,13 @@ const {
   error: teachersError,
   fetchTeachers,
   teacherToCardItem,
-  teacherToCardItem2
+  teacherToCardItem2,
 } = useTeachers();
 
 // Format the teachers data as a nicely indented JSON string
 //const formattedTeachersData = computed(() => {
-  //if (!teachers.value || teachers.value.length === 0) return "";
-  //return JSON.stringify(teachers.value, null, 2);
+//if (!teachers.value || teachers.value.length === 0) return "";
+//return JSON.stringify(teachers.value, null, 2);
 //});
 const teachers = computed<TeacherCardItem[]>(() => {
   return teachersData.value.map((teacher) => teacherToCardItem(teacher));
@@ -58,11 +61,8 @@ const cardteachers = computed<teacherToCardItem2[]>(() => {
 });
 
 const navigateToActivity = (activityId: number) => {
-  navigateTo(`/activity/${activityId}`);
+  navigateTo(`/activitie/${activityId}`);
 };
-
-
-
 
 const navigateToTeacherDetail = (id: number) => {
   console.log(`Navigating to teacher with ID: ${id}`);
@@ -72,5 +72,28 @@ const navigateToTeacherDetail = (id: number) => {
 onMounted(async () => {
   await fetchTeachers();
 });
-
 </script>
+
+<style scoped>
+.teachers-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.teacher-card-item {
+  /* Ensure teacher cards maintain their size but don't grow to fill space */
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments for the card width */
+@media (max-width: 639px) {
+  .teacher-card-item {
+    /* On mobile, cards can take up more width */
+    width: 100%;
+    max-width: 330px;
+  }
+}
+</style>
