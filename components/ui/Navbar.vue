@@ -1,6 +1,9 @@
 <template>
-  <!-- Mobile navbar (top) -->
-  <div class="lg:hidden fixed top-0 left-0 right-0 bg-secondary shadow-lg z-50">
+  <!-- Mobile navbar (top) - shown for mobile devices OR when zoom detected -->
+  <div
+    class="fixed top-0 left-0 right-0 bg-secondary shadow-lg z-50"
+    :class="{ hidden: !isMobileOrZoomed }"
+  >
     <div class="flex items-center justify-between p-4">
       <!-- Logo and Title -->
       <div class="flex items-center space-x-3">
@@ -102,9 +105,10 @@
     </div>
   </div>
 
-  <!-- Desktop sidebar (left side) -->
+  <!-- Desktop sidebar (left side) - hidden when mobile OR zoomed in -->
   <div
-    class="hidden lg:flex w-72 bg-secondary h-full shadow-xl flex-col items-center border-r border-third-accent/50"
+    class="bg-secondary h-full shadow-xl flex-col items-center border-r border-third-accent/50 w-72"
+    :class="{ hidden: isMobileOrZoomed, flex: !isMobileOrZoomed }"
   >
     <!-- Logo and Title Section -->
     <div class="flex flex-col space-y-4 items-center justify-center pt-8 pb-6">
@@ -196,13 +200,21 @@
 </template>
 
 <script setup>
-import { ref, watch, onUnmounted, onMounted } from "vue";
+import { ref, watch, onUnmounted, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 
 const mobileMenuOpen = ref(false);
 const route = useRoute();
+const isZoomedIn = ref(false);
+const isMobile = ref(false);
 
-// Close mobile menu when route changes - fixed to use the route object properly
+// Computed property that determines if we should show mobile layout
+// (either actual mobile device OR desktop that's zoomed in)
+const isMobileOrZoomed = computed(() => {
+  return isMobile.value || isZoomedIn.value;
+});
+
+// Close mobile menu when route changes
 watch(
   () => route.fullPath,
   () => {
@@ -210,9 +222,38 @@ watch(
   }
 );
 
-// Client-side only code needs to be executed after component is mounted
+// Detect if zoom level is high enough to switch to mobile layout
+const detectZoom = () => {
+  if (typeof window === "undefined") return;
+
+  // Method 1: Check browser zoom ratio
+  const ratio = Math.round((window.outerWidth / window.innerWidth) * 100) / 100;
+
+  // Method 2: Check device pixel ratio for Windows scaling
+  const pixelRatio = window.devicePixelRatio || 1;
+
+  // Method 3: Check if available width is limited
+  const availableWidth = window.innerWidth;
+
+  // Combined detection logic:
+  // 1. Browser is zoomed beyond 130%
+  // 2. Device has high pixel ratio (Windows scaling)
+  // 3. Available width is too small for comfortable sidebar viewing
+  isZoomedIn.value = ratio > 1.3 || pixelRatio >= 1.4 || availableWidth < 1300;
+
+  // Check mobile separately using window width
+  isMobile.value = window.innerWidth < 1024; // 1024px is lg breakpoint in Tailwind
+};
+
+// Client-side only code
 onMounted(() => {
   if (typeof window !== "undefined") {
+    // Initial check for zoom and mobile
+    detectZoom();
+
+    // Listen for resize to detect changes in zoom or orientation
+    window.addEventListener("resize", detectZoom);
+
     // Create a debounced version of the scroll handler
     const closeMenuOnScroll = () => {
       if (mobileMenuOpen.value) {
@@ -231,8 +272,9 @@ onMounted(() => {
       }
     });
 
-    // Clear event listener when component unmounts
+    // Clear event listeners when component unmounts
     onUnmounted(() => {
+      window.removeEventListener("resize", detectZoom);
       window.removeEventListener("scroll", closeMenuOnScroll);
     });
   }
