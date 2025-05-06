@@ -6,7 +6,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
         </svg>
       </div>
-      <div class="px-4 py-2 text-lg font-medium text-gray-800 bg-teal-200 rounded-md bg-opacity-60">
+      <div :class="['px-4 py-2 text-lg font-medium rounded-md', schedule.professor?.name ? 'bg-teal-200 bg-opacity-70 text-gray-800' : 'bg-gray-200 text-gray-600']">
         {{ schedule.professor?.name || 'Instructor Led' }}
       </div>
     </div>
@@ -38,40 +38,88 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
           </svg>
         </div>
-        <a :href="`mailto:${schedule.professor.email}`" class="text-md hover:text-teal-700 hover:underline">{{ schedule.professor.email }}</a>
+        <a :href="`mailto:${schedule.professor.email}`" class="text-md hover:text-teal-700 hover:underline" :title="schedule.professor.email">
+          {{ truncatedEmail }}
+        </a>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'; // Import computed
 import type { PropType } from 'vue';
 
 interface Professor {
-  name?: string;
+  id: number;
+  name?: string; // Made name optional to match example of "Instructor Led"
   phone?: string;
   email?: string;
+  photo_url?: string;
 }
 
 interface Schedule {
   professor?: Professor;
-  days: string[]; // e.g., ["Tuesday", "Thursday"]
-  time: string;  // e.g., "6:30 PM"
+  days: string[];
+  time: string;
 }
 
-defineProps({
+// Define the props for this component
+const props = defineProps({
   schedule: {
     type: Object as PropType<Schedule>,
     required: true,
   },
 });
+
+// Computed property to truncate the email
+const truncatedEmail = computed(() => {
+  const email = props.schedule.professor?.email;
+  if (!email) {
+    return '';
+  }
+
+  const atSymbolIndex = email.indexOf('@');
+  if (atSymbolIndex === -1) {
+    return email; // Should not happen for valid emails
+  }
+
+  const localPart = email.substring(0, atSymbolIndex);
+  const domainPart = email.substring(atSymbolIndex); // Includes '@'
+
+  // Example: "anya.sharma@lotushaven.com"
+  // localPart: "anya.sharma"
+  // domainPart: "@lotushaven.com"
+
+  // Truncate domainPart to "@" + first 3 chars of domain + "..."
+  // e.g. "@lot..."
+  let truncatedDomain = domainPart;
+  if (domainPart.length > 4) { // @ + 3 chars = 4
+    truncatedDomain = domainPart.substring(0, 4) + '...'; // e.g., "@lot..."
+  }
+
+  // Combine local part with truncated domain
+  const fullTruncatedEmail = localPart + truncatedDomain;
+
+  // Optional: if the fullTruncatedEmail is still too long, you might want to truncate the localPart too
+  // For example, limit the total length
+  const maxLength = 20; // Adjust this to your desired max length
+  if (fullTruncatedEmail.length > maxLength) {
+    // This is a more aggressive truncation if the above is still too long.
+    // You might want to prioritize showing more of the local part or handle this differently.
+    // For "anya.sharma@lot...", if still too long, maybe "anya.s...@lot..."
+    // Or simply cut the whole thing:
+    return fullTruncatedEmail.substring(0, maxLength - 3) + '...';
+  }
+
+  return fullTruncatedEmail;
+});
+
 </script>
 
 <style scoped>
-/* Add any additional component-specific styles here if needed.
-   For example, if you want to ensure all icons have exactly the same alignment
-   if their intrinsic sizes differ slightly, you could add styles for them. */
-.shrink-0 { /* Ensure icons don't shrink if text next to them is long */
+/* Styles from previous example */
+.shrink-0 {
   flex-shrink: 0;
 }
 </style>
