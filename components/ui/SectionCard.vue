@@ -7,9 +7,9 @@
             class="w-30 h-30 mt-1 text-teal-500"
         />
       </div>
-      <div :class="['px-4 py-2 text-lg font-medium rounded-md', schedule.professor?.name ? 'bg-teal-200 bg-opacity-70 text-gray-800' : 'bg-gray-200 text-gray-600']">
+      <NuxtLink :to="'/teacher/' + schedule.professor?.id" :class="['px-4 py-2 text-lg font-medium rounded-md', schedule.professor?.name ? 'bg-teal-200 bg-opacity-70 text-gray-800' : 'bg-gray-200 text-gray-600']">
         {{ schedule.professor?.name || 'Instructor Led' }}
-      </div>
+      </NuxtLink>
     </div>
 
     <div class="space-y-4 text-gray-700">

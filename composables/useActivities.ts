@@ -4,7 +4,7 @@ import type { Activity, ClassCardItem, Schedule } from "../types/activities.ts";
 
 // Define types for the raw database responses
 interface TeacherData {
-  id: number;
+  teacher_id: number;
   name: string;
   surname?: string;
   photo_url?: string;
@@ -170,7 +170,7 @@ export function useActivities() {
             days: ta.days || [],
             professor: ta.teacher
               ? {
-                  id: ta.teacher.id,
+                  id: ta.teacher.teacher_id,
                   name: ta.teacher.name,
                   email: ta.teacher.email,
                   phone: ta.teacher.phone,
