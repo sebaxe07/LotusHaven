@@ -39,83 +39,81 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import { useActivities } from "../composables/useActivities.js"; // Adjust path if necessary
-import type { Activity } from '../types/activities.js'; // Adjust path if necessary
-import SearchBar from '../components/ui/SearchBar.vue'; // Adjust path if necessary
-import ActivityCard from '../components/ui/ActivityCard.vue'; // Adjust path if necessary
+import { useActivities } from "../composables/useActivities.js";
+import type { Activity } from '../types/activities.js';
+import SearchBar from '../components/ui/SearchBar.vue';
+import ActivityCard from '../components/ui/ActivityCard.vue';
 
 // --- State ---
 const searchQuery = ref('');
-const activeFilter = ref<string | null>(null); // To store the active label filter
+const activeFilter = ref<string | null>(null); // Still used to highlight the active label
 
 // --- Composables ---
 const { activities, isLoading, error, fetchActivities } = useActivities();
 
 // --- Data ---
-// Example filter labels - adjust as needed based on your data/categories
-const filterLabels = ref([
+// These labels will become search terms
+const filterLabels = ref<string[]>([
   'Gentle', 'Moderate', 'Restorative', 'Dynamic', 'Slow Flow',
   'High Energy', 'Flexibility', 'Hatha'
 ]);
 
 // --- Computed Properties ---
 const filteredActivities = computed(() => {
-  let results = activities.value;
+  let results: Activity[] = [...activities.value];
 
-  // Apply search query filter
-  if (searchQuery.value.trim()) {
-    const lowerCaseQuery = searchQuery.value.toLowerCase();
-    results = results.filter((activity: any) =>
-            activity.title.toLowerCase().includes(lowerCaseQuery) ||
-            activity.description.toLowerCase().includes(lowerCaseQuery) ||
-            activity.short_desc.toLowerCase().includes(lowerCaseQuery)
-        // Add more fields to search if needed (e.g., professor name)
-        // (activity.schedules?.some(s => s.professor?.name.toLowerCase().includes(lowerCaseQuery)))
-    );
-  }
+  // Unified search/filter logic:
+  // If there's an activeFilter (meaning a label was clicked), its text is used for searching.
+  // Otherwise, if searchQuery has a value (from the SearchBar), that's used.
+  const queryToUse = activeFilter.value || searchQuery.value.trim();
 
-  // Apply active label filter (Needs logic based on your Activity data)
-  // *** IMPORTANT: You need to decide HOW labels map to your Activity data.
-  // Example: Assuming Activity has a 'tags' or 'category' array/string property
-  /*
-  if (activeFilter.value) {
-    const lowerCaseFilter = activeFilter.value.toLowerCase();
+  if (queryToUse) {
+    const lowerCaseQuery = queryToUse.toLowerCase();
     results = results.filter(activity =>
-      activity.tags?.some(tag => tag.toLowerCase() === lowerCaseFilter) // Example: if activity.tags is an array
-      // OR if it's a single category string:
-      // activity.category?.toLowerCase() === lowerCaseFilter
+        (activity.title?.toLowerCase().includes(lowerCaseQuery) || false) ||
+        (activity.description?.toLowerCase().includes(lowerCaseQuery) || false) ||
+        (activity.short_desc?.toLowerCase().includes(lowerCaseQuery) || false) ||
+        // Optional: Search by professor name if available
+        (activity.schedules?.some(s => s.professor?.name?.toLowerCase().includes(lowerCaseQuery)) || false)
     );
   }
-  */
+  // If neither activeFilter nor searchQuery is set, all activities are returned.
 
   return results;
 });
 
 // --- Methods ---
 const performSearch = (query: string) => {
-  // The search filtering is now handled reactively by the computed property
-  // This function could be used for more complex search actions if needed (e.g., API calls)
-  console.log('Search triggered for:', query);
+  // This function is called by the SearchBar component when its content changes or search is submitted.
+  // We need to ensure that if the user types in the search bar, any active label filter is cleared.
+  searchQuery.value = query;
+  if (query.trim() && activeFilter.value) {
+    activeFilter.value = null; // Clear active label if user types in search bar
+  } else if (!query.trim() && !activeFilter.value) {
+    // If search bar is cleared and no label is active, effectively no search query
+    // This case is handled by `queryToUse` being empty in computed prop.
+  }
 };
 
 const toggleFilter = (label: string) => {
   if (activeFilter.value === label) {
-    activeFilter.value = null; // Deselect if clicking the active filter
+    // Clicking the same active label again
+    activeFilter.value = null;
+    searchQuery.value = ''; // Clear search query
   } else {
-    activeFilter.value = label; // Select the clicked filter
+    // Clicking a new label or a label when none is active
+    activeFilter.value = label;
+    searchQuery.value = label; // Set search query to the label's text
   }
-  // You might want to reset the search query when a filter is applied/cleared
-  // searchQuery.value = '';
 };
 
 const clearFilter = () => {
   activeFilter.value = null;
-}
+  searchQuery.value = ''; // Also clear the search query input
+};
 
 // --- Lifecycle Hooks ---
 onMounted(async () => {
-  // Fetch all activities when component mounts
-  // Consider fetching only *after* user interaction if the list is very large
   await fetchActivities();
 });
 
