@@ -8,6 +8,8 @@ interface TeacherData {
   name: string;
   surname?: string;
   photo_url?: string;
+  email: string;
+  phone: number;
 }
 
 interface TeacherActivityData {
@@ -127,7 +129,7 @@ export function useActivities() {
           TeacherActivities(
             time,
             days,
-            teacher:Teachers(teacher_id, name, surname, photo_url, short_cv, email)
+            teacher:Teachers(teacher_id, name, surname, photo_url, short_cv, email, phone)
           )
         `
         )
@@ -170,6 +172,8 @@ export function useActivities() {
               ? {
                   id: ta.teacher.id,
                   name: ta.teacher.name,
+                  email: ta.teacher.email,
+                  phone: ta.teacher.phone,
                 }
               : undefined,
           })
