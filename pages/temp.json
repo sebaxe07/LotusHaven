@@ -1,0 +1,36 @@
+{
+  "id": 1,
+  "title": "Sunrise Vinyasa Flow",
+  "description": "Start your day with an energizing Vinyasa flow sequence synchronized with breath. Suitable for all levels looking to build heat and flexibility.",
+  "short_desc": "Energize your morning with flowing sequences",
+  "images": [
+    "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=900",
+    "https://images.unsplash.com/photo-1588286840104-8957b019727f?q=80&w=900"
+  ],
+  "highlighted": true,
+  "difficulty_level": 2,
+  "icon_id": 3,
+  "schedules": [
+    {
+      "time": "06:30:00",
+      "days": [
+        "monday",
+        "wednesday",
+        "friday"
+      ],
+      "professor": {
+        "name": "Anya"
+      }
+    },
+    {
+      "time": "07:00:00",
+      "days": [
+        "tuesday",
+        "thursday"
+      ],
+      "professor": {
+        "name": "David"
+      }
+    }
+  ]
+}

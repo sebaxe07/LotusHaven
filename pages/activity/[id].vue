@@ -33,14 +33,16 @@
         </div>
 
         <div class="lg:col-span-2">
-          <div
-              :class="['inline-flex items-center px-4 py-1.5 mb-4 rounded-full text-sm font-semibold', difficultyInfo.bgClass, difficultyInfo.textClass]"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
-              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
-            </svg>
-            {{ difficultyInfo.text }}
-          </div>
+          <!-- Difficulty info -->
+          <NuxtImg
+              :src="'/images/' + difficultyInfo.text + '.png'"
+              alt="Difficulty level"
+              class="mb-4 max-w-30"
+              format="webp"
+              quality="90"
+              loading="eager"
+          />
+
 
           <h1 class="mb-4 text-3xl font-bold text-gray-800 lg:text-4xl">{{ selectedActivity.title }}</h1>
 
@@ -108,10 +110,10 @@ const difficultyInfo = computed(() => {
   // Add optional chaining and a default level in case selectedActivity is null initially
   const level = selectedActivity.value?.difficulty_level ?? 0;
   switch (level) {
-    case 1: return { text: 'Easy', bgClass: 'bg-green-100', textClass: 'text-green-700' };
-    case 2: return { text: 'Moderate', bgClass: 'bg-yellow-100', textClass: 'text-yellow-700' };
-    case 3: return { text: 'Advanced', bgClass: 'bg-red-100', textClass: 'text-red-700' };
-    default: return { text: 'General', bgClass: 'bg-gray-100', textClass: 'text-gray-700' };
+    case 1: return { text: 'easy', bgClass: 'bg-green-100', textClass: 'text-green-700' };
+    case 2: return { text: 'medium', bgClass: 'bg-yellow-100', textClass: 'text-yellow-700' };
+    case 3: return { text: 'difficult', bgClass: 'bg-red-100', textClass: 'text-red-700' };
+    default: return { text: 'error', bgClass: 'bg-gray-100', textClass: 'text-gray-700' };
   }
 });
 
