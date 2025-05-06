@@ -44,7 +44,7 @@
               quality="90"
               loading="eager"
           />
-          <div class="p-5 bg-gray-100 rounded-lg shadow-sm">
+          <div class="p-8 bg-gray-100 rounded-lg shadow-sm">
             <h1 class="mb-4 text-3xl font-bold text-gray-800 lg:text-4xl">{{ selectedActivity.title }}</h1>
             <p class="text-gray-600 whitespace-pre-line">{{ selectedActivity.description }}</p>
           </div>

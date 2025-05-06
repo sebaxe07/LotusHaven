@@ -16,12 +16,14 @@
       <div class="flex items-start">
         <div class="mr-4 text-teal-600 shrink-0 pt-1">
           <UiSvgIcon
-            :icon="getIconPath('calendar')"
-            class="w-30 h-30 mt-1 text-teal-500"
+              :icon="getIconPath('calendar')"
+              class="w-30 h-30 mt-1 text-teal-500"
           />
         </div>
         <div>
-          <p v-for="day in schedule.days" :key="day" class="text-md">{{ day }} - {{ schedule.time }}</p>
+          <p v-for="day in schedule.days" :key="day" class="text-md">
+            {{ capitalizeFirstLetter(day) }} - {{ schedule.time }}
+          </p>
         </div>
       </div>
 
@@ -51,12 +53,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'; // Import computed
+import { computed } from 'vue';
 import type { PropType } from 'vue';
+// Assuming UiSvgIcon is a component you have, if not, this line would cause an error.
+// If it's globally registered or auto-imported, you might not need to explicitly import it.
+// import UiSvgIcon from './UiSvgIcon.vue'; // Or the correct path
 
 interface Professor {
   id: number;
-  name?: string; // Made name optional to match example of "Instructor Led"
+  name?: string;
   phone?: string;
   email?: string;
   photo_url?: string;
@@ -64,11 +69,10 @@ interface Professor {
 
 interface Schedule {
   professor?: Professor;
-  days: string[];
+  days: string[]; // Expecting strings like "monday", "tuesday"
   time: string;
 }
 
-// Define the props for this component
 const props = defineProps({
   schedule: {
     type: Object as PropType<Schedule>,
@@ -77,58 +81,37 @@ const props = defineProps({
 });
 
 const getIconPath = (name: string): string => {
-  return '/icons/section-' + name + '.svg'; // Fallback icon
+  return '/icons/section-' + name + '.svg';
 };
-// --- End Icon Mapping ---
 
+// Method to capitalize the first letter of a string
+const capitalizeFirstLetter = (string: string): string => {
+  if (!string) return '';
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 
-// Computed property to truncate the email
 const truncatedEmail = computed(() => {
   const email = props.schedule.professor?.email;
-  if (!email) {
-    return '';
-  }
-
+  if (!email) return '';
   const atSymbolIndex = email.indexOf('@');
-  if (atSymbolIndex === -1) {
-    return email; // Should not happen for valid emails
-  }
-
+  if (atSymbolIndex === -1) return email;
   const localPart = email.substring(0, atSymbolIndex);
-  const domainPart = email.substring(atSymbolIndex); // Includes '@'
-
-  // Example: "anya.sharma@lotushaven.com"
-  // localPart: "anya.sharma"
-  // domainPart: "@lotushaven.com"
-
-  // Truncate domainPart to "@" + first 3 chars of domain + "..."
-  // e.g. "@lot..."
+  const domainPart = email.substring(atSymbolIndex);
   let truncatedDomain = domainPart;
-  if (domainPart.length > 4) { // @ + 3 chars = 4
-    truncatedDomain = domainPart.substring(0, 4) + '...'; // e.g., "@lot..."
+  if (domainPart.length > 4) {
+    truncatedDomain = domainPart.substring(0, 4) + '...';
   }
-
-  // Combine local part with truncated domain
   const fullTruncatedEmail = localPart + truncatedDomain;
-
-  // Optional: if the fullTruncatedEmail is still too long, you might want to truncate the localPart too
-  // For example, limit the total length
-  const maxLength = 20; // Adjust this to your desired max length
+  const maxLength = 20;
   if (fullTruncatedEmail.length > maxLength) {
-    // This is a more aggressive truncation if the above is still too long.
-    // You might want to prioritize showing more of the local part or handle this differently.
-    // For "anya.sharma@lot...", if still too long, maybe "anya.s...@lot..."
-    // Or simply cut the whole thing:
     return fullTruncatedEmail.substring(0, maxLength - 3) + '...';
   }
-
   return fullTruncatedEmail;
 });
 
 </script>
 
 <style scoped>
-/* Styles from previous example */
 .shrink-0 {
   flex-shrink: 0;
 }
