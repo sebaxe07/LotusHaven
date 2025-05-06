@@ -1,7 +1,7 @@
 <template>
   <div class="p-4 sm:p-6 bg-gray-100 rounded-xl shadow-lg">
     <div class="flex flex-wrap items-center mb-4 sm:mb-5 gap-3">
-      <div class="text-teal-600 flex-shrink-0">
+      <div class="text-primary-accent flex-shrink-0">
         <UiSvgIcon
           :icon="getIconPath('professor')"
           class="w-6 h-6 sm:w-7 sm:h-7"
@@ -13,8 +13,8 @@
         :class="[
           'px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium rounded-md break-words max-w-full transition-colors group flex items-center gap-2',
           schedule.professor?.name
-            ? 'bg-teal-200 hover:bg-teal-300 text-gray-800'
-            : 'bg-gray-200 text-gray-600',
+            ? 'bg-primary-accent-light hover:bg-primary-accent-light text-primary-text'
+            : 'bg-gray-200 text-secondary-text',
         ]"
       >
         <span>{{ schedule.professor?.name || "Instructor Led" }}</span>
@@ -34,9 +34,9 @@
       </NuxtLink>
     </div>
 
-    <div class="space-y-3 sm:space-y-4 text-gray-700">
+    <div class="space-y-3 sm:space-y-4 text-secondary-text">
       <div class="flex items-start">
-        <div class="mr-3 sm:mr-4 text-teal-600 flex-shrink-0 pt-1">
+        <div class="mr-3 sm:mr-4 text-primary-accent flex-shrink-0 pt-1">
           <UiSvgIcon
             :icon="getIconPath('calendar')"
             class="w-5 h-5 sm:w-6 sm:h-6"
@@ -54,7 +54,7 @@
       </div>
 
       <div v-if="schedule.professor?.phone" class="flex items-center">
-        <div class="mr-3 sm:mr-4 text-teal-600 flex-shrink-0">
+        <div class="mr-3 sm:mr-4 text-primary-accent flex-shrink-0">
           <UiSvgIcon
             :icon="getIconPath('phone')"
             class="w-5 h-5 sm:w-6 sm:h-6"
@@ -62,14 +62,14 @@
         </div>
         <a
           :href="`tel:${schedule.professor.phone}`"
-          class="text-sm sm:text-base hover:text-teal-700 hover:underline break-all"
+          class="text-sm sm:text-base hover:text-primary-accent hover:underline break-all"
         >
           {{ formatPhoneNumber(schedule.professor.phone) }}
         </a>
       </div>
 
       <div v-if="schedule.professor?.email" class="flex items-center">
-        <div class="mr-3 sm:mr-4 text-teal-600 flex-shrink-0">
+        <div class="mr-3 sm:mr-4 text-primary-accent flex-shrink-0">
           <UiSvgIcon
             :icon="getIconPath('email')"
             class="w-5 h-5 sm:w-6 sm:h-6"
@@ -77,7 +77,7 @@
         </div>
         <a
           :href="`mailto:${schedule.professor.email}`"
-          class="text-sm sm:text-base hover:text-teal-700 hover:underline break-all"
+          class="text-sm sm:text-base hover:text-primary-accent hover:underline break-all"
           :title="schedule.professor.email"
         >
           {{ responsiveEmail }}

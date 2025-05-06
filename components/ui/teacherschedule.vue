@@ -11,16 +11,16 @@
         :width="60"
         :height="60"
         class="w-full h-full object-contain"
-        :color="'#76C5B9'"
+        :color="'var(--color-primary-accent)'"
       />
     </div>
 
     <!-- Text Section -->
     <div class="flex flex-col justify-center flex-grow overflow-hidden">
-      <h3 class="text-sm sm:text-base font-semibold text-[#2E3030] truncate">
+      <h3 class="text-sm sm:text-base font-semibold text-primary-text truncate">
         {{ title }}
       </h3>
-      <p class="text-xs sm:text-sm text-[#5E7E79] mt-1 truncate">
+      <p class="text-xs sm:text-sm text-secondary-text mt-1 truncate">
         {{ time }} on {{ formattedDays }}
       </p>
     </div>
@@ -66,6 +66,6 @@ defineEmits(["click"]);
 <style scoped>
 /* Add a subtle hover effect */
 button:hover {
-  box-shadow: 0 0 8px rgba(118, 197, 185, 0.4);
+  box-shadow: 0 0 8px var(--color-primary-accent-light);
 }
 </style>

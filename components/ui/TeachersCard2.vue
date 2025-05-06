@@ -16,7 +16,7 @@
     <div class="p-4 flex flex-col h-[50%]">
       <div class="flex items-center justify-between mb-2">
         <!-- Teacher name as H2 for prominence -->
-        <h2 class="font-semibold text-gray-900 text-xl">
+        <h2 class="font-semibold text-primary-text text-xl">
           {{ name }}
         </h2>
         <!-- Arrow icon for navigation -->
@@ -30,14 +30,16 @@
       </div>
 
       <!-- Teacher bio -->
-      <p class="text-sm text-gray-700 line-clamp-2 mb-3">
+      <p class="text-sm text-secondary-text line-clamp-2 mb-3">
         {{ shortBio }}
       </p>
 
       <!-- Activities section -->
       <div class="mt-auto">
         <!-- Activities label as H3 for secondary prominence -->
-        <h3 class="font-semibold text-gray-800 text-base mb-2">Activities</h3>
+        <h3 class="font-semibold text-primary-text text-base mb-2">
+          Activities
+        </h3>
         <div
           ref="activitiesCarousel"
           class="flex gap-2 overflow-x-auto whitespace-nowrap carousel-no-scrollbar activities-carousel"

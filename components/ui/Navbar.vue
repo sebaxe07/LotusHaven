@@ -196,44 +196,47 @@
 </template>
 
 <script setup>
-import { ref, watch, onUnmounted } from "vue";
+import { ref, watch, onUnmounted, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
 const mobileMenuOpen = ref(false);
+const route = useRoute();
 
-// Close mobile menu when route changes
+// Close mobile menu when route changes - fixed to use the route object properly
 watch(
-  () => useRoute().fullPath,
+  () => route.fullPath,
   () => {
     mobileMenuOpen.value = false;
   }
 );
 
-// Added client-side script for scroll handling
-if (typeof window !== "undefined") {
-  // Create a debounced version of the scroll handler
-  const closeMenuOnScroll = () => {
-    if (mobileMenuOpen.value) {
-      mobileMenuOpen.value = false;
-    }
-  };
+// Client-side only code needs to be executed after component is mounted
+onMounted(() => {
+  if (typeof window !== "undefined") {
+    // Create a debounced version of the scroll handler
+    const closeMenuOnScroll = () => {
+      if (mobileMenuOpen.value) {
+        mobileMenuOpen.value = false;
+      }
+    };
 
-  // Set up watch effect that adds/removes event listener based on menu state
-  watch(mobileMenuOpen, (isOpen) => {
-    if (isOpen) {
-      // Menu opened - add scroll listener
-      window.addEventListener("scroll", closeMenuOnScroll, { passive: true });
-    } else {
-      // Menu closed - remove scroll listener (only needed when menu is open)
+    // Set up watch effect that adds/removes event listener based on menu state
+    watch(mobileMenuOpen, (isOpen) => {
+      if (isOpen) {
+        // Menu opened - add scroll listener
+        window.addEventListener("scroll", closeMenuOnScroll, { passive: true });
+      } else {
+        // Menu closed - remove scroll listener (only needed when menu is open)
+        window.removeEventListener("scroll", closeMenuOnScroll);
+      }
+    });
+
+    // Clear event listener when component unmounts
+    onUnmounted(() => {
       window.removeEventListener("scroll", closeMenuOnScroll);
-    }
-  });
-
-  // Clear event listener when component unmounts
-  onUnmounted(() => {
-    window.removeEventListener("scroll", closeMenuOnScroll);
-  });
-}
+    });
+  }
+});
 </script>
 
 <style scoped>
@@ -265,7 +268,7 @@ if (typeof window !== "undefined") {
   transition: filter 0.2s ease;
 }
 
-social-icon-link:hover .social-icon {
+.social-icon-link:hover .social-icon {
   filter: brightness(0) invert(1); /* Make icon white on hover */
 }
 </style>

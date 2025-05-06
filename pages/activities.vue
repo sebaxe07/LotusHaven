@@ -1,7 +1,9 @@
 <template>
   <div class="container px-4 py-6 sm:py-8 mx-auto">
-    <h1 class="mb-4 text-2xl sm:text-3xl font-bold">Activities</h1>
-    <p class="max-w-2xl mb-6 sm:mb-8 text-sm sm:text-base text-gray-600">
+    <h1 class="mb-4 text-2xl sm:text-3xl font-bold text-primary-text">
+      Activities
+    </h1>
+    <p class="max-w-2xl mb-6 sm:mb-8 text-sm sm:text-base text-secondary-text">
       Whether you're here to deepen your breath, build strength, or simply slow
       down, our diverse offerings are designed to meet you where you are.
       Explore our classes and find your flow.
@@ -21,8 +23,8 @@
           :class="[
             'inline-block rounded-full px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-medium cursor-pointer transition-colors duration-200',
             activeFilter === label
-              ? 'bg-teal-500 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
+              ? 'bg-primary-accent text-white'
+              : 'bg-gray-200 text-secondary-text hover:bg-gray-300',
           ]"
           @click="toggleFilter(label)"
         >
@@ -55,9 +57,9 @@
     <!-- State handling (loading, error, empty) -->
     <div v-if="isLoading" class="py-8 text-center">
       <div
-        class="inline-block w-10 h-10 border-4 border-teal-200 border-t-teal-500 rounded-full animate-spin"
+        class="inline-block w-10 h-10 border-4 border-primary-accent-light border-t-primary-accent rounded-full animate-spin"
       ></div>
-      <p class="mt-4 text-gray-500">Loading activities...</p>
+      <p class="mt-4 text-secondary-text">Loading activities...</p>
     </div>
     <div v-else-if="error" class="py-8 text-center">
       <div
@@ -80,7 +82,7 @@
       </div>
       <p class="text-red-500">Error loading activities: {{ error.message }}</p>
       <button
-        class="px-4 py-2 mt-4 text-sm font-medium text-white bg-teal-500 rounded-md hover:bg-teal-600"
+        class="px-4 py-2 mt-4 text-sm font-medium text-white bg-primary-accent rounded-md hover:bg-primary-accent-dark"
         @click="retryLoading"
       >
         Retry
@@ -88,7 +90,7 @@
     </div>
     <div v-else-if="filteredActivities.length === 0" class="py-8 text-center">
       <div
-        class="inline-flex items-center justify-center w-12 h-12 mb-4 text-gray-500 bg-gray-100 rounded-full"
+        class="inline-flex items-center justify-center w-12 h-12 mb-4 text-secondary-text bg-gray-100 rounded-full"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -105,10 +107,12 @@
           />
         </svg>
       </div>
-      <p class="text-gray-500">No activities found matching your criteria.</p>
+      <p class="text-secondary-text">
+        No activities found matching your criteria.
+      </p>
       <button
         v-if="searchQuery || activeFilter"
-        class="px-4 py-2 mt-4 text-sm font-medium text-teal-700 border border-teal-300 rounded-md bg-teal-50 hover:bg-teal-100"
+        class="px-4 py-2 mt-4 text-sm font-medium text-primary-accent-dark border border-primary-accent-light rounded-md bg-primary-accent-lightest hover:bg-primary-accent-light"
         @click="clearSearch"
       >
         Clear filters

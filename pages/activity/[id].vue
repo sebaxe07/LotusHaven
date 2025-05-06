@@ -2,9 +2,9 @@
   <div class="container px-4 py-8 mx-auto lg:px-8">
     <div v-if="isLoading" class="text-center py-10">
       <div
-        class="inline-block w-10 h-10 border-4 border-teal-200 border-t-teal-500 rounded-full animate-spin mb-4"
+        class="inline-block w-10 h-10 border-4 border-primary-accent-light border-t-primary-accent rounded-full animate-spin mb-4"
       ></div>
-      <p class="text-gray-500">Loading activity details...</p>
+      <p class="text-secondary-text">Loading activity details...</p>
     </div>
     <div v-else-if="error" class="text-center py-10">
       <div
@@ -26,17 +26,17 @@
         </svg>
       </div>
       <p class="text-red-500 mb-4">Error loading activity details.</p>
-      <p class="text-sm text-gray-500 mb-6">{{ error.message }}</p>
+      <p class="text-sm text-secondary-text mb-6">{{ error.message }}</p>
       <NuxtLink
         to="/activities"
-        class="inline-block px-4 py-2 text-sm font-medium bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors"
+        class="inline-block px-4 py-2 text-sm font-medium bg-primary-accent text-white rounded-md hover:bg-primary-accent-dark transition-colors"
       >
         Go back to activities
       </NuxtLink>
     </div>
     <div v-else-if="!selectedActivity" class="text-center py-10">
       <div
-        class="inline-flex items-center justify-center w-12 h-12 mb-4 text-gray-500 bg-gray-100 rounded-full"
+        class="inline-flex items-center justify-center w-12 h-12 mb-4 text-secondary-text bg-gray-100 rounded-full"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -53,20 +53,22 @@
           />
         </svg>
       </div>
-      <p class="text-gray-500 mb-6">Activity not found.</p>
+      <p class="text-secondary-text mb-6">Activity not found.</p>
       <NuxtLink
         to="/activities"
-        class="inline-block px-4 py-2 text-sm font-medium bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors"
+        class="inline-block px-4 py-2 text-sm font-medium bg-primary-accent text-white rounded-md hover:bg-primary-accent-dark transition-colors"
       >
         Go back to activities
       </NuxtLink>
     </div>
     <div v-else>
       <!-- Breadcrumb - responsive text size -->
-      <div class="flex items-center mb-6 text-xs sm:text-sm text-gray-500">
+      <div
+        class="flex items-center mb-6 text-xs sm:text-sm text-secondary-text"
+      >
         <NuxtLink
           to="/activities"
-          class="mr-2 hover:text-gray-800"
+          class="mr-2 hover:text-primary-text"
           aria-label="Back to Activities"
         >
           <svg
@@ -84,12 +86,12 @@
             />
           </svg>
         </NuxtLink>
-        <NuxtLink to="/activities" class="hover:text-gray-800"
+        <NuxtLink to="/activities" class="hover:text-primary-text"
           >Activities</NuxtLink
         >
         <span class="mx-2">/</span>
         <span
-          class="font-medium text-gray-700 truncate max-w-[150px] sm:max-w-none"
+          class="font-medium text-primary-text truncate max-w-[150px] sm:max-w-none"
           >{{ selectedActivity.title }}</span
         >
       </div>
@@ -106,7 +108,7 @@
           />
           <div
             v-else
-            class="flex items-center justify-center w-full text-gray-400 bg-gray-100 rounded-lg aspect-video"
+            class="flex items-center justify-center w-full text-secondary-text bg-gray-100 rounded-lg aspect-video"
           >
             No Image Available
           </div>
@@ -140,11 +142,13 @@
 
           <div class="p-4 sm:p-6 lg:p-8 bg-gray-100 rounded-lg shadow-sm">
             <h1
-              class="mb-4 text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 break-words"
+              class="mb-4 text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-text break-words"
             >
               {{ selectedActivity.title }}
             </h1>
-            <p class="text-sm sm:text-base text-gray-600 whitespace-pre-line">
+            <p
+              class="text-sm sm:text-base text-secondary-text whitespace-pre-line"
+            >
               {{ selectedActivity.description }}
             </p>
           </div>
@@ -154,7 +158,7 @@
       <!-- Available Sections - responsive grid with improved spacing -->
       <div class="mt-8 sm:mt-10 lg:mt-16">
         <h2
-          class="mb-4 sm:mb-6 text-xl sm:text-2xl font-semibold text-gray-800"
+          class="mb-4 sm:mb-6 text-xl sm:text-2xl font-semibold text-primary-text"
         >
           Available Sections
         </h2>
@@ -172,7 +176,7 @@
         </div>
         <div
           v-else
-          class="p-4 text-center text-gray-500 bg-gray-100 rounded-lg"
+          class="p-4 text-center text-secondary-text bg-gray-100 rounded-lg"
         >
           No specific sections or schedules currently listed for this activity.
         </div>

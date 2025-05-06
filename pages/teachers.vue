@@ -1,13 +1,19 @@
 <template>
   <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Our Teachers</h1>
-    <p class="mb-6">Meet our experienced and dedicated teachers.</p>
+    <h1 class="text-3xl font-bold mb-6 text-primary-text">Our Teachers</h1>
+    <p class="mb-6 text-secondary-text">
+      Meet our experienced and dedicated teachers.
+    </p>
 
-    <div v-if="teachersLoading" class="py-4">Loading teachers...</div>
+    <div v-if="teachersLoading" class="py-4 text-secondary-text">
+      Loading teachers...
+    </div>
     <div v-else-if="teachersError" class="py-4 text-red-500">
       Error: {{ teachersError }}
     </div>
-    <div v-else-if="teachers.length === 0" class="py-4">No teachers found.</div>
+    <div v-else-if="teachers.length === 0" class="py-4 text-secondary-text">
+      No teachers found.
+    </div>
     <div v-else>
       <!-- Flex container for the teachers -->
       <div class="teachers-container">

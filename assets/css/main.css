@@ -15,6 +15,13 @@
   --color-third-accent: #cfdad9;
   --color-disabled: #b1bdbb;
 
+  /* Added color variants */
+  --color-primary-accent-light: rgba(118, 197, 185, 0.15);
+  --color-primary-accent-lightest: rgba(118, 197, 185, 0.05);
+  --color-primary-accent-dark: #5aa89d;
+  --color-secondary-accent-light: rgba(94, 126, 121, 0.15);
+  --color-third-accent-light: rgba(207, 218, 217, 0.15);
+
   /* Rounded Corners */
   --radius-base: 0.625rem; /* 10px */
 }

@@ -13,7 +13,7 @@
           icon="/icons/arrow.svg"
           :width="20"
           :height="20"
-          :color="'#76C5B9'"
+          :color="'var(--color-primary-accent)'"
         />
         Back
       </button>
@@ -73,7 +73,7 @@
                       icon="/icons/phone.svg"
                       :width="24"
                       :height="24"
-                      :color="'#76C5B9'"
+                      :color="'var(--color-primary-accent)'"
                     />
                   </div>
                   <span
@@ -88,7 +88,7 @@
                       icon="/icons/email.svg"
                       :width="24"
                       :height="24"
-                      :color="'#76C5B9'"
+                      :color="'var(--color-primary-accent)'"
                     />
                   </div>
                   <span
@@ -127,7 +127,7 @@
         <div class="flex flex-row items-center mb-4 mt-4 lg:mt-16">
           <div class="h-8 w-1 bg-primary-accent rounded-r-full block"></div>
           <h2
-            class="text-2xl sm:text-3xl md:text-4xl font-semibold leading-tight text-black font-figtree ml-3"
+            class="text-2xl sm:text-3xl md:text-4xl font-semibold leading-tight text-primary-text font-figtree ml-3"
           >
             Activities
           </h2>
@@ -149,7 +149,10 @@
             @click="navigateToActivity(activityItem.activity.id)"
           />
         </div>
-        <div v-else class="mt-4 text-sm text-gray-500 text-center lg:text-left">
+        <div
+          v-else
+          class="mt-4 text-sm text-secondary-text text-center lg:text-left"
+        >
           No activities listed.
         </div>
       </div>

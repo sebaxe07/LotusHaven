@@ -21,7 +21,7 @@
         >
           <UiSvgIcon
             :icon="getIconPath(activity.icon_id || 1)"
-            class="w-12 h-12 text-gray-400"
+            class="w-12 h-12 text-secondary-text"
           />
         </div>
       </div>
@@ -29,11 +29,11 @@
       <!-- Content section -->
       <div class="flex-1 flex flex-col">
         <h3
-          class="mb-2 text-lg sm:text-xl font-semibold text-gray-800 break-words"
+          class="mb-2 text-lg sm:text-xl font-semibold text-primary-text break-words"
         >
           {{ activity.title || "Unnamed Activity" }}
         </h3>
-        <p class="mb-4 text-sm text-gray-600 line-clamp-3 flex-grow">
+        <p class="mb-4 text-sm text-secondary-text line-clamp-3 flex-grow">
           {{
             activity.short_desc ||
             activity.description ||
