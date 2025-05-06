@@ -47,6 +47,7 @@ import { computed } from "vue";
 const props = defineProps<{
   id: number | string;
   title: string;
+  // eslint-disable-next-line vue/prop-name-casing
   icon_id: number;
   time: string;
   days: string[];
