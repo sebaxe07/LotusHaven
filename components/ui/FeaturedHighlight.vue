@@ -18,21 +18,13 @@
               :class="tagColorClass"
               >Featured</span
             >
-            <div v-if="difficultyLevel" class="ml-2 flex items-center">
-              <span class="text-secondary-text text-sm">Difficulty:</span>
-              <div class="ml-2 flex">
-                <div
-                  v-for="i in 3"
-                  :key="i"
-                  class="w-2 h-2 rounded-full mx-0.5"
-                  :class="
-                    i <= difficultyLevel
-                      ? 'bg-primary-accent'
-                      : 'bg-third-accent'
-                  "
-                ></div>
-              </div>
-            </div>
+            <span
+              v-if="difficultyLevel"
+              class="ml-2 px-2 py-1 text-xs font-medium rounded-full"
+              :class="getDifficultyClass(difficultyLevel)"
+            >
+              {{ getDifficultyLabel(difficultyLevel) }}
+            </span>
           </div>
           <h2 class="text-2xl font-bold mb-3 text-primary-text">{{ title }}</h2>
           <p class="mb-6 text-secondary-text">{{ description }}</p>
@@ -145,7 +137,9 @@ defineEmits(["learn-more"]);
 
 // Format schedule for display
 const formatSchedule = (schedule: Schedule): string => {
-  const daysStr = schedule.days.join(", ");
+  const daysStr = schedule.days
+    .map((day) => day.charAt(0).toUpperCase() + day.slice(1))
+    .join(", ");
   const instructorName = schedule.professor
     ? ` with ${schedule.professor.name}`
     : "";
@@ -184,4 +178,32 @@ const tagColorClass = computed(() => {
       return "bg-primary-accent";
   }
 });
+
+// Get difficulty class based on difficulty level
+const getDifficultyClass = (level: number): string => {
+  switch (level) {
+    case 1:
+      return "bg-green-100 text-green-800";
+    case 2:
+      return "bg-blue-100 text-blue-800";
+    case 3:
+      return "bg-orange-100 text-orange-800";
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+};
+
+// Get difficulty label based on difficulty level
+const getDifficultyLabel = (level: number): string => {
+  switch (level) {
+    case 1:
+      return "Beginner";
+    case 2:
+      return "Intermediate";
+    case 3:
+      return "Advanced";
+    default:
+      return "All Levels";
+  }
+};
 </script>

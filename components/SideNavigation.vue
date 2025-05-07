@@ -5,7 +5,7 @@
         <NuxtLink
           :to="item.to"
           class="nav-link flex items-center px-4 py-3 rounded-lg transition-all duration-200"
-          :class="{ 'active-link': $route.path === item.to }"
+          :class="{ 'active-link': isLinkActive(item) }"
         >
           <div v-if="item.icon" class="icon-container mr-3">
             <UiSvgIcon
@@ -23,14 +23,57 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
 const navItems = [
   { label: "Home", to: "/", icon: "/icons/home.svg" },
   { label: "Highlights", to: "/highlights", icon: "/icons/star.svg" },
-  { label: "Activities", to: "/activities", icon: "/icons/activity.svg" },
-  { label: "Teachers", to: "/teachers", icon: "/icons/people.svg" },
+  {
+    label: "Activities",
+    to: "/activities",
+    icon: "/icons/activity.svg",
+    childRoutes: ["/activity/"],
+  },
+  {
+    label: "Teachers",
+    to: "/teachers",
+    icon: "/icons/people.svg",
+    childRoutes: ["/teacher/"],
+  },
   { label: "About Us", to: "/about", icon: "/icons/info.svg" },
   { label: "Contact Us", to: "/contact", icon: "/icons/mail.svg" },
 ];
+
+// Check if a navigation link should be active
+interface NavItem {
+  label: string;
+  to: string;
+  icon?: string;
+  childRoutes?: string[];
+}
+
+const isLinkActive = (item: NavItem) => {
+  // Exact match for most routes
+  if (route.path === item.to) {
+    return true;
+  }
+
+  // Special case for home page - only active when exactly at root
+  if (item.to === "/" && route.path !== "/") {
+    return false;
+  }
+
+  // Check if current path is a child route for this navigation item
+  if (item.childRoutes && item.childRoutes.length) {
+    return item.childRoutes.some((childRoute: string) =>
+      route.path.startsWith(childRoute)
+    );
+  }
+
+  return false;
+};
 </script>
 
 <style scoped>

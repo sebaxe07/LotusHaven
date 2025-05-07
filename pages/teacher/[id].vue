@@ -129,7 +129,11 @@
           <h2
             class="text-2xl sm:text-3xl md:text-4xl font-semibold leading-tight text-primary-text font-figtree ml-3"
           >
-            Activities
+            {{
+              selectedTeacher
+                ? `${selectedTeacher.name}'s Activities`
+                : "Activities"
+            }}
           </h2>
         </div>
 
@@ -165,7 +169,7 @@ import { onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { navigateTo } from "nuxt/app";
 import { useTeachers } from "../../composables/useTeachers";
-import Teacherschedule from "../../components/ui/teacherschedule.vue";
+import Teacherschedule from "../../components/ui/TeacherSchedule.vue";
 
 const { selectedTeacher, isLoading, error, fetchTeacherById } = useTeachers();
 const route = useRoute();

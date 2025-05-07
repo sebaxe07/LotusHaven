@@ -116,28 +116,14 @@
 
         <!-- Details section - full width on mobile, 7/12 on desktop -->
         <div class="lg:col-span-7">
-          <!-- Difficulty badge with improved styling - now with circle background -->
+          <!-- Difficulty badge with styling matching ActivityCard -->
           <div class="mb-6">
-            <div class="inline-flex items-center gap-2">
-              <div
-                class="p-2 rounded-full aspect-square flex items-center justify-center"
-                :class="difficultyInfo.bgClass"
-                style="width: 36px; height: 36px"
-              >
-                <UiSvgIcon
-                  :icon="getDifficultyIcon(selectedActivity.difficulty_level)"
-                  :width="24"
-                  :height="24"
-                  :color="difficultyInfo.iconColor"
-                />
-              </div>
-              <span
-                class="text-sm sm:text-base font-medium"
-                :class="difficultyInfo.textClass"
-              >
-                {{ difficultyInfo.label }}
-              </span>
-            </div>
+            <span
+              class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full"
+              :class="getDifficultyClass(selectedActivity.difficulty_level)"
+            >
+              {{ getDifficultyLabel(selectedActivity.difficulty_level) }}
+            </span>
           </div>
 
           <div class="p-4 sm:p-6 lg:p-8 bg-gray-100 rounded-lg shadow-sm">
@@ -186,7 +172,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from "vue";
+import { onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useActivities } from "../../composables/useActivities";
 import SectionCard from "../../components/ui/SectionCard.vue";
@@ -195,55 +181,31 @@ const { selectedActivity, isLoading, error, fetchActivityById } =
   useActivities();
 const route = useRoute();
 
-const difficultyInfo = computed(() => {
-  const level = selectedActivity.value?.difficulty_level ?? 0;
-  switch (level) {
-    case 1:
-      return {
-        text: "easy",
-        label: "Beginner",
-        bgClass: "bg-green-100",
-        textClass: "text-green-700",
-        iconColor: "#15803d", // green-700
-      };
-    case 2:
-      return {
-        text: "medium",
-        label: "Intermediate",
-        bgClass: "bg-yellow-100",
-        textClass: "text-yellow-700",
-        iconColor: "#a16207", // yellow-700
-      };
-    case 3:
-      return {
-        text: "difficult",
-        label: "Advanced",
-        bgClass: "bg-red-100",
-        textClass: "text-red-700",
-        iconColor: "#b91c1c", // red-700
-      };
-    default:
-      return {
-        text: "easy",
-        label: "All Levels",
-        bgClass: "bg-gray-100",
-        textClass: "text-gray-700",
-        iconColor: "#374151", // gray-700
-      };
-  }
-});
-
 // Get an appropriate icon based on difficulty level
-const getDifficultyIcon = (level: number): string => {
+
+const getDifficultyClass = (level: number): string => {
   switch (level) {
     case 1:
-      return "/icons/activity-icon-1.svg"; // Use simplest yoga pose icon for beginner
+      return "bg-green-100 text-green-800";
     case 2:
-      return "/icons/activity-icon-3.svg"; // Medium complexity pose for intermediate
+      return "bg-blue-100 text-blue-800";
     case 3:
-      return "/icons/activity-icon-5.svg"; // Complex pose for advanced
+      return "bg-orange-100 text-orange-800";
     default:
-      return "/icons/activity-icon-1.svg"; // Default to beginner
+      return "bg-gray-100 text-gray-800";
+  }
+};
+
+const getDifficultyLabel = (level: number): string => {
+  switch (level) {
+    case 1:
+      return "Beginner";
+    case 2:
+      return "Intermediate";
+    case 3:
+      return "Advanced";
+    default:
+      return "All Levels";
   }
 };
 

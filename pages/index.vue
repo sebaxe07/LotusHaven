@@ -19,28 +19,30 @@
         <h1 class="header1 mb-4 leading-10 text-primary-text">
           Welcome to Lotus Haven
         </h1>
-        <p class="paragraph text-secondary-text mb-8">
+        <h3 class="text-secondary-text mb-8">
           This is more than a yoga studio—it's a haven to reconnect, recharge,
-          and rise. Join a community where movement, breath, and intention come
-          together.
-        </p>
+          and rise.
+        </h3>
       </div>
-      <!-- Arrow indicating scroll down -->
+      <!-- Text and arrow for scrolling down -->
       <div
-        class="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce"
+        class="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center"
       >
-        <UiSvgIcon
-          icon="/icons/arrow.svg"
-          :width="32"
-          :height="32"
-          :color="arrowColor"
-          class="transform rotate-270"
-        />
+        <p class="text-primary-text mb-10">Explore our community!</p>
+        <div class="animate-bounce cursor-pointer" @click="scrollToNextSection">
+          <UiSvgIcon
+            icon="/icons/arrow.svg"
+            :width="32"
+            :height="32"
+            :color="arrowColor"
+            class="transform rotate-270"
+          />
+        </div>
       </div>
     </section>
 
     <!-- Quote Section -->
-    <section class="py-16 bg-primary">
+    <section id="quote-section" class="py-16 bg-primary">
       <div class="container mx-auto px-4">
         <h2 class="text-center text-primary-text leading-snug">
           "Yoga is the dance of every cell with the music of every <br />
@@ -103,7 +105,7 @@
         <div class="grid md:grid-cols-3 gap-8 mb-12">
           <!-- Beginner Courses -->
           <div class="text-center">
-            <h3 class="text-primary-text mb-4 leading-snug">
+            <h3 class="text-primary-text mb-4 leading-7">
               Beginner <br />Courses
             </h3>
             <p class="text-secondary-text">
@@ -117,7 +119,7 @@
 
           <!-- Medium and Advanced Courses -->
           <div class="text-center">
-            <h3 class="text-primary-text mb-4 leading-snug">
+            <h3 class="text-primary-text mb-4 leading-7">
               Medium and<br />Advanced
             </h3>
             <p class="text-secondary-text">
@@ -131,7 +133,7 @@
 
           <!-- Teacher Training -->
           <div class="text-center">
-            <h3 class="text-primary-text mb-4 leading-snug">
+            <h3 class="text-primary-text mb-4 leading-7">
               Courses to become <br />a teacher
             </h3>
             <p class="text-secondary-text">
@@ -384,5 +386,13 @@ const navigateToActivities = () => {
 const contactUs = () => {
   console.log("Opening sign up form");
   navigateTo("/contact");
+};
+
+// Function to scroll to the next section
+const scrollToNextSection = () => {
+  const nextSection = document.querySelector("#quote-section");
+  if (nextSection) {
+    nextSection.scrollIntoView({ behavior: "smooth" });
+  }
 };
 </script>

@@ -15,8 +15,8 @@
     </div>
 
     <!-- Filter labels with better mobile handling -->
-    <div class="filter-container mb-6 sm:mb-8">
-      <div class="flex flex-wrap gap-2 mb-2">
+    <div class="filter-container mb-6 sm:mb-8 stable-layout">
+      <div class="flex flex-wrap items-center gap-2">
         <span
           v-for="label in filterLabels"
           :key="label"
@@ -30,28 +30,29 @@
         >
           {{ label }}
         </span>
-      </div>
-      <button
-        v-if="activeFilter"
-        class="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-medium text-red-700 transition-colors duration-200 bg-red-100 rounded-full hover:bg-red-200"
-        @click="clearFilter"
-      >
-        <span class="mr-1">Clear</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-3.5 h-3.5"
+
+        <button
+          v-if="activeFilter"
+          class="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-medium text-red-700 transition-colors duration-200 bg-red-100 rounded-full hover:bg-red-200"
+          @click="clearFilter"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
+          <span class="mr-1">Clear</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-3.5 h-3.5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- State handling (loading, error, empty) -->
@@ -229,6 +230,16 @@ onMounted(async () => {
 
 .filter-container::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
+}
+
+/* Ensure consistent layout with or without scrollbar */
+.stable-layout {
+  /* Force the browser to calculate layout as if scrollbar is always present */
+  overflow-y: scroll;
+  /* Hide the extra scrollbar */
+  overflow-y: hidden;
+  /* Add a bit of bottom padding to ensure no content is cut off */
+  padding-bottom: 1px;
 }
 
 @keyframes spin {

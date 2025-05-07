@@ -12,7 +12,7 @@
       <h3 class="text-xl font-semibold mb-2">{{ title }}</h3>
       <p class="text-secondary-text mb-4 flex-grow">{{ description }}</p>
       <div class="flex justify-between items-center">
-        <span class="font-medium text-primary-accent">
+        <span class="font-semibold text-primary-accent">
           <span v-if="sessionCount > 0"
             >{{ sessionCount }} sessions available</span
           >
