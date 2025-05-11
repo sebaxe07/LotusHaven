@@ -40,20 +40,15 @@
         <h3 class="font-semibold text-primary-text text-base mb-2">
           Activities
         </h3>
-        <div
-          ref="activitiesCarousel"
-          class="flex gap-2 overflow-x-auto whitespace-nowrap carousel-no-scrollbar activities-carousel"
-          @wheel.prevent="handleWheel"
-        >
-          <Button
+        <div class="activities-container">
+          <div
             v-for="activity in activities"
             :key="activity.id"
-            variant="secondary"
-            class="rounded-full text-xs shrink-0"
+            class="activity-tag bg-primary-accent text-white hover:bg-primary-accent-dark px-2 py-1 mb-1.5 mr-1.5 inline-block cursor-pointer transition-colors"
             @click.stop="handleActivityClick(activity.id)"
           >
-            {{ activity.title }}
-          </Button>
+            {{ formatActivityName(activity.title) }}
+          </div>
         </div>
       </div>
     </div>
@@ -78,7 +73,6 @@ const props = withDefaults(defineProps<TeacherCardProps>(), {
 });
 
 const arrowColor = ref("var(--color-primary-accent)");
-const activitiesCarousel = ref<HTMLElement | null>(null);
 
 const emit = defineEmits<{
   (e: "click", id: number): void;
@@ -88,20 +82,33 @@ const emit = defineEmits<{
   ): void;
 }>();
 
+// Format activity names to be more meaningful even when short
+const formatActivityName = (name: string) => {
+  // For very long names, use intelligent shortening
+  if (name.length > 15) {
+    // If name has spaces, try to extract meaningful parts
+    if (name.includes(" ")) {
+      const words = name.split(" ");
+      // If first word is long enough, use it; otherwise use first two words
+      if (words[0].length >= 6) {
+        return words[0];
+      } else if (words.length >= 2) {
+        return `${words[0]} ${words[1].substring(0, 3)}`;
+      }
+    }
+    // For single long words, keep more characters
+    return name.substring(0, 12) + "...";
+  }
+  // Short names can be shown completely
+  return name;
+};
+
 const handleActivityClick = (activityId: number) => {
   emit("activity-click", { teacherId: props.id, activityId });
 };
 
 const handleClick = () => {
   emit("click", props.id);
-};
-
-const handleWheel = (event: WheelEvent) => {
-  if (activitiesCarousel.value) {
-    // Use sensitivity for better scroll control
-    const sensitivity = 0.5;
-    activitiesCarousel.value.scrollLeft += event.deltaY * sensitivity;
-  }
 };
 
 // Computed classes based on size prop for more flexibility
@@ -119,6 +126,38 @@ const cardClasses = computed(() => {
 </script>
 
 <style scoped>
+.activities-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  max-height: 80px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.activity-tag {
+  border-radius: var(--radius-base);
+  margin-right: 0.375rem;
+}
+
+.activity-tag:last-child {
+  margin-right: 0;
+}
+
+/* Ensuring the vertical scrollbar has your custom styling */
+.activities-container::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+.activities-container::-webkit-scrollbar-thumb {
+  background: var(--color-primary-accent) !important;
+  border-radius: 4px !important;
+}
+
+.activities-container::-webkit-scrollbar-track {
+  background: var(--color-primary) !important;
+}
+
 .carousel-no-scrollbar {
   -ms-overflow-style: none !important; /* IE and Edge */
   scrollbar-width: none !important; /* Firefox */
