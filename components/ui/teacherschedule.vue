@@ -1,6 +1,7 @@
 <template>
   <div
-    class="flex items-center justify-between bg-white rounded-lg shadow w-full overflow-hidden p-4 sm:p-6 mb-4 gap-3 transition-all hover:shadow-md"
+    class="flex items-center justify-between bg-white rounded-lg shadow w-full overflow-hidden p-4 sm:p-6 mb-4 gap-3 transition-all hover:shadow-md cursor-pointer"
+    @click="$emit('click')"
   >
     <!-- Icon Section (uses yoga{icon_id}.svg) -->
     <div

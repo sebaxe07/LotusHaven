@@ -11,7 +11,7 @@
     />
     <button
       type="button"
-      class="absolute inset-y-0 right-0 flex items-center justify-center px-3 text-white bg-primary-accent rounded-r-md hover:bg-secondary-accent focus:outline-none focus:ring-2 focus:ring-primary-accent focus:ring-offset-1"
+      class="cursor-pointer absolute inset-y-0 right-0 flex items-center justify-center px-3 text-white bg-primary-accent rounded-r-md hover:bg-secondary-accent focus:outline-none focus:ring-2 focus:ring-primary-accent focus:ring-offset-1"
       aria-label="Search"
       @click="$emit('search', modelValue)"
     >
