@@ -1,7 +1,7 @@
 <template>
   <button
     :class="[
-      'font-semibold transition-all rounded-base cursor-pointer',
+      'font-semibold transition-all rounded-base cursor-pointer hover:shadow-md',
       isDisabled ? disabledClasses : buttonClasses,
       extraClasses,
     ]"
@@ -61,7 +61,7 @@ const colorClasses = computed(() => {
     case "secondary":
       return "bg-secondary-accent text-white hover:bg-primary-accent";
     case "white":
-      return "bg-white text-primary-accent hover:bg-opacity-90";
+      return "bg-white text-primary-accent hover:bg-third-accent hover:text-primary-text";
     case "outline":
       return "border-2 border-primary-accent text-primary-accent hover:bg-primary-accent hover:text-white";
     case "outline-white":

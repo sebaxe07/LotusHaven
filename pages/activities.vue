@@ -33,7 +33,7 @@
 
         <button
           v-if="activeFilter"
-          class="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-medium text-red-700 transition-colors duration-200 bg-red-100 rounded-full hover:bg-red-200"
+          class="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-medium text-red-700 transition-colors duration-200 bg-red-100 rounded-full hover:bg-red-200 cursor-pointer"
           @click="clearFilter"
         >
           <span class="mr-1">Clear</span>
@@ -113,7 +113,7 @@
       </p>
       <button
         v-if="searchQuery || activeFilter"
-        class="px-4 py-2 mt-4 text-sm font-medium text-primary-accent-dark border border-primary-accent-light rounded-md bg-primary-accent-lightest hover:bg-primary-accent-light"
+        class="px-4 py-2 mt-4 text-sm font-medium text-primary-accent-dark border border-primary-accent-light rounded-md bg-primary-accent-lightest hover:bg-primary-accent-light cursor-pointer"
         @click="clearSearch"
       >
         Clear filters
