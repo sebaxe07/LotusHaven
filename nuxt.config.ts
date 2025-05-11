@@ -5,6 +5,12 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
+  // Explicitly setting rendering mode to universal (SSR + client-side hydration)
+  ssr: true, // Server-Side Rendering enabled
+  routeRules: {
+    // Apply universal rendering to all routes by default
+    "/**": { ssr: true },
+  },
   css: ["~/assets/css/main.css", "~/assets/css/scrollbar.css"],
   vite: {
     plugins: [tailwindcss()],

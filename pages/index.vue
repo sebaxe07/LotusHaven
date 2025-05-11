@@ -263,8 +263,47 @@
 import { ref, onMounted, computed, onUnmounted } from "vue";
 import { useActivities } from "../composables/useActivities";
 import { useTeachers } from "../composables/useTeachers";
-import { navigateTo } from "nuxt/app";
+import { navigateTo, useHead } from "nuxt/app";
 import type { TeacherCardItem } from "../types/teachers";
+
+// SEO configuration for homepage
+useHead({
+  title: "Lotus Haven | Yoga Studio & Wellness Center",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Welcome to Lotus Haven, a premier yoga studio and wellness center offering classes for all levels. Join our community to reconnect, recharge, and rise through mindful practice.",
+    },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    // Keywords
+    {
+      name: "keywords",
+      content:
+        "yoga studio, wellness center, yoga classes, meditation, mindfulness, beginner yoga, advanced yoga, teacher training",
+    },
+    // Open Graph tags for better social media sharing
+    {
+      property: "og:title",
+      content: "Lotus Haven | Yoga Studio & Wellness Center",
+    },
+    {
+      property: "og:description",
+      content:
+        "Discover our welcoming yoga community offering classes for all levels, from beginners to advanced practitioners.",
+    },
+    { property: "og:type", content: "website" },
+    { property: "og:image", content: "/images/logo.svg" },
+    // Twitter Card
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Lotus Haven Yoga" },
+    {
+      name: "twitter:description",
+      content: "A sanctuary dedicated to holistic wellness and mindful living.",
+    },
+  ],
+  link: [{ rel: "canonical", href: "https://lotushaven.com" }],
+});
 
 // Define the arrow color directly
 const arrowColor = ref("var(--color-primary-text)");

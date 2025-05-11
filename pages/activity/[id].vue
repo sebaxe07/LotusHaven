@@ -128,15 +128,52 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useActivities } from "../../composables/useActivities";
+import { useHead } from "nuxt/app";
 import SectionCard from "../../components/ui/SectionCard.vue";
 
 const { selectedActivity, isLoading, error, fetchActivityById } =
   useActivities();
 const route = useRoute();
 const router = useRouter();
+
+// SEO metadata computed properties
+const pageTitle = computed(() => {
+  if (!selectedActivity.value) return "Yoga Activity | Lotus Haven";
+  return `${selectedActivity.value.title} | ${getDifficultyLabel(
+    selectedActivity.value.difficulty_level
+  )} Yoga Class | Lotus Haven`;
+});
+
+const pageDescription = computed(() => {
+  if (!selectedActivity.value)
+    return "Explore our yoga activities and classes at Lotus Haven.";
+  return `Join our ${selectedActivity.value.title} yoga class at Lotus Haven. ${
+    selectedActivity.value.description
+      ? selectedActivity.value.description.substring(0, 120) + "..."
+      : `Perfect for ${getDifficultyLabel(
+          selectedActivity.value.difficulty_level
+        ).toLowerCase()} students.`
+  }`;
+});
+
+// Dynamic SEO with useHead
+useHead(() => ({
+  title: pageTitle.value,
+  meta: [
+    { name: "description", content: pageDescription.value },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    // Open Graph tags for better social media sharing
+    { property: "og:title", content: pageTitle.value },
+    { property: "og:description", content: pageDescription.value },
+    { property: "og:type", content: "article" },
+    ...(selectedActivity.value?.images?.length
+      ? [{ property: "og:image", content: selectedActivity.value.images[0] }]
+      : []),
+  ],
+}));
 
 // Add goBack function to match teacher page navigation
 const goBack = () => {
