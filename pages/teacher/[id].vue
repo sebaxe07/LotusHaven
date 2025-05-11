@@ -148,7 +148,7 @@
           v-if="selectedTeacher?.activities?.length"
           class="mt-4 lg:mt-8 w-full space-y-3"
         >
-          <Teacherschedule
+          <UiTeacherSchedule
             v-for="activityItem in selectedTeacher.activities"
             :id="activityItem.activity.id"
             :key="activityItem.activity.id"
@@ -175,7 +175,6 @@ import { onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { navigateTo } from "nuxt/app";
 import { useTeachers } from "../../composables/useTeachers";
-import Teacherschedule from "../../components/ui/TeacherSchedule.vue";
 
 const { selectedTeacher, isLoading, error, fetchTeacherById } = useTeachers();
 const route = useRoute();
