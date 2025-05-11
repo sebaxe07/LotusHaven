@@ -6,7 +6,7 @@
     >
       <!-- Back link - Keep this aligned left -->
       <button
-        class="flex items-center gap-2 text-primary-accent hover:underline text-sm mb-4 self-start"
+        class="cursor-pointer flex items-center gap-2 text-primary-accent hover:underline text-sm mb-4 self-start"
         @click="goBack"
       >
         <UiSvgIcon
@@ -68,7 +68,9 @@
                 class="flex flex-col justify-center items-start gap-4 w-full mt-2 sm:mt-4"
               >
                 <div class="flex items-center gap-4">
-                  <div class="bg-primary-accent-light rounded-full p-2">
+                  <div
+                    class="bg-primary-accent-light rounded-full p-2 flex items-center justify-center w-10 h-10 min-w-10"
+                  >
                     <UiSvgIcon
                       icon="/icons/phone.svg"
                       :width="24"
@@ -76,14 +78,17 @@
                       :color="'var(--color-primary-accent)'"
                     />
                   </div>
-                  <span
-                    class="text-primary-text font-figtree text-sm sm:text-base"
+                  <a
+                    :href="`tel:${selectedTeacher.phone}`"
+                    class="text-primary-text font-figtree text-sm sm:text-base hover:text-primary-accent transition-colors cursor-pointer"
                   >
                     {{ formattedPhone }}
-                  </span>
+                  </a>
                 </div>
                 <div class="flex items-center gap-4">
-                  <div class="bg-primary-accent-light rounded-full p-2">
+                  <div
+                    class="bg-primary-accent-light rounded-full p-2 flex items-center justify-center w-10 h-10 min-w-10"
+                  >
                     <UiSvgIcon
                       icon="/icons/email.svg"
                       :width="24"
@@ -91,11 +96,12 @@
                       :color="'var(--color-primary-accent)'"
                     />
                   </div>
-                  <span
-                    class="text-primary-text font-figtree text-sm sm:text-base underline underline-offset-2"
+                  <a
+                    :href="`mailto:${selectedTeacher.email}`"
+                    class="text-primary-text font-figtree text-sm sm:text-base underline underline-offset-2 hover:text-primary-accent transition-colors cursor-pointer"
                   >
                     {{ selectedTeacher.email }}
-                  </span>
+                  </a>
                 </div>
               </div>
             </div>

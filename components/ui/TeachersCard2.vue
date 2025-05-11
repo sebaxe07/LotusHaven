@@ -57,7 +57,6 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import Button from "./Button.vue";
 
 interface TeacherCardProps {
   id: number;
