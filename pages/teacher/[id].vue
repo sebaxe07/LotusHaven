@@ -173,13 +173,41 @@
 <script setup lang="ts">
 import { onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { navigateTo } from "nuxt/app";
+import { navigateTo, useHead } from "nuxt/app";
 import { useTeachers } from "../../composables/useTeachers";
 
 const { selectedTeacher, isLoading, error, fetchTeacherById } = useTeachers();
 const route = useRoute();
 const router = useRouter();
 const teacherId = Number(route.params.id);
+
+// SEO metadata computed properties
+const pageTitle = computed(() => {
+  if (!selectedTeacher.value) return "Teacher Profile | Lotus Haven";
+  return `${selectedTeacher.value.name} ${selectedTeacher.value.surname} | Yoga Teacher | Lotus Haven`;
+});
+
+const pageDescription = computed(() => {
+  if (!selectedTeacher.value)
+    return "View our yoga teacher's profile, classes and contact information at Lotus Haven.";
+  return `Learn about ${selectedTeacher.value.name} ${selectedTeacher.value.surname}, yoga teacher at Lotus Haven. View their class schedule, contact information, and professional background.`;
+});
+
+// Dynamic SEO with useHead
+useHead(() => ({
+  title: pageTitle.value,
+  meta: [
+    { name: "description", content: pageDescription.value },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    // Open Graph tags for better social media sharing
+    { property: "og:title", content: pageTitle.value },
+    { property: "og:description", content: pageDescription.value },
+    { property: "og:type", content: "profile" },
+    ...(selectedTeacher.value?.photo_url
+      ? [{ property: "og:image", content: selectedTeacher.value.photo_url }]
+      : []),
+  ],
+}));
 
 const goBack = () => {
   router.back();

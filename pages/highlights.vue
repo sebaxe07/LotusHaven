@@ -192,6 +192,31 @@
 import { onMounted, computed, ref } from "vue";
 import { useActivities } from "../composables/useActivities";
 import { useRouter } from "vue-router";
+import { useHead } from "nuxt/app";
+
+// SEO configuration
+useHead({
+  title: "Featured Highlights & Special Classes | Lotus Haven Yoga",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Explore our highlighted yoga classes and special activities at Lotus Haven. Discover premium sessions taught by expert instructors for all experience levels.",
+    },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    // Open Graph tags for better social media sharing
+    {
+      property: "og:title",
+      content: "Featured Yoga Classes & Highlights | Lotus Haven",
+    },
+    {
+      property: "og:description",
+      content:
+        "Discover our premium yoga classes taught by expert instructors at Lotus Haven. Special activities for all experience levels.",
+    },
+    { property: "og:type", content: "website" },
+  ],
+});
 
 // Use the activities composable
 const { highlightedActivities, isLoading, error, fetchHighlightedActivities } =

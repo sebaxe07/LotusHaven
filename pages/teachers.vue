@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { onMounted, computed } from "vue";
 import { useTeachers } from "../composables/useTeachers";
-import { navigateTo } from "nuxt/app";
+import { navigateTo, useHead } from "nuxt/app";
 import type { teacherToCardItem2, TeacherCardItem } from "../types/teachers"; // Import the Teacher type
 import TeachersCard2 from "../components/ui/TeachersCard2.vue"; // Import TeachersCard2
 
@@ -52,6 +52,27 @@ const {
   teacherToCardItem,
   teacherToCardItem2,
 } = useTeachers();
+
+// SEO with useHead
+useHead({
+  title: "Our Yoga Teachers | Meet the Team | Lotus Haven",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Meet our experienced and dedicated yoga teachers at Lotus Haven. Our instructors are certified professionals passionate about helping you achieve your wellness goals.",
+    },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    // Open Graph tags for better social media sharing
+    { property: "og:title", content: "Our Yoga Teachers | Lotus Haven" },
+    {
+      property: "og:description",
+      content:
+        "Meet our experienced and dedicated yoga teachers at Lotus Haven.",
+    },
+    { property: "og:type", content: "website" },
+  ],
+});
 
 // Format the teachers data as a nicely indented JSON string
 //const formattedTeachersData = computed(() => {

@@ -137,9 +137,34 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { useActivities } from "../composables/useActivities.js";
+import { useHead } from "nuxt/app";
 import type { Activity } from "../types/activities.js";
 import SearchBar from "../components/ui/SearchBar.vue";
 import ActivityCard from "../components/ui/ActivityCard.vue";
+
+// SEO configuration
+useHead({
+  title: "Yoga Classes & Activities | Lotus Haven",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Explore our diverse range of yoga classes and wellness activities at Lotus Haven. From gentle and restorative to dynamic and high-energy sessions for all experience levels.",
+    },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    // Open Graph tags for better social media sharing
+    {
+      property: "og:title",
+      content: "Yoga Classes & Activities | Lotus Haven",
+    },
+    {
+      property: "og:description",
+      content:
+        "Explore our diverse range of yoga classes and wellness activities at Lotus Haven.",
+    },
+    { property: "og:type", content: "website" },
+  ],
+});
 
 const searchQuery = ref("");
 const activeFilter = ref<string | null>(null);
