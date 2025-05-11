@@ -12,7 +12,7 @@
         <img
           v-if="activity.images && activity.images.length > 0"
           :src="activity.images[0]"
-          :alt="activity.title"
+          alt=""
           class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
         />
         <div

@@ -10,7 +10,7 @@
         <NuxtLink to="/" aria-label="Go to homepage">
           <nuxt-img
             src="/images/logo.svg"
-            alt="Logo"
+            alt=""
             width="40"
             height="40"
             class="drop-shadow-md"
@@ -119,7 +119,7 @@
       >
         <nuxt-img
           src="/images/logo.svg"
-          alt="Logo"
+          alt=""
           width="100"
           height="100"
           class="drop-shadow-md"

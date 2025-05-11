@@ -29,6 +29,7 @@
     <!-- Arrow Button -->
     <button
       class="min-w-[32px] w-8 h-8 bg-primary-accent rounded-full flex items-center justify-center text-white cursor-pointer hover:scale-105 transition-transform"
+      aria-label="View details of this class"
       @click.stop="$emit('click')"
     >
       <UiSvgIcon
@@ -37,6 +38,7 @@
         :height="16"
         :color="'white'"
         class="rotate-180"
+        aria-hidden="true"
       />
     </button>
   </div>

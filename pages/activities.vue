@@ -119,18 +119,23 @@
         Clear filters
       </button>
     </div>
+    <template v-else>
+      <!-- Added h2 heading for proper heading hierarchy -->
+      <h2 class="mt-4 mb-6 text-xl sm:text-2xl font-semibold text-primary-text">
+        Available Classes
+      </h2>
 
-    <!-- Responsive grid that works well at all screen sizes -->
-    <div
-      v-else
-      class="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3"
-    >
-      <ActivityCard
-        v-for="activity in filteredActivities"
-        :key="activity.id"
-        :activity="activity"
-      />
-    </div>
+      <!-- Responsive grid that works well at all screen sizes -->
+      <div
+        class="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        <ActivityCard
+          v-for="activity in filteredActivities"
+          :key="activity.id"
+          :activity="activity"
+        />
+      </div>
+    </template>
   </div>
 </template>
 

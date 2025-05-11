@@ -19,10 +19,10 @@
         <h1 class="header1 mb-4 leading-10 text-primary-text">
           Welcome to Lotus Haven
         </h1>
-        <h3 class="text-secondary-text mb-8">
+        <h2 class="text-secondary-text mb-8 header3">
           This is more than a yoga studio—it's a haven to reconnect, recharge,
           and rise.
-        </h3>
+        </h2>
       </div>
       <!-- Text and arrow for scrolling down -->
       <div
