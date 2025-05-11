@@ -16,14 +16,21 @@
             ? 'bg-primary-accent-light hover:bg-primary-accent-light text-primary-text'
             : 'bg-gray-200 text-secondary-text',
         ]"
+        :aria-label="
+          schedule.professor?.name
+            ? `View details of ${schedule.professor.name}`
+            : 'View instructor details'
+        "
       >
         <span>{{ schedule.professor?.name || "Instructor Led" }}</span>
+        <!-- Arrow icon is decorative and should be hidden from screen readers -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
           class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"
           aria-hidden="true"
+          focusable="false"
         >
           <path
             fill-rule="evenodd"
@@ -78,7 +85,6 @@
         <a
           :href="`mailto:${schedule.professor.email}`"
           class="text-sm sm:text-base hover:text-primary-accent hover:underline break-all"
-          :title="schedule.professor.email"
         >
           {{ responsiveEmail }}
         </a>

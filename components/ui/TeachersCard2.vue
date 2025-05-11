@@ -37,9 +37,9 @@
       <!-- Activities section -->
       <div class="mt-auto">
         <!-- Activities label changed from h3 to h4 since it's a subsection under the teacher name (which is h2) -->
-        <h4 class="font-semibold text-primary-text text-base mb-2">
+        <h3 class="font-semibold text-primary-text text-base mb-2">
           Activities
-        </h4>
+        </h3>
         <div class="activities-container">
           <div
             v-for="activity in activities"

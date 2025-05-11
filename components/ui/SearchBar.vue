@@ -1,6 +1,9 @@
 <template>
   <div class="relative flex items-center mb-6">
+    <!-- Added id to input and label with matching for attribute -->
+    <label for="search-input" class="sr-only">Search</label>
     <input
+      id="search-input"
       type="text"
       :value="modelValue"
       placeholder="Search here"
