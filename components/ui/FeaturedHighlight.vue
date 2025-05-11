@@ -32,11 +32,11 @@
 
         <div>
           <div v-if="schedules && schedules.length > 0" class="mb-4">
-            <h3
+            <h4
               class="text-sm uppercase tracking-wider text-secondary-text mb-2"
             >
               Upcoming Sessions
-            </h3>
+            </h4>
             <div class="space-y-2">
               <div
                 v-for="(schedule, index) in displayedSchedules"

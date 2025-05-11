@@ -11,6 +11,14 @@ export default defineNuxtConfig({
     // Apply universal rendering to all routes by default
     "/**": { ssr: true },
   },
+  // Setting the HTML language attribute for accessibility
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: "en", // Set language to English
+      },
+    },
+  },
   css: ["~/assets/css/main.css", "~/assets/css/scrollbar.css"],
   vite: {
     plugins: [tailwindcss()],
