@@ -1,5 +1,6 @@
 <template>
   <div class="container px-4 py-6 sm:py-8 mx-auto">
+    <!-- Page Header - Main title and introductory text -->
     <h1 class="mb-4 text-2xl sm:text-3xl font-bold text-primary-text">
       Activities
     </h1>
@@ -9,12 +10,12 @@
       Explore our classes and find your flow.
     </p>
 
-    <!-- Search bar with responsive padding -->
+    <!-- Search Component - Text input for filtering activities by keyword -->
     <div class="mb-6">
       <SearchBar v-model="searchQuery" @search="performSearch" />
     </div>
 
-    <!-- Filter labels with better mobile handling -->
+    <!-- Quick Filter Tags - Horizontally scrollable category filter buttons -->
     <div class="filter-container mb-6 sm:mb-8 stable-layout">
       <div class="flex flex-wrap items-center gap-2">
         <span
@@ -55,13 +56,14 @@
       </div>
     </div>
 
-    <!-- State handling (loading, error, empty) -->
+    <!-- Loading State - Animated spinner while fetching activity data -->
     <div v-if="isLoading" class="py-8 text-center">
       <div
         class="inline-block w-10 h-10 border-4 border-primary-accent-light border-t-primary-accent rounded-full animate-spin"
       ></div>
       <p class="mt-4 text-secondary-text">Loading activities...</p>
     </div>
+    <!-- Error State - User-friendly error display with retry option -->
     <div v-else-if="error" class="py-8 text-center">
       <div
         class="inline-flex items-center justify-center w-12 h-12 mb-4 text-red-500 bg-red-100 rounded-full"
@@ -89,6 +91,7 @@
         Retry
       </button>
     </div>
+    <!-- Empty Search Results - Displayed when filters return no matches -->
     <div v-else-if="filteredActivities.length === 0" class="py-8 text-center">
       <div
         class="inline-flex items-center justify-center w-12 h-12 mb-4 text-secondary-text bg-gray-100 rounded-full"
@@ -111,6 +114,7 @@
       <p class="text-secondary-text">
         No activities found matching your criteria.
       </p>
+      <!-- Reset Button - Clears all active filters -->
       <button
         v-if="searchQuery || activeFilter"
         class="px-4 py-2 mt-4 text-sm font-medium text-primary-accent-dark border border-primary-accent-light rounded-md bg-primary-accent-lightest hover:bg-primary-accent-light cursor-pointer"
@@ -120,15 +124,16 @@
       </button>
     </div>
     <template v-else>
-      <!-- Added h2 heading for proper heading hierarchy -->
+      <!-- Results Heading - Section title for available activities -->
       <h2 class="mt-4 mb-6 text-xl sm:text-2xl font-semibold text-primary-text">
         Available Classes
       </h2>
 
-      <!-- Responsive grid that works well at all screen sizes -->
+      <!-- Activity Grid - Responsive layout for displaying activity cards -->
       <div
         class="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
+        <!-- Activity Card Components - Individual class listings -->
         <ActivityCard
           v-for="activity in filteredActivities"
           :key="activity.id"
@@ -147,7 +152,7 @@ import type { Activity } from "../types/activities.js";
 import SearchBar from "../components/ui/SearchBar.vue";
 import ActivityCard from "../components/ui/ActivityCard.vue";
 
-// SEO configuration
+// Configure SEO metadata for activities page with proper titles and descriptions
 useHead({
   title: "Yoga Classes & Activities | Lotus Haven",
   meta: [
@@ -171,11 +176,15 @@ useHead({
   ],
 });
 
-const searchQuery = ref("");
-const activeFilter = ref<string | null>(null);
+// Search and filter state management
+const searchQuery = ref(""); // Tracks user input in search field
+const activeFilter = ref<string | null>(null); // Currently selected filter tag
 
+// Initialize activities data and methods from composable
 const { activities, isLoading, error, fetchActivities } = useActivities();
 
+// Available filter categories for quick selection
+// Represents common activity types users can filter by
 const filterLabels = ref<string[]>([
   "Gentle",
   "Moderate",
@@ -187,9 +196,12 @@ const filterLabels = ref<string[]>([
   "Hatha",
 ]);
 
+// Computed property that filters activities based on search query or active filter
+// Returns activities that match the current filter criteria across various fields
 const filteredActivities = computed(() => {
   let results: Activity[] = [...activities.value];
 
+  // Use either the tag filter or the search box input, prioritizing the active filter
   const queryToUse = activeFilter.value || searchQuery.value.trim();
 
   if (queryToUse) {
@@ -212,57 +224,73 @@ const filteredActivities = computed(() => {
   return results;
 });
 
+// Handler for search input events
+// Updates search state and manages interaction between search and filter tags
 const performSearch = (query: string) => {
   searchQuery.value = query;
   if (query.trim() && activeFilter.value) {
+    // Clear any active filter tags when manually typing a search query
     activeFilter.value = null;
   } else if (!query.trim() && !activeFilter.value) {
     // If search bar is cleared and no label is active, effectively no search query
-    // This case is handled by `queryToUse` being empty in computed prop.
+    // This case is handled by `queryToUse` being empty in computed prop
   }
 };
 
+// Toggle filter tags when clicked
+// Handles selection, deselection, and synchronization with search input
 const toggleFilter = (label: string) => {
   if (activeFilter.value === label) {
+    // If clicking the already active filter, clear it
     activeFilter.value = null;
     searchQuery.value = "";
   } else {
+    // Activate the selected filter and update search query to match
     activeFilter.value = label;
     searchQuery.value = label;
   }
 };
 
+// Clear only the active filter tag selection
 const clearFilter = () => {
   activeFilter.value = null;
   searchQuery.value = "";
 };
 
+// Reset all search and filter states
+// Used by the "Clear filters" button in empty results view
 const clearSearch = () => {
   activeFilter.value = null;
   searchQuery.value = "";
 };
 
+// Retry fetching activities after an error
+// Called when user clicks the retry button in error state
 const retryLoading = async () => {
   await fetchActivities();
 };
 
+// Initialize page data on component mount
+// Loads all activities from API or data source
 onMounted(async () => {
   await fetchActivities();
 });
 </script>
 
 <style scoped>
+/* Horizontal scrolling container for filter tags with hidden scrollbar */
 .filter-container {
   overflow-x: auto;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
 
+/* Hide scrollbar while preserving scrolling functionality */
 .filter-container::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
 
-/* Ensure consistent layout with or without scrollbar */
+/* Layout stabilization to prevent content shifts */
 .stable-layout {
   /* Force the browser to calculate layout as if scrollbar is always present */
   overflow-y: scroll;
@@ -272,6 +300,7 @@ onMounted(async () => {
   padding-bottom: 1px;
 }
 
+/* Loading spinner animation */
 @keyframes spin {
   to {
     transform: rotate(360deg);

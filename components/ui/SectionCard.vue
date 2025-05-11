@@ -1,13 +1,14 @@
 <template>
   <div class="p-4 sm:p-6 bg-gray-100 rounded-xl shadow-lg">
     <div class="flex flex-wrap items-center mb-4 sm:mb-5 gap-3">
+      <!-- Instructor icon with responsive sizing -->
       <div class="text-primary-accent flex-shrink-0">
         <UiSvgIcon
           :icon="getIconPath('professor')"
           class="w-6 h-6 sm:w-7 sm:h-7"
         />
       </div>
-      <!-- Added proper styling to indicate clickable teacher link -->
+      <!-- Instructor name with visual feedback for interaction -->
       <NuxtLink
         :to="'/teacher/' + schedule.professor?.id"
         :class="[
@@ -23,7 +24,7 @@
         "
       >
         <span>{{ schedule.professor?.name || "Instructor Led" }}</span>
-        <!-- Arrow icon is decorative and should be hidden from screen readers -->
+        <!-- Decorative arrow icon that appears on hover -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
@@ -42,6 +43,7 @@
     </div>
 
     <div class="space-y-3 sm:space-y-4 text-secondary-text">
+      <!-- Schedule information section with dates and times -->
       <div class="flex items-start">
         <div class="mr-3 sm:mr-4 text-primary-accent flex-shrink-0 pt-1">
           <UiSvgIcon
@@ -59,7 +61,7 @@
           </p>
         </div>
       </div>
-
+      <!-- Phone contact information with clickable link -->
       <div v-if="schedule.professor?.phone" class="flex items-center">
         <div class="mr-3 sm:mr-4 text-primary-accent flex-shrink-0">
           <UiSvgIcon
@@ -75,6 +77,7 @@
         </a>
       </div>
 
+      <!-- Email contact with responsive display and clickable link -->
       <div v-if="schedule.professor?.email" class="flex items-center">
         <div class="mr-3 sm:mr-4 text-primary-accent flex-shrink-0">
           <UiSvgIcon
@@ -97,37 +100,74 @@
 import { computed } from "vue";
 import type { PropType } from "vue";
 
+/**
+ * Represents an instructor with contact information
+ */
 interface Professor {
+  /** Unique identifier for the instructor */
   id: number;
+  /** Instructor's display name */
   name?: string;
+  /** Contact phone number */
   phone?: string;
+  /** Contact email address */
   email?: string;
+  /** URL to instructor's profile photo */
   photo_url?: string;
 }
 
+/**
+ * Represents a class session schedule with time and instructor
+ */
 interface Schedule {
+  /** Instructor information for this session */
   professor?: Professor;
+  /** Days of the week when the class is held */
   days: string[];
+  /** Time when the class is held (e.g. "9:00 AM") */
   time: string;
 }
 
+/**
+ * Component props definition with validation
+ */
 const props = defineProps({
+  /**
+   * Session schedule data to display
+   * Contains instructor information, days, and time
+   */
   schedule: {
     type: Object as PropType<Schedule>,
     required: true,
   },
 });
 
+/**
+ * Generates the path to SVG icons used in the component
+ * @param {string} name - Base name of the icon
+ * @returns {string} Complete path to the SVG icon file
+ */
 const getIconPath = (name: string): string => {
   return "/icons/section-" + name + ".svg";
 };
 
+/**
+ * Formats day names with capitalized first letter
+ * @param {string} string - Day name to format
+ * @returns {string} Day name with first letter capitalized
+ */
 const capitalizeFirstLetter = (string: string): string => {
   if (!string) return "";
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-// Format phone number to display as (xxx) xxx-xxxx if possible
+/**
+ * Formats phone numbers to standard US format (xxx) xxx-xxxx when possible
+ * Falls back to original format if not a standard 10-digit number
+ *
+ * @param {string|number} phoneNumber - Raw phone number to format
+ * @returns {string} Formatted phone number for display
+ */
 const formatPhoneNumber = (phoneNumber: string | number) => {
   if (phoneNumber === undefined || phoneNumber === null) return "";
 
@@ -137,7 +177,7 @@ const formatPhoneNumber = (phoneNumber: string | number) => {
   // Remove all non-numeric characters
   const cleaned = phoneStr.replace(/\D/g, "");
 
-  // Check if we have a 10-digit number (US format)
+  // Format as (xxx) xxx-xxxx for standard US 10-digit numbers
   if (cleaned.length === 10) {
     return `(${cleaned.substring(0, 3)}) ${cleaned.substring(
       3,
@@ -149,58 +189,66 @@ const formatPhoneNumber = (phoneNumber: string | number) => {
   return phoneStr;
 };
 
-// Use a more responsive approach to email display
+/**
+ * Intelligently formats email addresses based on screen size
+ * Truncates long email addresses to prevent layout issues while maintaining readability
+ *
+ * @returns {string} Responsively formatted email address
+ */
 const responsiveEmail = computed(() => {
   const email = props.schedule.professor?.email;
   if (!email) return "";
 
-  // For small screens, truncate aggressively to avoid layout issues
+  // Get current viewport width with SSR fallback
   const windowWidth = typeof window !== "undefined" ? window.innerWidth : 1024;
 
+  // Mobile viewport formatting
   if (windowWidth < 768) {
-    // More aggressive truncation for mobile
     const atIndex = email.indexOf("@");
     if (atIndex === -1) return email;
 
     const username = email.substring(0, atIndex);
     const domain = email.substring(atIndex); // Includes the @ symbol
 
+    // Aggressively truncate long usernames on small screens
     if (username.length > 10) {
-      // Just show truncated username + domain
       return `${username.substring(0, 7)}...${domain}`;
     }
 
-    // Show full username + domain
     return email;
   }
 
-  // For larger screens with long emails
+  // Desktop viewport formatting for long emails
   if (email.length > 25) {
     const atIndex = email.indexOf("@");
     if (atIndex === -1) return email;
 
     const username = email.substring(0, atIndex);
-    const domain = email.substring(atIndex); // Includes the @ symbol
+    const domain = email.substring(atIndex);
 
-    // Truncate username if it's very long
+    // Moderate truncation for long usernames on larger screens
     if (username.length > 15) {
       return `${username.substring(0, 12)}...${domain}`;
     }
-
-    // Otherwise show full email
-    return email;
   }
 
+  // Default: show full email when space permits
   return email;
 });
 </script>
 
 <style scoped>
-/* Ensure text wrapping works properly */
+/**
+ * Text wrapping utilities for optimal display
+ * Prevents content overflow and improves readability
+ */
+
+/* Breaks words at appropriate points for natural reading */
 .break-words {
   word-break: break-word;
 }
 
+/* More aggressive word breaking for long unbroken strings like emails */
 .break-all {
   word-break: break-all;
 }

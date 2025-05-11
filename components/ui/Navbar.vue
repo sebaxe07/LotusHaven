@@ -1,5 +1,6 @@
 <template>
-  <!-- Mobile navbar (top) - shown for mobile devices OR when zoom detected -->
+  <!-- Responsive top navigation bar
+     Displays when on mobile devices or when browser zoom level is high -->
   <div
     class="fixed top-0 left-0 right-0 bg-secondary shadow-lg z-50"
     :class="{ hidden: !isMobileOrZoomed }"
@@ -105,7 +106,8 @@
     </div>
   </div>
 
-  <!-- Desktop sidebar (left side) - hidden when mobile OR zoomed in -->
+  <!-- Permanent sidebar navigation for desktop view
+     Hidden automatically on mobile or when browser is zoomed -->
   <div
     class="bg-secondary h-full shadow-xl flex-col items-center border-r border-third-accent/50 w-72"
     :class="{ hidden: isMobileOrZoomed, flex: !isMobileOrZoomed }"
@@ -203,18 +205,26 @@
 import { ref, watch, onUnmounted, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 
-const mobileMenuOpen = ref(false);
+/**
+ * Reactive state for the navigation component
+ */
+const mobileMenuOpen = ref(false); // Controls mobile menu visibility
 const route = useRoute();
-const isZoomedIn = ref(false);
-const isMobile = ref(false);
+const isZoomedIn = ref(false); // Tracks if browser is zoomed in
+const isMobile = ref(false); // Tracks if viewport is mobile-sized
 
-// Computed property that determines if we should show mobile layout
-// (either actual mobile device OR desktop that's zoomed in)
+/**
+ * Determines whether to show the mobile layout or desktop sidebar
+ * Used to adapt navigation UI for both small screens and zoomed-in browsers
+ */
 const isMobileOrZoomed = computed(() => {
   return isMobile.value || isZoomedIn.value;
 });
 
-// Close mobile menu when route changes
+/**
+ * Auto-close mobile menu when navigating between routes
+ * Prevents menu from staying open after user navigates to a new page
+ */
 watch(
   () => route.fullPath,
   () => {
@@ -222,57 +232,72 @@ watch(
   }
 );
 
-// Detect if zoom level is high enough to switch to mobile layout
+/**
+ * Detects browser zoom level and viewport size to determine appropriate layout
+ * Uses multiple detection methods for cross-browser compatibility
+ */
 const detectZoom = () => {
   if (typeof window === "undefined") return;
 
-  // Method 1: Check browser zoom ratio
+  // Calculate browser zoom ratio from window dimensions
   const ratio = Math.round((window.outerWidth / window.innerWidth) * 100) / 100;
-
-  // Method 2: Check device pixel ratio for Windows scaling
+  // Get device pixel ratio for detecting OS-level scaling
   const pixelRatio = window.devicePixelRatio || 1;
 
-  // Method 3: Check if available width is limited
+  // Measure available screen width for layout decisions
   const availableWidth = window.innerWidth;
 
-  // Combined detection logic:
-  // 1. Browser is zoomed beyond 130%
-  // 2. Device has high pixel ratio (Windows scaling)
-  // 3. Available width is too small for comfortable sidebar viewing
+  /**
+   * Determine if we should use mobile layout based on three criteria:
+   * - Browser zoom level exceeds 130%
+   * - High device pixel ratio indicates OS display scaling
+   * - Window width is too narrow for comfortable sidebar viewing
+   */
   isZoomedIn.value = ratio > 1.3 || pixelRatio >= 1.4 || availableWidth < 1300;
 
-  // Check mobile separately using window width
-  isMobile.value = window.innerWidth < 1024; // 1024px is lg breakpoint in Tailwind
+  // Set mobile status based on Tailwind's lg breakpoint
+  isMobile.value = window.innerWidth < 1024;
 };
 
-// Client-side only code
+/**
+ * Component initialization on mount
+ * Sets up event listeners and initial state detection
+ */
 onMounted(() => {
   if (typeof window !== "undefined") {
-    // Initial check for zoom and mobile
+    // Perform initial layout detection
     detectZoom();
 
-    // Listen for resize to detect changes in zoom or orientation
+    // Set up responsive behavior
     window.addEventListener("resize", detectZoom);
 
-    // Create a debounced version of the scroll handler
+    /**
+     * Handler to close mobile menu when user scrolls
+     * Improves UX by clearing the menu when user begins page navigation
+     */
     const closeMenuOnScroll = () => {
       if (mobileMenuOpen.value) {
         mobileMenuOpen.value = false;
       }
     };
-
-    // Set up watch effect that adds/removes event listener based on menu state
+    /**
+     * Dynamically add/remove scroll listener based on menu state
+     * This optimizes performance by only listening when necessary
+     */
     watch(mobileMenuOpen, (isOpen) => {
       if (isOpen) {
-        // Menu opened - add scroll listener
+        // When menu opens, listen for scroll events to close it
         window.addEventListener("scroll", closeMenuOnScroll, { passive: true });
       } else {
-        // Menu closed - remove scroll listener (only needed when menu is open)
+        // When menu closes, remove the listener to avoid unnecessary processing
         window.removeEventListener("scroll", closeMenuOnScroll);
       }
     });
 
-    // Clear event listeners when component unmounts
+    /**
+     * Clean up event listeners when component is destroyed
+     * Prevents memory leaks and unexpected behavior
+     */
     onUnmounted(() => {
       window.removeEventListener("resize", detectZoom);
       window.removeEventListener("scroll", closeMenuOnScroll);
@@ -282,6 +307,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/**
+ * Social media icon styling
+ * Creates circular buttons with hover effects for social media links
+ */
 .social-icon-link {
   display: flex;
   align-items: center;
@@ -289,28 +318,34 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: rgba(
-    207,
-    218,
-    217,
-    0.8
-  ); /* Brighter version of third-accent */
+  background-color: rgba(207, 218, 217, 0.8);
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
 }
 
+/**
+ * Interactive hover state for social icons
+ * Creates visual feedback with color change, elevation and shadow
+ */
 .social-icon-link:hover {
   background-color: var(--color-primary-accent);
   transform: translateY(-2px);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/**
+ * Icon image transition effect
+ */
 .social-icon {
   transition: filter 0.2s ease;
 }
 
+/**
+ * Change icon color to white on hover
+ * Ensures proper contrast with the background color
+ */
 .social-icon-link:hover .social-icon {
-  filter: brightness(0) invert(1); /* Make icon white on hover */
+  filter: brightness(0) invert(1);
 }
 </style>

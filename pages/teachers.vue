@@ -5,18 +5,22 @@
       Meet our experienced and dedicated teachers.
     </p>
 
+    <!-- Loading State - Simple text indicator while data is being fetched -->
     <div v-if="teachersLoading" class="py-4 text-secondary-text">
       Loading teachers...
     </div>
+    <!-- Error State - Display error message if data fetch fails -->
     <div v-else-if="teachersError" class="py-4 text-red-500">
       Error: {{ teachersError }}
     </div>
+    <!-- Empty State - Message shown when no teachers are available -->
     <div v-else-if="teachers.length === 0" class="py-4 text-secondary-text">
       No teachers found.
     </div>
     <div v-else>
-      <!-- Flex container for the teachers -->
+      <!-- Teacher Grid - Responsive layout for displaying all teachers -->
       <div class="teachers-container">
+        <!-- Teacher Card Component - Individual teacher profile with activities -->
         <TeachersCard2
           v-for="teacher in cardteachers"
           :id="teacher.id"
@@ -28,7 +32,8 @@
           class="teacher-card-item"
           @click="navigateToTeacherDetail(teacher.id)"
           @activity-click="
-            ({ teacherId, activityId }) => navigateToActivity(activityId)
+            ({ teacherId, activityId }) =>
+              navigateToActivity(activityId) /* Handle activity chip clicks */
           "
         />
       </div>
@@ -40,10 +45,11 @@
 import { onMounted, computed } from "vue";
 import { useTeachers } from "../composables/useTeachers";
 import { navigateTo, useHead } from "nuxt/app";
-import type { teacherToCardItem2, TeacherCardItem } from "../types/teachers"; // Import the Teacher type
-import TeachersCard2 from "../components/ui/TeachersCard2.vue"; // Import TeachersCard2
+import type { teacherToCardItem2, TeacherCardItem } from "../types/teachers";
+import TeachersCard2 from "../components/ui/TeachersCard2.vue";
 
-// Use the teachers composable
+// Initialize teacher data and methods from composable
+// Provides data fetching, loading states, and formatting utilities
 const {
   teachers: teachersData,
   isLoading: teachersLoading,
@@ -53,7 +59,8 @@ const {
   teacherToCardItem2,
 } = useTeachers();
 
-// SEO with useHead
+// Configure SEO metadata for teachers listing page
+// Includes page title, description and social media tags
 useHead({
   title: "Our Yoga Teachers | Meet the Team | Lotus Haven",
   meta: [
@@ -74,34 +81,36 @@ useHead({
   ],
 });
 
-// Format the teachers data as a nicely indented JSON string
-//const formattedTeachersData = computed(() => {
-//if (!teachers.value || teachers.value.length === 0) return "";
-//return JSON.stringify(teachers.value, null, 2);
-//});
+// Transform teachers data to standard card format
+// Used for compatibility with existing components
 const teachers = computed<TeacherCardItem[]>(() => {
   return teachersData.value.map((teacher) => teacherToCardItem(teacher));
 });
-// Transform teacher data to card items for the carousel
+// Transform teacher data to enhanced card format with additional details
+// Used specifically for TeachersCard2 component which shows activities
 const cardteachers = computed<teacherToCardItem2[]>(() => {
   return teachersData.value.map((teacher) => teacherToCardItem2(teacher));
 });
 
+// Navigate to specific activity detail page when activity chip is clicked
 const navigateToActivity = (activityId: number) => {
   navigateTo(`/activity/${activityId}`);
 };
 
+// Navigate to teacher profile page when teacher card is clicked
 const navigateToTeacherDetail = (id: number) => {
   console.log(`Navigating to teacher with ID: ${id}`);
-  navigateTo(`/teacher/${id}`); // Changed from /teachers/${id} to /teacher/${id}
+  navigateTo(`/teacher/${id}`);
 };
-// Fetch all teachers when component mounts
+// Initialize page data on component mount
+// Loads teacher data from API or other data source
 onMounted(async () => {
   await fetchTeachers();
 });
 </script>
 
 <style scoped>
+/* Flex container for responsive grid layout of teacher cards */
 .teachers-container {
   display: flex;
   flex-wrap: wrap;
@@ -109,13 +118,14 @@ onMounted(async () => {
   justify-content: center;
 }
 
+/* Individual card styling to prevent unwanted growth/shrinking */
 .teacher-card-item {
   /* Ensure teacher cards maintain their size but don't grow to fill space */
   flex-grow: 0;
   flex-shrink: 0;
 }
 
-/* Responsive adjustments for the card width */
+/* Mobile-specific adjustments for smaller screens */
 @media (max-width: 639px) {
   .teacher-card-item {
     /* On mobile, cards can take up more width */

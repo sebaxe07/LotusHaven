@@ -6,6 +6,7 @@
       Haven.
     </p>
 
+    <!-- Loading State - Animated spinner while data is being fetched -->
     <div v-if="isLoading" class="py-12 text-center">
       <div
         class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-primary-accent border-r-transparent align-[-0.125em]"
@@ -13,6 +14,7 @@
       <p class="mt-4 text-secondary-text">Loading highlighted activities...</p>
     </div>
 
+    <!-- Error State - User-friendly error display with retry option -->
     <div v-else-if="error" class="py-8 text-center">
       <div
         class="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg"
@@ -27,6 +29,7 @@
       </div>
     </div>
 
+    <!-- Empty State - Friendly message when no activities are available -->
     <div
       v-else-if="highlightedActivities.length === 0"
       class="py-12 text-center"
@@ -41,8 +44,9 @@
       </div>
     </div>
 
+    <!-- Content Container - Wrapper for all content when data is available -->
     <div v-else>
-      <!-- Featured Highlight (randomly selected activity) -->
+      <!-- Hero Feature - Randomly selected premium activity with full details -->
       <div v-if="featuredActivity" class="mb-12">
         <UiFeaturedHighlight
           :id="featuredActivity.id"
@@ -58,7 +62,7 @@
         />
       </div>
 
-      <!-- Other Highlighted Activities as Carousel -->
+      <!-- Activity Carousel - Secondary featured activities in horizontal scrollable layout -->
       <div v-if="otherHighlightedActivities.length > 0" class="mb-10">
         <h2 class="text-2xl font-semibold mb-4 text-primary-text">
           Featured Classes
@@ -69,12 +73,13 @@
         />
       </div>
 
-      <!-- Why Join Our Highlighted Classes Section -->
+      <!-- Benefits Grid - Selling points of premium classes with visual indicators -->
       <div class="mt-12 bg-box p-6 rounded-lg">
         <h2 class="text-xl font-semibold mb-4 text-primary-text">
           Why Join Our Highlighted Classes?
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Benefit Item - Expert Instructors Feature -->
           <div class="flex items-start">
             <div class="bg-primary-accent rounded-full p-2 mr-3">
               <svg
@@ -98,6 +103,7 @@
               </p>
             </div>
           </div>
+          <!-- Benefit Item - Premium Content Feature -->
           <div class="flex items-start">
             <div class="bg-secondary-accent rounded-full p-2 mr-3">
               <svg
@@ -120,6 +126,7 @@
               </p>
             </div>
           </div>
+          <!-- Benefit Item - Flexible Scheduling Feature -->
           <div class="flex items-start">
             <div class="bg-third-accent rounded-full p-2 mr-3">
               <svg
@@ -142,6 +149,7 @@
               </p>
             </div>
           </div>
+          <!-- Benefit Item - Inclusivity Feature -->
           <div class="flex items-start">
             <div class="bg-primary-accent/70 rounded-full p-2 mr-3">
               <svg
@@ -168,7 +176,7 @@
         </div>
       </div>
 
-      <!-- Call to Action Section -->
+      <!-- Conversion Section - Sign-up prompt with contextual background -->
       <div class="mt-12 text-center p-8 bg-primary-accent/10 rounded-lg">
         <h2 class="text-2xl font-bold mb-3 text-primary-text">
           Ready to Experience Our Highlighted Classes?
@@ -177,6 +185,7 @@
           Join Lotus Haven today and transform your practice with our specially
           curated classes designed to enhance your mind, body, and spirit.
         </p>
+        <!-- CTA Button - Primary call-to-action for conversion -->
         <UiButton
           text="Sign Up Now"
           color="primary"
@@ -194,7 +203,7 @@ import { useActivities } from "../composables/useActivities";
 import { useRouter } from "vue-router";
 import { useHead } from "nuxt/app";
 
-// SEO configuration
+// Configure SEO metadata for highlights page with proper titles and descriptions
 useHead({
   title: "Featured Highlights & Special Classes | Lotus Haven Yoga",
   meta: [
@@ -218,17 +227,18 @@ useHead({
   ],
 });
 
-// Use the activities composable
+// Initialize activities data and methods from composable
+// Provides featured activities data and loading states
 const { highlightedActivities, isLoading, error, fetchHighlightedActivities } =
   useActivities();
 
-// Set up the router for navigation
+// Initialize Vue Router for page navigation
 const router = useRouter();
 
-// A reference to store our randomly selected featured activity index
+// Track the index of the randomly selected featured activity
 const featuredActivityIndex = ref(0);
 
-// Transform the highlighted activities into ClassCardItem format
+// Convert raw activity data into formatted card objects with consistent structure
 const highlightedActivitiesAsCards = computed(() => {
   if (!highlightedActivities.value || highlightedActivities.value.length === 0)
     return [];
@@ -251,29 +261,33 @@ const highlightedActivitiesAsCards = computed(() => {
   });
 });
 
-// Featured activity (randomly selected from the list)
+// Extract the currently selected featured activity to highlight at the top of the page
+// Returns null if no activities are available
 const featuredActivity = computed(() => {
   if (highlightedActivitiesAsCards.value.length === 0) return null;
   return highlightedActivitiesAsCards.value[featuredActivityIndex.value];
 });
 
-// Other highlighted activities (excluding the featured one)
+// Filter out the featured activity to display the remaining activities in the carousel
+// Returns empty array if only one or zero activities are available
 const otherHighlightedActivities = computed(() => {
   if (highlightedActivitiesAsCards.value.length <= 1) return [];
 
-  // Return all activities except the featured one
+  // Filter out the featured activity by index
   return highlightedActivitiesAsCards.value.filter(
     (_, index) => index !== featuredActivityIndex.value
   );
 });
 
-// Get color variant based on index for visual variety
+// Assign color themes to activities using a cyclic pattern
+// Ensures visual variety when displaying multiple activity cards
 const getColorVariant = (index: number): string => {
   const variants = ["primary", "secondary", "third"];
   return variants[index % variants.length];
 };
 
-// Randomly select a featured activity
+// Select a random activity to feature at the top of the page
+// Adds dynamic content variation between page visits
 const randomizeFeaturedActivity = () => {
   if (highlightedActivitiesAsCards.value.length > 0) {
     featuredActivityIndex.value = Math.floor(
@@ -282,18 +296,21 @@ const randomizeFeaturedActivity = () => {
   }
 };
 
-// Navigate to activity details page
+// Handle navigation to individual activity detail pages
+// Triggered by clicking "Learn More" buttons
 const navigateToActivity = (id: number) => {
   router.push(`/activity/${id}`);
 };
 
-// Retry fetching in case of an error
+// Error recovery handler for data fetching failures
+// Attempts to reload data when user clicks "Retry" button
 const retryFetch = async () => {
   await fetchHighlightedActivities();
   randomizeFeaturedActivity();
 };
 
-// Fetch highlighted activities when component mounts
+// Initialize page data on component mount
+// Loads activities and selects a random feature
 onMounted(async () => {
   await fetchHighlightedActivities();
   randomizeFeaturedActivity();

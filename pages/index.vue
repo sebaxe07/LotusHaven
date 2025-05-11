@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen">
-    <!-- Hero Section with Gradient and Logo -->
+    <!-- Hero Section - Full-height landing with gradient background and logo -->
     <section
       class="h-screen lg:h-screen flex flex-col justify-center text-center relative"
       :style="{
@@ -24,7 +24,7 @@
           and rise.
         </h2>
       </div>
-      <!-- Text and arrow for scrolling down -->
+      <!-- Navigation arrow - Animated downward indicator to guide users to scroll -->
       <div
         class="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center"
       >
@@ -41,7 +41,7 @@
       </div>
     </section>
 
-    <!-- Quote Section -->
+    <!-- Quote Section - Inspirational yoga quote with primary background -->
     <section id="quote-section" class="py-16 bg-primary">
       <div class="container mx-auto px-4">
         <h2 class="text-center text-primary-text leading-snug">
@@ -52,11 +52,11 @@
       </div>
     </section>
 
-    <!-- Who Are We Section -->
+    <!-- About Section - Studio description with image and mission statement -->
     <section class="py-16 bg-secondary">
       <div class="container mx-auto px-4">
         <div class="grid md:grid-cols-2 gap-8 items-center">
-          <!-- Left column with image -->
+          <!-- Visual content - Studio image with optimized loading -->
           <div class="mb-8 md:mb-0">
             <NuxtImg
               src="/images/whoarewe1.png"
@@ -68,7 +68,7 @@
             />
           </div>
 
-          <!-- Right column with text -->
+          <!-- Studio description - Mission statement and values text -->
           <div>
             <h2 class="text-primary-text mb-6">Who Are We?</h2>
             <p class="text-secondary-text mb-4">
@@ -94,7 +94,7 @@
       </div>
     </section>
 
-    <!-- Course Levels Section -->
+    <!-- Course Levels Section - Three-column overview of class difficulty levels -->
     <section class="py-16 bg-third-accent">
       <div class="container mx-auto px-4">
         <h2 class="text-primary-text text-center mb-12 leading-snug">
@@ -103,7 +103,7 @@
         </h2>
 
         <div class="grid md:grid-cols-3 gap-8 mb-12">
-          <!-- Beginner Courses -->
+          <!-- Beginner Level - Entry-level course descriptions -->
           <div class="text-center">
             <h3 class="text-primary-text mb-4 leading-7">
               Beginner <br />Courses
@@ -117,7 +117,7 @@
             </p>
           </div>
 
-          <!-- Medium and Advanced Courses -->
+          <!-- Intermediate/Advanced Level - Higher difficulty course descriptions -->
           <div class="text-center">
             <h3 class="text-primary-text mb-4 leading-7">
               Medium and<br />Advanced
@@ -131,7 +131,7 @@
             </p>
           </div>
 
-          <!-- Teacher Training -->
+          <!-- Teacher Certification - Professional training program information -->
           <div class="text-center">
             <h3 class="text-primary-text mb-4 leading-7">
               Courses to become <br />a teacher
@@ -146,7 +146,7 @@
           </div>
         </div>
 
-        <!-- See All Activities Button -->
+        <!-- CTA Button - Navigation link to full activity listings -->
         <div class="text-center">
           <UiButton
             text="See All Activities"
@@ -158,7 +158,7 @@
       </div>
     </section>
 
-    <!-- Featured Classes Section -->
+    <!-- Featured Classes Section - Dynamic display of highlighted classes/activities -->
     <section class="py-16 bg-white">
       <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold mb-8 text-center text-primary-text">
@@ -197,7 +197,7 @@
       </div>
     </section>
 
-    <!-- Teachers Section -->
+    <!-- Teachers Section - Carousel displaying staff with "See All" navigation -->
     <section class="py-16 bg-secondary">
       <div class="container mx-auto px-4">
         <div class="flex justify-start gap-4 items-center mb-8">
@@ -235,7 +235,7 @@
       </div>
     </section>
 
-    <!-- Contact CTA Section -->
+    <!-- CTA Section - Call-to-action with sign-up button and promotional text -->
     <section class="py-16 bg-primary-accent text-white">
       <div class="container mx-auto px-4">
         <div class="text-center mb-8">
@@ -266,7 +266,7 @@ import { useTeachers } from "../composables/useTeachers";
 import { navigateTo, useHead } from "nuxt/app";
 import type { TeacherCardItem } from "../types/teachers";
 
-// SEO configuration for homepage
+// SEO configuration with meta tags for improved search engine visibility and social sharing
 useHead({
   title: "Lotus Haven | Yoga Studio & Wellness Center",
   meta: [
@@ -305,10 +305,10 @@ useHead({
   link: [{ rel: "canonical", href: "https://lotushaven.com" }],
 });
 
-// Define the arrow color directly
+// Set the color for the downward navigation arrow using CSS variable
 const arrowColor = ref("var(--color-primary-text)");
 
-// Add mobile detection
+// Reactive state for responsive layout adjustments
 const isMobile = ref(false);
 
 // Check if device is mobile on component mount and on window resize
@@ -329,14 +329,16 @@ onUnmounted(() => {
   }
 });
 
-// Function to check if viewport is mobile size
+// Check viewport size to determine if device is mobile
+// Uses 1024px as the breakpoint which corresponds to Tailwind's lg breakpoint
 const checkIfMobile = () => {
   if (typeof window !== "undefined") {
-    isMobile.value = window.innerWidth < 1024; // 1024px is the lg breakpoint in Tailwind
+    isMobile.value = window.innerWidth < 1024;
   }
 };
 
-// Use the activities composable
+// Initialize activities data and methods from composable
+// Provides data fetching, loading states, and formatting utilities
 const {
   highlightedActivities,
   isLoading: activitiesLoading,
@@ -345,7 +347,8 @@ const {
   activityToClassCard,
 } = useActivities();
 
-// Use the teachers composable
+// Initialize teachers data and methods from composable
+// Provides staff information with loading states and formatting utilities
 const {
   teachers: teachersData,
   isLoading: teachersLoading,
@@ -354,7 +357,7 @@ const {
   teacherToCardItem,
 } = useTeachers();
 
-// Transform highlighted activities into class cards with proper formatting, randomly selecting 3
+// Transform highlighted activities into class cards and randomly select 3 for display on homepage
 const highlightedClassCards = computed(() => {
   const activities = highlightedActivities.value;
 
@@ -389,45 +392,52 @@ const highlightedClassCards = computed(() => {
   );
 });
 
-// Transform teacher data to card items for the carousel
+// Map teacher data from API to TeacherCardItem format for the carousel component
 const teachers = computed<TeacherCardItem[]>(() => {
   return teachersData.value.map((teacher) => teacherToCardItem(teacher));
 });
 
-// Fetch highlighted activities and teachers when component mounts
+// Fetch data for featured content when component mounts
+// Load both highlighted activities and teachers in parallel for better performance
 onMounted(async () => {
   await Promise.all([fetchHighlightedActivities(), fetchTeachers()]);
 });
 
-// Handle Learn More button click
+// Event handler for "Learn More" button on class cards
+// Navigates to the detailed activity page with the specific ID
 const handleLearnMore = (id: number): void => {
   console.log(`Learn more about class with ID: ${id}`);
-  navigateTo(`/activity/${id}`); // Added navigation and changed to /activity/${id}
+  navigateTo(`/activity/${id}`);
 };
 
-// Navigation functions for the teachers section
+// Navigation function for the "See All" teachers button
 const navigateToTeachers = () => {
   console.log("Navigating to all teachers page");
   navigateTo("/teachers");
 };
 
+// Navigation handler for teacher card clicks
+// Routes to individual teacher profile page
 const navigateToTeacherDetail = (id: number) => {
   console.log(`Navigating to teacher with ID: ${id}`);
-  navigateTo(`/teacher/${id}`); // Changed from /teachers/${id} to /teacher/${id}
+  navigateTo(`/teacher/${id}`);
 };
 
+// Handler for "See All Activities" button
+// Routes to the complete activities catalog page
 const navigateToActivities = () => {
   console.log("Navigating to all activities page");
   navigateTo("/activities");
 };
 
-// Handle Sign Up button click
+// Handler for CTA "Sign Up Now" button
+// Routes to contact page with registration form
 const contactUs = () => {
   console.log("Opening sign up form");
   navigateTo("/contact");
 };
 
-// Function to scroll to the next section
+// Function to handle smooth scrolling from hero to quote section when arrow is clicked
 const scrollToNextSection = () => {
   const nextSection = document.querySelector("#quote-section");
   if (nextSection) {

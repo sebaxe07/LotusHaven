@@ -1,7 +1,7 @@
 <template>
   <div class="relative overflow-hidden bg-box rounded-lg shadow-md">
     <div class="grid grid-cols-1 md:grid-cols-2">
-      <!-- Image Section -->
+      <!-- Visual representation section - displays image or colored background -->
       <div
         v-if="image"
         class="h-64 md:h-full bg-cover bg-center"
@@ -9,7 +9,7 @@
       ></div>
       <div v-else class="h-64 md:h-full" :class="backgroundColorClass"></div>
 
-      <!-- Content Section -->
+      <!-- Featured content section with details and schedule -->
       <div class="p-6 md:p-8 flex flex-col justify-between">
         <div>
           <div class="flex items-center mb-4">
@@ -91,51 +91,95 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
+/**
+ * @interface Schedule
+ * @description Represents a session schedule with time, days and optional instructor information
+ */
 interface Schedule {
+  /** The time when the session is held (e.g., "9:00 AM") */
   time: string;
+  /** Days of the week when the session is offered */
   days: string[];
+  /** Optional information about the instructor leading the session */
   professor?: {
     id: number;
     name: string;
   };
 }
 
+/**
+ * Component props definition with validation
+ */
 const props = defineProps({
+  /**
+   * Unique identifier for the featured item
+   * Used for navigation and event handling
+   */
   id: {
     type: [Number, String],
     required: true,
   },
+  /**
+   * Title of the featured class or activity
+   */
   title: {
     type: String,
     required: true,
   },
+  /**
+   * Descriptive text about the featured class or activity
+   */
   description: {
     type: String,
     required: true,
   },
+  /**
+   * URL to the featured item's image
+   * If not provided, a colored background will be used
+   */
   image: {
     type: String,
     default: "",
   },
+  /**
+   * Array of available session schedules
+   */
   schedules: {
     type: Array as () => Schedule[],
     default: () => [],
   },
+  /**
+   * Color theme variant for the component
+   * Controls background colors and accent elements
+   */
   colorVariant: {
     type: String,
     default: "primary",
     validator: (value: string) =>
       ["primary", "secondary", "third"].includes(value),
   },
+  /**
+   * Difficulty level of the class or activity (1-3)
+   * 1: Beginner, 2: Intermediate, 3: Advanced
+   */
   difficultyLevel: {
     type: Number,
     default: 1,
   },
 });
 
+/**
+ * Event emitted when a user clicks the "Learn More" button
+ * Passes the ID of the selected item to the parent component
+ */
 defineEmits(["learn-more"]);
 
-// Format schedule for display
+/**
+ * Formats schedule information into a human-readable string
+ *
+ * @param {Schedule} schedule - The schedule object to format
+ * @returns {string} Formatted schedule string (e.g., "9:00 AM on Monday, Wednesday with Jane Doe")
+ */
 const formatSchedule = (schedule: Schedule): string => {
   const daysStr = schedule.days
     .map((day) => day.charAt(0).toUpperCase() + day.slice(1))
@@ -146,12 +190,20 @@ const formatSchedule = (schedule: Schedule): string => {
   return `${schedule.time} on ${daysStr}${instructorName}`;
 };
 
-// Only show up to 2 schedules in the featured component
+/**
+ * Limit the number of displayed schedules to prevent overcrowding
+ * Shows only the first two available sessions
+ */
 const displayedSchedules = computed(() => {
   return props.schedules.slice(0, 2);
 });
 
-// Dynamic background color class based on colorVariant prop
+/**
+ * Determines the appropriate background color class based on the colorVariant prop
+ * Used when no image is provided to maintain visual consistency
+ *
+ * @returns {string} Tailwind CSS class name for background color
+ */
 const backgroundColorClass = computed(() => {
   switch (props.colorVariant) {
     case "primary":
@@ -165,7 +217,12 @@ const backgroundColorClass = computed(() => {
   }
 });
 
-// Tag color class based on colorVariant
+/**
+ * Determines the color class for the "Featured" tag based on colorVariant
+ * Ensures visual consistency with the component's color theme
+ *
+ * @returns {string} Tailwind CSS class name for the tag background
+ */
 const tagColorClass = computed(() => {
   switch (props.colorVariant) {
     case "primary":
@@ -179,21 +236,32 @@ const tagColorClass = computed(() => {
   }
 });
 
-// Get difficulty class based on difficulty level
+/**
+ * Maps difficulty level to appropriate visual style classes
+ * Color-codes difficulty levels for better user understanding
+ *
+ * @param {number} level - The difficulty level (1-3)
+ * @returns {string} Tailwind CSS classes for styling the difficulty badge
+ */
 const getDifficultyClass = (level: number): string => {
   switch (level) {
     case 1:
-      return "bg-green-100 text-green-800";
+      return "bg-green-100 text-green-800"; // Beginner - green
     case 2:
-      return "bg-blue-100 text-blue-800";
+      return "bg-blue-100 text-blue-800"; // Intermediate - blue
     case 3:
-      return "bg-orange-100 text-orange-800";
+      return "bg-orange-100 text-orange-800"; // Advanced - orange
     default:
-      return "bg-gray-100 text-gray-800";
+      return "bg-gray-100 text-gray-800"; // Fall back to neutral gray
   }
 };
 
-// Get difficulty label based on difficulty level
+/**
+ * Converts numeric difficulty level to user-friendly text label
+ *
+ * @param {number} level - The difficulty level (1-3)
+ * @returns {string} Human-readable difficulty label
+ */
 const getDifficultyLabel = (level: number): string => {
   switch (level) {
     case 1:

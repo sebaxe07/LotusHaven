@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-secondary">
-    <!-- Header Section -->
+    <!-- Hero Banner - Visual header with title overlay on background image -->
     <section class="relative h-[400px] bg-primary-accent">
       <h1
         class="absolute inset-0 flex items-center justify-center text-4xl font-bold text-white"
@@ -14,12 +14,13 @@
       />
     </section>
 
-    <!-- Contact Content Section -->
+    <!-- Main Content - Two-column layout with contact cards and form -->
     <section class="container mx-auto px-4 py-16">
       <div class="grid md:grid-cols-2 gap-8">
-        <!-- Left Column - Contact Cards -->
+        <!-- Staff Directory - Contact cards for key personnel -->
         <div class="space-y-6">
           <div class="grid gap-6">
+            <!-- Contact Person Cards - Dynamic list of staff members -->
             <UiContactCard
               v-for="person in contactPeople"
               :key="person.name"
@@ -31,10 +32,12 @@
           </div>
         </div>
 
-        <!-- Right Column - Contact Form -->
+        <!-- Inquiry Form - User input fields for message submission -->
         <div class="bg-primary-accent rounded-lg p-8 shadow-md text-white">
           <h2 class="text-2xl font-semibold mb-6">Get In Touch</h2>
+          <!-- Contact Form - User input with validation and submission handling -->
           <form class="space-y-6" @submit.prevent="handleSubmit">
+            <!-- Full Name Field - Required text input -->
             <div>
               <label for="fullName" class="block text-sm font-medium mb-2"
                 >Full Name</label
@@ -48,6 +51,7 @@
               />
             </div>
 
+            <!-- Email Field - Required email input with validation -->
             <div>
               <label for="email" class="block text-sm font-medium mb-2"
                 >Email Address</label
@@ -61,6 +65,7 @@
               />
             </div>
 
+            <!-- Message Field - Multiline text area for inquiry details -->
             <div>
               <label for="message" class="block text-sm font-medium mb-2"
                 >Message</label
@@ -74,6 +79,7 @@
               ></textarea>
             </div>
 
+            <!-- Submit Button - Triggers form submission handler -->
             <UiButton
               text="Send Message"
               color="white"
@@ -92,7 +98,7 @@
 import { ref } from "vue";
 import { useHead } from "nuxt/app";
 
-// SEO configuration
+// Configure SEO metadata for contact page with proper titles and descriptions
 useHead({
   title: "Contact Us | Yoga Studio | Lotus Haven",
   meta: [
@@ -113,6 +119,8 @@ useHead({
   ],
 });
 
+// Staff directory data with contact information and roles
+// Each entry includes name, role, description and profile image
 const contactPeople = ref([
   {
     name: "Daniel Ruiz",
@@ -144,14 +152,18 @@ const contactPeople = ref([
   },
 ]);
 
+// Form state for contact inquiries
+// Tracks user input for name, email, and message content
 const formData = ref({
   fullName: "",
   email: "",
   message: "",
 });
 
+// Handle form submission event
+// Currently logs data to console, will be connected to backend service
 const handleSubmit = () => {
-  // TODO: Implement form submission
+  // TODO: Implement form submission to backend service
   console.log("Form submitted:", formData.value);
 };
 </script>

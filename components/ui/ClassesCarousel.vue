@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full">
-    <!-- Left arrow navigation - only visible when not at left edge -->
+    <!-- Navigation arrow for scrolling left -->
     <div
       v-if="canScrollLeft"
       class="absolute left-2 top-1/2 -translate-y-1/2 z-10 transition-opacity"
@@ -9,7 +9,7 @@
       <UiCarouselArrow direction="left" :size="40" @click="scrollLeft" />
     </div>
 
-    <!-- Carousel container with horizontal scrolling -->
+    <!-- Main carousel container with horizontally scrolling content -->
     <div class="px-10 overflow-hidden">
       <div
         ref="carouselContainer"
@@ -17,6 +17,7 @@
         @wheel="onWheel"
         @scroll="handleScroll"
       >
+        <!-- Individual class card items with dynamic width -->
         <div
           v-for="activity in activities"
           :key="activity.id"
@@ -39,7 +40,7 @@
       </div>
     </div>
 
-    <!-- Right arrow navigation - only visible when not at right edge -->
+    <!-- Navigation arrow for scrolling right -->
     <div
       v-if="canScrollRight"
       class="absolute right-2 top-1/2 -translate-y-1/2 z-10 transition-opacity"
@@ -54,30 +55,58 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import type { ClassCardItem } from "../../types/activities";
 
+/**
+ * Component props definition
+ */
 defineProps({
+  /**
+   * Array of class/activity items to display in the carousel
+   * Each item contains details like image, title, description, and scheduling info
+   */
   activities: {
     type: Array as () => ClassCardItem[],
     required: true,
   },
 });
 
+/**
+ * Event emitted when a user clicks "Learn More" on a class card
+ * Passes the ID of the selected class to the parent component
+ */
 defineEmits<{
   "learn-more": [id: number];
 }>();
 
+/**
+ * Reference to the DOM element containing the scrollable carousel content
+ */
 const carouselContainer = ref<HTMLElement | null>(null);
+
+/**
+ * Base sensitivity multiplier for mousewheel scrolling
+ * Higher values make the carousel scroll faster
+ */
 const SCROLL_SENSITIVITY = 1.2;
 
-// Track scroll state
+/**
+ * Reactive state variables to track scroll position for arrow visibility
+ */
 const canScrollLeft = ref(false);
-const canScrollRight = ref(true); // Default to true since most carousels have content to scroll
+const canScrollRight = ref(true); // Default to true until fully rendered
 
-// Responsive card width calculation
+/**
+ * Tracks current viewport width for responsive design
+ * Falls back to desktop size if window is not available (SSR)
+ */
 const screenWidth = ref(
   typeof window !== "undefined" ? window.innerWidth : 1024
 );
 
-// Determine number of cards to show based on screen width
+/**
+ * Computes the number of cards to display based on screen width breakpoints
+ * Uses fractional values for some breakpoints to show partial cards
+ * @returns {number} Number of cards to display at current viewport width
+ */
 const cardsToShow = computed(() => {
   if (screenWidth.value < 640) return 1.2; // Mobile: 1.2 cards
   if (screenWidth.value < 768) return 1.5; // Small tablet: 1.5 cards
@@ -86,44 +115,52 @@ const cardsToShow = computed(() => {
   return 3; // Desktop: 3 cards
 });
 
-// Calculate card width as percentage, accounting for margins
+/**
+ * Calculates the width for each card as a percentage of container width
+ * Accounts for margins between cards to create consistent spacing
+ * @returns {string} CSS calculation string for card width
+ */
 const cardWidth = computed(() => {
-  // Account for the margins (px-2 = 0.5rem on each side = 1rem total per card)
-  // Also account for the padding added for arrow space (px-10 = 2.5rem total)
-  const containerWidth = 100; // 100%
-
-  // Calculate available space percentage accounting for padding
+  const containerWidth = 100; // Base percentage width
   return `calc(${containerWidth / cardsToShow.value}% - 1rem)`;
 });
 
-// Handle screen resize
+/**
+ * Handles window resize events to update responsive layout
+ * Updates screen width measurement and recalculates scroll positions
+ */
 const handleResize = () => {
   screenWidth.value = window.innerWidth;
-  // Re-check scroll state on resize
+
+  // Delay scroll state check to ensure DOM updates are complete
   setTimeout(() => {
     handleScroll();
   }, 100);
 };
 
-// Handle scroll events to update arrow visibility
+/**
+ * Updates navigation arrow visibility based on current scroll position
+ * Shows/hides arrows depending on whether user can scroll in each direction
+ */
 const handleScroll = () => {
   if (!carouselContainer.value) return;
 
   const container = carouselContainer.value;
 
-  // Check if we can scroll left (not at the start)
-  canScrollLeft.value = container.scrollLeft > 5; // Small threshold to account for rounding errors
+  // Show left arrow if not at beginning of carousel (with small threshold)
+  canScrollLeft.value = container.scrollLeft > 5;
 
-  // Check if we can scroll right (not at the end)
-  // Add small buffer (5px) to account for rounding errors
+  // Show right arrow if not at end of carousel (with small buffer)
   canScrollRight.value =
     container.scrollLeft < container.scrollWidth - container.clientWidth - 5;
 };
 
-// Function to scroll left with the arrow
+/**
+ * Scrolls the carousel left by one card width when left arrow is clicked
+ * Uses smooth scrolling animation for better user experience
+ */
 const scrollLeft = () => {
   if (carouselContainer.value) {
-    // Scroll by exactly one card width + its margin
     const scrollAmount =
       carouselContainer.value.clientWidth / cardsToShow.value;
     carouselContainer.value.scrollBy({
@@ -133,10 +170,12 @@ const scrollLeft = () => {
   }
 };
 
-// Function to scroll right with the arrow
+/**
+ * Scrolls the carousel right by one card width when right arrow is clicked
+ * Uses smooth scrolling animation for better user experience
+ */
 const scrollRight = () => {
   if (carouselContainer.value) {
-    // Scroll by exactly one card width + its margin
     const scrollAmount =
       carouselContainer.value.clientWidth / cardsToShow.value;
     carouselContainer.value.scrollBy({
@@ -146,51 +185,62 @@ const scrollRight = () => {
   }
 };
 
-// Improved wheel handler with better cross-device compatibility
+/**
+ * Handles mousewheel events to enable horizontal scrolling with the mousewheel
+ * Provides a natural scrolling experience while preventing page scrolling conflicts
+ * @param {WheelEvent} e - The wheel event object
+ */
 const onWheel = (e: WheelEvent) => {
   if (!carouselContainer.value) return;
 
   const container = carouselContainer.value;
   const maxScrollLeft = container.scrollWidth - container.clientWidth;
 
-  // Check if we're at the edges - let vertical scrolling happen there
+  // Allow vertical scrolling when carousel is at either edge
   if (
-    (e.deltaY > 0 && container.scrollLeft >= maxScrollLeft - 5) || // Near right edge
-    (e.deltaY < 0 && container.scrollLeft <= 5) // Near left edge
+    (e.deltaY > 0 && container.scrollLeft >= maxScrollLeft - 5) || // At right edge
+    (e.deltaY < 0 && container.scrollLeft <= 5) // At left edge
   ) {
-    return; // At edge, let default vertical scroll happen
+    return; // Let default vertical scroll behavior happen
   }
 
-  // Prevent default to avoid both vertical and horizontal scrolling simultaneously
+  // Prevent vertical page scrolling when scrolling horizontally
   e.preventDefault();
 
-  // Use dynamic sensitivity based on how fast the user is scrolling
+  // Adjust sensitivity dynamically based on scroll speed
   const deltaMagnitude = Math.abs(e.deltaY);
   const dynamicSensitivity =
     SCROLL_SENSITIVITY * (1 + Math.min(1.5, deltaMagnitude / 100));
 
-  // Apply smooth scrolling directly
+  // Apply horizontal scrolling with calculated sensitivity
   container.scrollLeft += e.deltaY * dynamicSensitivity;
 };
 
+/**
+ * Component lifecycle hook for initialization
+ * Sets up event listeners and initializes component state
+ */
 onMounted(() => {
   const container = carouselContainer.value;
   if (container) {
-    // Add passive: false to properly prevent default
+    // Register wheel event with passive: false to allow preventDefault()
     container.addEventListener("wheel", onWheel, { passive: false });
   }
 
-  // Add resize listener
+  // Set up responsive behavior
   window.addEventListener("resize", handleResize);
-  // Set initial width
   handleResize();
 
-  // Initial check for scroll arrows
+  // Initialize scroll arrow visibility after content renders
   setTimeout(() => {
     handleScroll();
-  }, 200); // Increased delay to ensure content is rendered
+  }, 200);
 });
 
+/**
+ * Component lifecycle hook for cleanup
+ * Removes event listeners to prevent memory leaks
+ */
 onBeforeUnmount(() => {
   if (carouselContainer.value) {
     carouselContainer.value.removeEventListener("wheel", onWheel);
@@ -200,6 +250,10 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+/**
+ * Cross-browser styles to hide scrollbars while maintaining scroll functionality
+ * Ensures a clean visual appearance across different browsers
+ */
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -208,12 +262,19 @@ onBeforeUnmount(() => {
   display: none; /* Chrome, Safari and Opera */
 }
 
-/* Add smooth scrolling behavior to container while avoiding lag */
+/**
+ * Smooth scrolling behavior styles
+ * Ensures fluid motion and touch responsiveness
+ */
 .carousel-container {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS devices */
 }
 
+/**
+ * Enhanced scrollbar hiding for the carousel
+ * Ensures no scrollbars appear across all browsers and modes
+ */
 .carousel-no-scrollbar {
   -ms-overflow-style: none !important; /* IE and Edge */
   scrollbar-width: none !important; /* Firefox */
@@ -225,7 +286,10 @@ onBeforeUnmount(() => {
   height: 0 !important;
 }
 
-/* Override global scrollbar styles specifically for this component */
+/**
+ * Additional override styles to handle all scrollbar parts
+ * Ensures complete scrollbar hiding even with custom scrollbar themes
+ */
 .carousel-no-scrollbar::-webkit-scrollbar-track,
 .carousel-no-scrollbar::-webkit-scrollbar-thumb,
 .carousel-no-scrollbar::-webkit-scrollbar-thumb:hover {

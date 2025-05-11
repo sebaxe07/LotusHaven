@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen">
-    <!-- Header Section -->
+    <!-- Hero Banner - Visual header with overlaid title on semi-transparent background -->
     <section class="relative h-[400px] bg-primary-accent">
       <h1
         class="absolute inset-0 flex items-center justify-center text-4xl font-bold text-white header1"
@@ -14,10 +14,10 @@
       />
     </section>
 
-    <!-- Main Content -->
+    <!-- Main Content Container - Light background for readability -->
     <section class="bg-secondary py-16">
       <div class="container mx-auto px-4">
-        <!-- Introduction Section with Image -->
+        <!-- Philosophy Section - Two-column layout with decorative illustration and mission statement -->
         <div class="grid md:grid-cols-2 gap-8 items-center">
           <div>
             <UiDecorativeIllustration />
@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <!-- Decorative Divider -->
+        <!-- Visual Section Divider - Horizontal rule with centered icon and text -->
         <div class="flex items-center my-16">
           <div class="flex-1 border-t border-primary-accent/30"></div>
           <div class="mx-4 flex items-center gap-3">
@@ -57,9 +57,9 @@
           <div class="flex-1 border-t border-primary-accent/30"></div>
         </div>
 
-        <!-- Info Cards Grid -->
+        <!-- Information Cards - Three-column grid with studio details -->
         <div class="grid md:grid-cols-3 gap-6">
-          <!-- Location Card -->
+          <!-- Location Card - Physical address information with icon -->
           <div
             class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all p-8"
           >
@@ -79,7 +79,7 @@
             </div>
           </div>
 
-          <!-- Hours Card -->
+          <!-- Operating Hours Card - Schedule information with additional note -->
           <div
             class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all p-8"
           >
@@ -97,6 +97,7 @@
               <p class="paragraph">Saturday: 8:00 AM - 6:00 PM</p>
               <p class="paragraph">Sunday: 9:00 AM - 4:00 PM</p>
             </div>
+            <!-- Special Notice - Highlighted information about class scheduling -->
             <div class="mt-6 p-4 bg-third-accent/40 rounded-lg">
               <p class="paragraph text-secondary-text">
                 Classes are scheduled throughout the day. Check our activities
@@ -105,7 +106,7 @@
             </div>
           </div>
 
-          <!-- Contact Card -->
+          <!-- Contact Card - CTA with button linking to contact page -->
           <div class="bg-primary-accent rounded-lg shadow-md p-8 text-white">
             <div class="flex items-center gap-3 mb-6">
               <UiSvgIcon
@@ -120,6 +121,7 @@
               Have questions or want to connect with us? Visit our contact page
               to reach out to our team.
             </p>
+            <!-- Navigation Button - Routes to contact page -->
             <UiButton
               text="Contact Us"
               color="white"
@@ -129,7 +131,7 @@
           </div>
         </div>
 
-        <!-- Map Section -->
+        <!-- Location Map - Embedded Google Maps with studio location -->
         <div class="mt-12 rounded-lg overflow-hidden shadow-lg">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1!2d-73.9!3d40.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM40.7,-73.9!5e0!3m2!1sen!2sus!4v1234567890"
@@ -150,7 +152,7 @@
 <script setup lang="ts">
 import { useHead } from "nuxt/app";
 
-// SEO configuration
+// Configure SEO metadata for about page with proper titles and studio information
 useHead({
   title: "About Us | Our Studio & Philosophy | Lotus Haven",
   meta: [
