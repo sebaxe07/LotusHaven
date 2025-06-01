@@ -22,3 +22,44 @@ logs
 .env
 .env.*
 !.env.example
+
+
+# LaTeX build files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+# Bibliography files
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# Beamer build files
+*.nav
+*.pre
+*.snm
+*.vrb
+
+# Intermediate LaTeX files
+*.dvi
+*.xdv
+*,pdf
+
+# Generated PDFs (optional, comment out if you want to track PDFs)
+# *.pdf
+
+# Project-specific auxiliary files
+auto/
+*.el
