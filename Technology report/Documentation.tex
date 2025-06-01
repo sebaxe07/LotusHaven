@@ -1,0 +1,84 @@
+% --------------------------------------------------
+% 2 Documentation
+% --------------------------------------------------
+
+\section{Chosen Theme}
+This project presents the design and development of a yoga center website focused on promoting wellness, clarity, and connection. The website architecture is built around key entities such as instructors, activity types, and scheduled sessions, with main navigational pages including the homepage, About Us, and Contact Us. The design process included structured content organization, detailed wireframes with design rationale, and realistic user interaction scenarios to ensure intuitive navigation. The underlying database schema supports efficient data flow and user interaction, providing a cohesive and user-friendly experience for visitors seeking information about yoga activities and instructors.
+
+\section{Technological Choices}
+
+\begin{itemize}
+    \item \textbf{Hosting: Vercel} -- The website is deployed and hosted on Vercel, a cloud platform optimized for frontend frameworks and static sites. Vercel provides seamless integration with GitHub for continuous deployment, fast global CDN, and automatic SSL, ensuring high availability and performance.
+    \item \textbf{Database: Supabase} -- Supabase is used as the backend database solution. It offers a scalable, open-source alternative to Firebase, providing a PostgreSQL database, authentication, and real-time capabilities. Supabase enables secure storage and efficient retrieval of data related to instructors, activities, and sessions.
+    \item \textbf{Rendering Mode: Server-Side Rendering (SSR)} -- The project is configured to use Nuxt's server-side rendering mode, as specified in the configuration file. All routes are rendered on the server by default, providing improved SEO, performance, and dynamic content handling. This ensures that users receive fully rendered pages from the server, with client-side hydration for interactivity.
+    \item \textbf{Main Framework: Nuxt} -- The application is built using Nuxt, a powerful Vue.js framework for building modern web applications. Nuxt provides features such as file-based routing, automatic code splitting, and an intuitive module system, streamlining development and improving maintainability.
+    \item \textbf{Programming Language: TypeScript} -- TypeScript is used throughout the codebase to provide static typing, improved code quality, and better developer tooling. TypeScript helps catch errors early and enhances the maintainability of the project.
+    \item \textbf{Component-Based Architecture} -- The project is organized using a modular, component-based structure, with reusable UI components for buttons, cards, carousels, and more. This promotes code reuse and simplifies updates and testing.
+    \item \textbf{Version Control: GitHub} -- Source code is managed using Git and hosted on GitHub, enabling collaboration, version tracking, and integration with CI/CD pipelines.
+\end{itemize}
+
+\section{Project Structure}
+% Overview of the project structure.
+
+\subsection{Links/Pages Structure}
+
+\begin{table}[H]
+    \centering
+    \caption*{\textbf{Website Navigation Structure}}
+    \begin{tabular}{|p{2.5cm}|p{3cm}|p{8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Page} & \textbf{URL} & \textbf{Description} \\
+        \hline
+        Home & / & Landing page with hero section, featured activities, teacher highlights, and call-to-action sections providing an overview of the yoga studio. \\
+        \hline
+        Highlights & /highlights & Displays featured yoga classes and special activities, including a prominently featured activity and a carousel of additional highlighted options. \\
+        \hline
+        Activities & /activities & Lists all available yoga classes with search functionality and filtering options. Users can browse and find detailed information about each activity. \\
+        \hline
+        Activity Detail & /activity/[id] & Shows detailed information about a specific yoga class, including description, difficulty level, duration, and teacher information. \\
+        \hline
+        Teachers & /teachers & Displays all yoga instructors with their specialties and a brief introduction. Users can click to view detailed profiles. \\
+        \hline
+        Teacher Profile & /teacher/[id] & Provides comprehensive information about a specific teacher, including their bio, expertise, contact information, and scheduled classes. \\
+        \hline
+        About Us & /about & Contains information about the yoga studio philosophy, mission, location, operating hours, and other facility details. \\
+        \hline
+        Contact Us & /contact & Features contact information, staff directory, location map, and a contact form for inquiries and class registrations. \\
+        \hline
+    \end{tabular}
+    \caption{Website navigation structure showing main pages and their purposes}
+\end{table}
+
+\subsection{Available Server Endpoints}
+% List and describe the server endpoints available in the project.
+
+\section{Custom Types}
+% Document the custom types defined for the project.
+
+\section{Custom Components}
+% Overview of custom components developed for the project.
+
+\subsection{Buttons}
+% Describe custom button components.
+
+\subsection{Cards}
+% Describe custom card components.
+
+\subsection{Carousels}
+% Describe custom carousel components.
+
+\subsection{Containers}
+% Describe custom container components.
+
+\subsection{Slides}
+% Describe custom slide components.
+
+\subsection{Other Components}
+% Describe any other custom components.
+
+\section{Extra Modules}
+% List and describe any extra modules developed.
+
+\section{External Libraries}
+% List and describe external libraries used in the project.
