@@ -23,6 +23,12 @@
 \setlength\parindent{0pt} % Indentation
 \raggedbottom  
 
+% Reduce underfull \hbox warnings
+\hbadness=10000 % Silences the underfull \hbox warnings
+\hfuzz=15pt     % Silences overfull \hbox warnings below 15pt
+\vfuzz=15pt     % Silences overfull \vbox warnings below 15pt
+\tolerance=1000 % Makes TeX try harder to fit text
+
 % PACKAGES FOR TITLES
 \usepackage{titlesec}
 % \titlespacing{\section}{left spacing}{before spacing}{after spacing}
@@ -41,7 +47,7 @@
 \usepackage{graphicx}
 \usepackage{transparent} % Enables transparent images
 \usepackage{eso-pic} % For the background picture on the title page
-\usepackage{subfig} % Numbered and caption subfigures using \subfloat.
+\usepackage{subcaption} % Numbered and captioned subfigures using subcaption package.
 \usepackage{tikz} % A package for high-quality hand-made figures.
 \usetikzlibrary{}
 \graphicspath{{./Images/}} % Directory of the images

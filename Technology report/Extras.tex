@@ -1,1 +1,213 @@
-% Add conclusions, appendices, acknowledgements, etc. here.
+\section{Extras}
+
+In this chapter, we will discuss how our website is compliant with the accessibility and
+SEO guidelines. In order to evaluate such compliance, we have used the WAVE and
+Lighthouse web evaluation tools.
+
+\subsection{Accessibility Implementation}
+
+Ensuring web accessibility was a core priority in the development of Lotus Haven's website to provide an inclusive experience for all users regardless of their abilities or disabilities. Our implementation follows the Web Content Accessibility Guidelines (WCAG) standards and has been validated using Lighthouse evaluation tools.
+
+\subsubsection{Lighthouse Accessibility Evaluation}
+
+According to our most recent Lighthouse report, Lotus Haven achieved an accessibility score of \textbf{96\%} which demonstrates our strong commitment to accessible design. This high score confirms that the website implements most of the recommended accessibility practices and ensures a smooth experience for users with various disabilities.
+
+\subsubsection{Implemented Accessibility Features}
+
+\paragraph{Semantic HTML Structure}
+The website uses semantic HTML elements throughout to ensure that content is properly structured and navigable by screen readers and other assistive technologies:
+
+\begin{itemize}
+    \item \textbf{Proper heading hierarchy} with logical progression from H1 to lower-level headings
+    \item \textbf{Landmark regions} such as navigation, main content, and complementary areas
+    \item \textbf{Semantic elements} like \texttt{<section>}, \texttt{<article>}, and \texttt{<nav>} to organize content
+\end{itemize}
+
+\paragraph{Image Accessibility}
+All images throughout the website follow accessibility best practices:
+
+\begin{itemize}
+    \item \textbf{Alternative text}: Informative images include descriptive alt text (e.g., "Lotus Haven Logo" for the site logo)
+    \item \textbf{Decorative images}: Properly marked with empty alt attributes to prevent unnecessary screen reader announcements
+    \item \textbf{SVG accessibility}: Icons include appropriate ARIA attributes when needed for context
+\end{itemize}
+
+\paragraph{Color Contrast and Visual Design}
+The design ensures readability for users with visual impairments:
+
+\begin{itemize}
+    \item \textbf{WCAG AA compliant color contrast} between text and background
+    \item \textbf{Visual indicators} beyond color alone for interactive elements
+    \item \textbf{Consistent visual styling} for similar interactive elements
+    \item \textbf{Customized scrollbars} with enhanced visibility for easier navigation
+\end{itemize}
+
+\paragraph{Keyboard Navigation}
+The website is fully navigable without requiring a mouse:
+
+\begin{itemize}
+    \item \textbf{Logical tab order} following the visual flow of the page
+    \item \textbf{Focus indicators} that are clearly visible when elements receive keyboard focus
+    \item \textbf{Skip-to-content} functionality available for keyboard users
+    \item \textbf{Interactive carousels} with keyboard controls (arrow navigation)
+\end{itemize}
+
+\paragraph{Responsive Design Considerations}
+Accessibility extends to different viewport sizes and devices:
+
+\begin{itemize}
+    \item \textbf{Viewport meta tag} properly configured to support mobile devices and prevent zooming issues
+    \item \textbf{Responsive layout} that adapts to different screen sizes
+    \item \textbf{Zoom detection} that intelligently adapts the interface when users have zoomed in
+    \item \textbf{Touch-friendly targets} of appropriate size for mobile users
+\end{itemize}
+
+\paragraph{ARIA Attributes}
+ARIA (Accessible Rich Internet Applications) attributes are used judiciously to enhance accessibility:
+
+\begin{itemize}
+    \item \textbf{ARIA labels} for elements where the visible text is insufficient
+    \item \textbf{ARIA roles} to clarify the purpose of custom widgets and components
+    \item \textbf{Dynamic content updates} that are announced appropriately to screen readers
+\end{itemize}
+
+\paragraph{Forms and Interactive Elements}
+All interactive elements are designed with accessibility in mind:
+
+\begin{itemize}
+    \item \textbf{Properly labeled form controls} with explicit associations between labels and inputs
+    \item \textbf{Clear error messages} for form validation
+    \item \textbf{Button states} (disabled, active, hover) that are clearly distinguishable
+    \item \textbf{Focus management} for modal dialogs and other interactive components
+\end{itemize}
+
+\subsubsection{Implementation in Code}
+
+Our accessibility features are not just superficial additions but are deeply integrated into the codebase:
+
+\begin{itemize}
+    \item All components include careful consideration of keyboard navigation, screen reader announcements, and visual focus states
+    \item The \texttt{ClassesCarousel} and \texttt{TeachersCarousel} components implement enhanced keyboard accessibility and mouse wheel interaction for horizontal scrolling
+    \item Viewport meta tags ensure proper display on mobile devices and prevent the 300ms tap delay
+    \item Form components include built-in accessibility features like proper labeling and ARIA attributes
+    \item The UI component library (\texttt{@nuxt/ui}) provides a foundation of accessible components that we've extended
+\end{itemize}
+
+\subsubsection{Remaining Accessibility Challenges}
+
+While our Lighthouse score of 96\% is excellent, we acknowledge a few remaining areas for improvement:
+
+\begin{itemize}
+    \item Complex interactive elements like carousels could benefit from additional ARIA live regions for dynamic content updates
+    \item Further enhancements to keyboard navigation in some complex widgets
+    \item Additional testing with various screen readers to ensure consistent experiences
+\end{itemize}
+
+Our commitment to accessibility is ongoing, with regular testing and improvements planned as part of our development roadmap.
+
+\subsection{SEO Compliance}
+
+Search Engine Optimization (SEO) is crucial for ensuring that our website is discoverable by potential users through search engines. We've implemented several SEO strategies and best practices, validated through Lighthouse's SEO evaluation.
+
+\subsubsection{Lighthouse SEO Evaluation}
+
+The Lighthouse SEO analysis shows that our website follows modern SEO best practices, ensuring good visibility in search engine results. The implementation of proper meta tags, semantic HTML, and mobile-friendly design contributes to the website's search engine ranking potential.
+
+\subsubsection{Implemented SEO Features}
+
+\paragraph{Meta Tags and Document Structure}
+We've implemented comprehensive meta tags across all pages to improve search engine understanding of our content:
+
+\begin{itemize}
+    \item \textbf{Title tags}: Each page has a unique, descriptive title that includes relevant keywords (e.g., "About Us | Our Studio \& Philosophy | Lotus Haven")
+    \item \textbf{Meta descriptions}: Custom descriptions summarize each page's content and purpose for search engine results
+    \item \textbf{Viewport meta tag}: Properly configured to ensure mobile-friendly display with "width=device-width, initial-scale=1"
+    \item \textbf{Document \texttt{<head>}}: Well-structured with appropriate tags and prioritized loading
+\end{itemize}
+
+\paragraph{Semantic Content Structure}
+Our content is organized with search engines in mind:
+
+\begin{itemize}
+    \item \textbf{Proper heading hierarchy}: Logical H1-H6 structure that helps search engines understand content importance
+    \item \textbf{Descriptive link text}: Links use meaningful text rather than generic phrases like "click here"
+    \item \textbf{Semantic HTML elements}: Content is structured with appropriate semantic tags that communicate meaning
+    \item \textbf{Crawlable anchors}: All links are properly formatted to be discoverable by search engine crawlers
+\end{itemize}
+
+\paragraph{Social Media Integration}
+We've enhanced social sharing capabilities through proper metadata:
+
+\begin{itemize}
+    \item \textbf{Open Graph Protocol}: Implementation of og tags (og:title, og:description, og:type, og:image) for optimized sharing on platforms like Facebook
+    \item \textbf{Twitter Card markup}: Including twitter:card, twitter:title, and twitter:description tags for Twitter sharing optimization
+    \item \textbf{Consistent branding}: Social metadata maintains consistent branding and messaging across platforms
+\end{itemize}
+
+\paragraph{Mobile Optimization}
+Our mobile-first approach benefits SEO:
+
+\begin{itemize}
+    \item \textbf{Responsive design}: Content adapts seamlessly to various screen sizes
+    \item \textbf{Touch-friendly elements}: Proper sizing and spacing of interactive elements
+    \item \textbf{Fast loading on mobile}: Performance optimizations for mobile network conditions
+\end{itemize}
+
+\paragraph{Technical SEO Elements}
+Several technical implementations enhance our SEO compliance:
+
+\begin{itemize}
+    \item \textbf{HTTPS implementation}: The entire site is served over secure HTTPS connections
+    \item \textbf{Canonical URLs}: Properly defined to prevent duplicate content issues
+    \item \textbf{Server-side rendering}: Nuxt's SSR capabilities ensure content is immediately available to search engine crawlers
+    \item \textbf{robots.txt}: Properly configured to guide search engine crawlers
+\end{itemize}
+
+\subsubsection{Implementation in Code}
+
+Our SEO features are implemented throughout the codebase:
+
+\begin{itemize}
+    \item \textbf{Dynamic meta tags}: Using Nuxt's \texttt{useHead} composable to set page-specific metadata based on content
+    \item \textbf{Structured data}: Implementing JSON-LD for certain content types to enhance rich results in search engines
+    \item \textbf{Image optimization}: Using Nuxt Image module for responsive image sizing and format optimization
+    \item \textbf{SEO-friendly URLs}: Clean, descriptive URLs that follow best practices
+\end{itemize}
+
+Example from our \texttt{about.vue} page showing dynamic meta tag implementation:
+
+\begin{verbatim}
+useHead({
+  title: "About Us | Our Studio & Philosophy | Lotus Haven",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Learn about Lotus Haven yoga studio, our philosophy, location, and mission. 
+        Discover how we integrate ancient wisdom with modern practice to create 
+        a nurturing wellness environment.",
+    },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    { property: "og:title", content: "About Lotus Haven Yoga Studio" },
+    {
+      property: "og:description",
+      content:
+        "Learn about our yoga philosophy, studio location and hours at Lotus Haven.",
+    },
+    { property: "og:type", content: "website" },
+  ],
+});
+\end{verbatim}
+
+\subsubsection{SEO Monitoring and Future Improvements}
+
+While our implementation of SEO best practices is comprehensive, we recognize that SEO is an ongoing process:
+
+\begin{itemize}
+    \item \textbf{Regular monitoring}: Tracking search performance through analytics tools
+    \item \textbf{Keyword optimization}: Continuing to refine content based on relevant search terms
+    \item \textbf{Performance optimization}: Further improving page load speeds to benefit search rankings
+    \item \textbf{Structured data enhancements}: Expanding schema markup for more rich search results
+\end{itemize}
+
+Our approach to SEO is holistic, focusing not just on technical implementation but also on creating high-quality, relevant content that provides value to our users while following search engine guidelines.

@@ -1,3 +1,4 @@
+% chktex-file 44
 % --------------------------------------------------
 % 2 Documentation
 % --------------------------------------------------
@@ -8,24 +9,26 @@ This project presents the design and development of a yoga center website focuse
 \section{Technological Choices}
 
 \begin{itemize}
-    \item \textbf{Hosting: Vercel} -- The website is deployed and hosted on Vercel, a cloud platform optimized for frontend frameworks and static sites. Vercel provides seamless integration with GitHub for continuous deployment, fast global CDN, and automatic SSL, ensuring high availability and performance.
-    \item \textbf{Database: Supabase} -- Supabase is used as the backend database solution. It offers a scalable, open-source alternative to Firebase, providing a PostgreSQL database, authentication, and real-time capabilities. Supabase enables secure storage and efficient retrieval of data related to instructors, activities, and sessions.
-    \item \textbf{Rendering Mode: Server-Side Rendering (SSR)} -- The project is configured to use Nuxt's server-side rendering mode, as specified in the configuration file. All routes are rendered on the server by default, providing improved SEO, performance, and dynamic content handling. This ensures that users receive fully rendered pages from the server, with client-side hydration for interactivity.
-    \item \textbf{Main Framework: Nuxt} -- The application is built using Nuxt, a powerful Vue.js framework for building modern web applications. Nuxt provides features such as file-based routing, automatic code splitting, and an intuitive module system, streamlining development and improving maintainability.
-    \item \textbf{Programming Language: TypeScript} -- TypeScript is used throughout the codebase to provide static typing, improved code quality, and better developer tooling. TypeScript helps catch errors early and enhances the maintainability of the project.
-    \item \textbf{Component-Based Architecture} -- The project is organized using a modular, component-based structure, with reusable UI components for buttons, cards, carousels, and more. This promotes code reuse and simplifies updates and testing.
-    \item \textbf{Version Control: GitHub} -- Source code is managed using Git and hosted on GitHub, enabling collaboration, version tracking, and integration with CI/CD pipelines.
+    \item \textbf{Hosting: Vercel} --- The website is deployed and hosted on Vercel, a cloud platform optimized for frontend frameworks and static sites. Vercel provides seamless integration with GitHub for continuous deployment, fast global CDN, and automatic SSL, ensuring high availability and performance.
+    \item \textbf{Database: Supabase} --- Supabase is used as the backend database solution. It offers a scalable, open-source alternative to Firebase, providing a PostgreSQL database, authentication, and real-time capabilities. Supabase enables secure storage and efficient retrieval of data related to instructors, activities, and sessions.
+    \item \textbf{Rendering Mode: Server-Side Rendering (SSR)} --- The project is configured to use Nuxt's server-side rendering mode, as specified in the configuration file. All routes are rendered on the server by default, providing improved SEO, performance, and dynamic content handling. This ensures that users receive fully rendered pages from the server, with client-side hydration for interactivity.
+    \item \textbf{Main Framework: Nuxt} --- The application is built using Nuxt, a powerful Vue.js framework for building modern web applications. Nuxt provides features such as file-based routing, automatic code splitting, and an intuitive module system, streamlining development and improving maintainability.
+    \item \textbf{Programming Language: TypeScript} --- TypeScript is used throughout the codebase to provide static typing, improved code quality, and better developer tooling. TypeScript helps catch errors early and enhances the maintainability of the project.
+    \item \textbf{Component-Based Architecture} --- The project is organized using a modular, component-based structure, with reusable UI components for buttons, cards, carousels, and more. This promotes code reuse and simplifies updates and testing.
+    \item \textbf{Version Control: GitHub} --- Source code is managed using Git and hosted on GitHub, enabling collaboration, version tracking, and integration with CI/CD pipelines.
 \end{itemize}
 
+\newpage
 \section{Project Structure}
 % Overview of the project structure.
-
 \subsection{Links/Pages Structure}
 
+\noindent
 \begin{table}[H]
     \centering
-    \caption*{\textbf{Website Navigation Structure}}
-    \begin{tabular}{|p{2.5cm}|p{3cm}|p{8cm}|}
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{2.5cm}|p{2.8cm}|p{8.2cm}|}
         \hline
         \rowcolor{bluepoli!20}
         \textbf{Page} & \textbf{URL} & \textbf{Description} \\
@@ -48,37 +51,736 @@ This project presents the design and development of a yoga center website focuse
         \hline
     \end{tabular}
     \caption{Website navigation structure showing main pages and their purposes}
+
 \end{table}
 
-\subsection{Available Server Endpoints}
-% List and describe the server endpoints available in the project.
+\subsection{Database Structure and Data Access}
+
+This project utilizes Supabase as a backend-as-a-service solution rather than implementing traditional REST API endpoints. The data layer is structured around three main database tables:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{3cm}|p{10cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Table} & \textbf{Description} \\
+        \hline
+        Teachers & Stores information about yoga instructors, including name, bio, expertise, and contact details. \\
+        \hline
+        Activities & Contains data about yoga classes and activities, including name, description, difficulty level, duration, and whether they are highlighted. \\
+        \hline
+        TeacherActivities & Junction table managing the many-to-many relationship between teachers and activities, including scheduling information (days and times). \\
+        \hline
+    \end{tabular}
+    \caption{Supabase Database Structure}
+
+\end{table}
+
+Data is accessed through Supabase client queries in dedicated composables:
+
+\begin{itemize}
+    \item \textbf{useTeachers.ts} --- Provides functions for fetching all teachers (\texttt{fetchTeachers()}) and retrieving a specific teacher by ID (\texttt{fetchTeacherById()}) along with their associated activities.
+    
+    \item \textbf{useActivities.ts} --- Handles fetching all activities (\texttt{fetchActivities()}), highlighted activities (\texttt{fetchHighlightedActivities()}), and retrieving specific activities by ID (\texttt{fetchActivityById()}).
+\end{itemize}
+
+These composables encapsulate the data access logic, transforming raw database records into domain models used throughout the application.
 
 \section{Custom Types}
-% Document the custom types defined for the project.
+
+The project uses TypeScript to define and enforce a clear type system throughout the application. Types are organized into two main categories: database-related types that represent data models and UI component types used for presentation.
+
+\subsection{Database and Domain Model Types}
+
+These types represent the core data structures of the application, including raw database formats and their transformed domain models:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{4.5cm}|p{9.5cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Type Name} & \textbf{Description} \\
+        \hline
+        \texttt{Teacher} & Core teacher model containing personal and professional information including ID, name, surname, biography, contact details, and associated activities. \\
+        \hline
+        \texttt{Activity} & Core activity model representing a yoga class including title, descriptions, schedules, difficulty level, and visual assets. \\
+        \hline
+        \texttt{TeacherActivity} & Junction model representing the relationship between teachers and activities, including scheduling information. \\
+        \hline
+        \texttt{Schedule} & Represents a class schedule with time, days, and assigned teacher information. \\
+        \hline
+        \texttt{RawTeacherData} & Database response type for teacher records before transformation to domain models. \\
+        \hline
+        \texttt{RawActivityData} & Database response type for activity records before transformation to domain models. \\
+        \hline
+        \texttt{RawTeacher\-ActivityData} & Database response type for the teacher-activity relationship records. \\
+        \hline
+    \end{tabular}
+    \caption{Database and Domain Model Types}
+\end{table}
+
+\subsection{UI and Presentation Types}
+
+These types are designed for optimized display in UI components, often with simplified or enhanced properties:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{4cm}|p{9cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Type Name} & \textbf{Description} \\
+        \hline
+        \texttt{TeacherCardItem} & Simplified teacher presentation model optimized for card display with essential information and formatting properties. \\
+        \hline
+        \texttt{teacherToCardItem2} & Enhanced teacher card model that includes a list of activities taught by the teacher. \\
+        \hline
+        \texttt{ClassCardItem} & Presentation model for displaying activities in card format with visual properties like colorVariant. \\
+        \hline
+    \end{tabular}
+    \caption{UI and Presentation Types}
+\end{table}
+
+The application uses TypeScript interfaces to define these types, providing strong typing throughout the codebase. This approach enhances code quality through compile-time type checking and improves developer experience with better autocomplete and documentation.
+
+TypeScript's structural typing system allows for flexible type transformations between database representations and UI components, maintaining type safety while accommodating different data formats needed at various application layers.
 
 \section{Custom Components}
 % Overview of custom components developed for the project.
 
-\subsection{Buttons}
-% Describe custom button components.
+The project implements a comprehensive set of custom components to ensure consistency, reusability, and maintainability throughout the application. These components serve as the building blocks of the user interface, each designed with specific functionality while maintaining a cohesive visual language. By developing these custom components, the project achieves several key objectives:
 
-\subsection{Cards}
-% Describe custom card components.
+\begin{itemize}
+    \item \textbf{Design Consistency} --- Custom components ensure a unified look and feel across all pages, reinforcing brand identity and improving user experience through visual coherence.
+    
+    \item \textbf{Code Reusability} --- Components are designed to be reused across different pages and contexts, reducing code duplication and development time while ensuring consistent behavior.
+    
+    \item \textbf{Maintainability} --- Centralizing UI logic in discrete components simplifies debugging, updates, and feature additions by isolating changes to specific modules rather than scattered throughout the codebase.
+    
+    \item \textbf{Responsiveness} --- Components are built with responsive design principles, adapting to different screen sizes and device types to provide an optimal viewing experience.
+    
+    \item \textbf{Type Safety} --- All components leverage TypeScript for prop validation and interface definitions, preventing runtime errors and providing better developer tooling support.
+\end{itemize}
 
-\subsection{Carousels}
-% Describe custom carousel components.
+The component library is organized into functional categories, each serving distinct interface needs while maintaining consistency with the overall design system of the yoga studio website.
 
-\subsection{Containers}
-% Describe custom container components.
+\subsection{ActivityCard Component}
+The \texttt{ActivityCard} component serves as a reusable display element for yoga activities throughout the website. Its primary goal is to present activity information in a consistent and visually appealing card format, with support for images, descriptions, difficulty indicators, and navigation to detailed views.
 
-\subsection{Slides}
-% Describe custom slide components.
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.5cm}|p{2.5cm}|p{1.8cm}|p{6.5cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        activity & Activity & Yes & The activity object containing all necessary data to display, including title, description, images, and difficulty level. \\
+        \hline
+    \end{tabular}
+    \caption{ActivityCard Component Props}
+\end{table}
 
-\subsection{Other Components}
-% Describe any other custom components.
+The component is used throughout the application to display activities on the activities listing page, teacher profiles, and featured sections on the homepage.
 
+\subsection{Button Component}
+The \texttt{Button} component provides a highly configurable button element that adapts its appearance based on provided props. Its primary goal is to create consistent, accessible, and visually appealing interactive elements with support for multiple visual variants, sizes, and states.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        text & string & No & Button text content displayed when no slot content is provided. \\
+        \hline
+        color & "primary" | "secondary" | "white" | "outline" | "outline-white" & No & Visual style variant applying different color schemes. \\
+        \hline
+        disabled & boolean & No & Controls whether the button is clickable or in disabled state. \\
+        \hline
+        extraClasses & string & No & Additional CSS classes for custom styling beyond variants. \\
+        \hline
+        fullWidth & boolean & No & When true, the button expands to fill its parent container width. \\
+        \hline
+        size & "sm" | "md" | "lg" & No & Controls button size, affecting padding and text size. \\
+        \hline
+    \end{tabular}
+    \caption{Button Component Props}
+\end{table}
+
+The component is used extensively throughout the application for calls to action, form submissions, navigation triggers, and interactive elements.
+
+\subsection{CarouselArrow Component}
+The \texttt{CarouselArrow} component provides a circular navigation button with directional arrow icons. Its primary goal is to offer consistent carousel controls with directional indicators that can be placed anywhere within carousel components to navigate through content.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        direction & "left" | "right" | "up" | "down" & No & Determines the direction the arrow points using icon rotation. \\
+        \hline
+        size & number & No & Controls the diameter of the circular button in pixels. \\
+        \hline
+    \end{tabular}
+    \caption{CarouselArrow Component Props}
+\end{table}
+
+The component is used within carousel interfaces throughout the application, particularly in activity and teacher display carousels on the home page and highlights section.
+
+\subsection{ClassCard Component}
+The \texttt{ClassCard} component presents yoga class information in an elegant card format. Its primary goal is to display class details with visual distinction and provide a consistent interface for users to learn more about specific classes or activities.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        image & string & No & URL to the class image; if not provided, a colored background is used. \\
+        \hline
+        title & string & Yes & Title of the yoga class or activity. \\
+        \hline
+        description & string & Yes & Short description of the class content or benefits. \\
+        \hline
+        schedules & Schedule[] & No & Array of available class schedules with time, days, and instructor information. \\
+        \hline
+        id & string | number & Yes & Unique identifier for the class, used for navigation. \\
+        \hline
+        colorVariant & "primary" | "secondary" | "third" & No & Color theme for cards without images. \\
+        \hline
+    \end{tabular}
+    \caption{ClassCard Component Props}
+\end{table}
+
+The component is used on class listing pages and in featured sections to display yoga classes with their available sessions and provide navigation to detailed class information.
+
+\subsection{ClassesCarousel Component}
+The \texttt{ClassesCarousel} component provides a responsive horizontal scrolling container for displaying multiple class cards. Its primary goal is to create an interactive browsing experience for yoga activities with intuitive navigation controls and smooth scrolling behavior.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        activities & ClassCardItem[] & Yes & Array of activity/class items to display in the carousel with their details. \\
+        \hline
+    \end{tabular}
+    \caption{ClassesCarousel Component Props}
+\end{table}
+
+The component is used on the homepage and highlights section to showcase multiple activities in a space-efficient, horizontally-scrollable interface with navigation arrows and mousewheel support.
+
+\subsection{ContactCard Component}
+The \texttt{ContactCard} component displays staff contact information in a consistent card format. Its primary goal is to present contact details with visual prominence while maintaining the design language of the application.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        name & string & Yes & The name of the contact person to display. \\
+        \hline
+        role & string & Yes & The role or position of the contact person. \\
+        \hline
+        description & string & Yes & Brief description or additional information about the contact. \\
+        \hline
+        imageUrl & string & Yes & URL to the contact's profile image. \\
+        \hline
+    \end{tabular}
+    \caption{ContactCard Component Props}
+\end{table}
+
+The component is used on the Contact page to display yoga studio staff information, including instructors and administrative personnel.
+
+\subsection{DecorativeIllustration Component}
+The \texttt{DecorativeIllustration} component provides a stylized lotus flower SVG illustration. Its primary goal is to add visual interest and reinforce the yoga studio brand identity through decorative graphical elements using CSS variables for consistent theming.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        \multicolumn{4}{|c|}{No props required - zero-configuration component} \\
+        \hline
+    \end{tabular}
+    \caption{DecorativeIllustration Component Props}
+\end{table}
+
+The component is used as a decorative element on various pages, particularly in the About section and on content pages where visual interest is needed without requiring additional imagery.
+
+\subsection{FeaturedHighlight Component}
+The \texttt{FeaturedHighlight} component presents a prominent, responsive display for featured yoga activities. Its primary goal is to showcase a selected activity with enhanced visual treatment, comprehensive information, and upcoming sessions to drive user engagement.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        id & string | number & Yes & Unique identifier for the featured activity. \\
+        \hline
+        title & string & Yes & Title of the featured class or activity. \\
+        \hline
+        description & string & Yes & Descriptive text about the featured class or activity. \\
+        \hline
+        image & string & No & URL to the featured item's image; if not provided, a colored background is used. \\
+        \hline
+        schedules & Schedule[] & No & Array of available session schedules with time, days, and instructor information. \\
+        \hline
+        colorVariant & "primary" | "secondary" | "third" & No & Color theme variant controlling background colors and accents. \\
+        \hline
+        difficultyLevel & number & No & Difficulty level of the class (1: Beginner, 2: Intermediate, 3: Advanced). \\
+        \hline
+    \end{tabular}
+    \caption{FeaturedHighlight Component Props}
+\end{table}
+
+The component is used on the homepage and highlights page to prominently feature special activities or promotions with enhanced visual treatment and scheduling information.
+
+\subsection{Navbar Component}
+The \texttt{Navbar} component provides the main navigation interface for the website. Its primary goal is to offer consistent site-wide navigation with responsive behavior that adapts between a desktop sidebar and a mobile top navigation menu with dropdown.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        \multicolumn{4}{|c|}{No props required - handles responsive behavior internally} \\
+        \hline
+    \end{tabular}
+    \caption{Navbar Component Props}
+\end{table}
+
+The component is used throughout the application as part of the default layout, providing navigation links, logo display, and social media icons in both desktop and mobile views.
+
+\subsection{SearchBar Component}
+The \texttt{SearchBar} component provides a clean search input interface with an integrated search button. Its primary goal is to offer a consistent search experience with proper accessibility features and visual feedback.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        modelValue & string & Yes & Current search text value that binds with v-model for two-way data binding. \\
+        \hline
+    \end{tabular}
+    \caption{SearchBar Component Props}
+\end{table}
+
+The component is used on the activities and teachers listing pages to enable filtering and searching through available content.
+
+\subsection{SectionCard Component}
+The \texttt{SectionCard} component displays detailed class schedule information with instructor details. Its primary goal is to present session scheduling data and instructor contact information in a visually organized card format with interactive elements.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        schedule & Schedule & Yes & Schedule object containing time, days, and instructor information with contact details. \\
+        \hline
+    \end{tabular}
+    \caption{SectionCard Component Props}
+\end{table}
+
+The component is used on activity detail pages to display class sessions with instructor information, including contact details and schedule times.
+
+\subsection{SvgIcon Component}
+The \texttt{SvgIcon} component provides a flexible SVG loading and rendering utility. Its primary goal is to dynamically fetch and display SVG icons with configurable sizing and coloring while maintaining accessibility and visual consistency.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        icon & string & Yes & Path to the SVG file to be loaded and displayed. \\
+        \hline
+        width & number | string & No & Icon width in pixels. \\
+        \hline
+        height & number | string & No & Icon height in pixels. \\
+        \hline
+        color & string & No & Color to apply to SVG elements; can use CSS color values or "currentColor". \\
+        \hline
+    \end{tabular}
+    \caption{SvgIcon Component Props}
+\end{table}
+
+The component is used throughout the application to display icons in navigation elements, cards, buttons, and informational sections with consistent styling and color theming.
+
+\subsection{TeacherCard Component}
+The \texttt{TeacherCard} component provides a compact visualization of instructor information. Its primary goal is to display teacher profiles in a visually appealing card format with image, name, and optional description in an efficient space-conscious layout.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        id & number & Yes & Unique identifier for the teacher. \\
+        \hline
+        name & string & Yes & Teacher's display name. \\
+        \hline
+        imageUrl & string & Yes & Path to the teacher's profile image. \\
+        \hline
+        description & string & No & Optional short description or bio text. \\
+        \hline
+        cardWidth & string & No & Optional width specification (CSS value). \\
+        \hline
+    \end{tabular}
+    \caption{TeacherCard Component Props}
+\end{table}
+
+The component is used on the teachers listing page and in carousels on the homepage to display available instructors in a grid or scrollable layout.
+
+\subsection{TeachersCarousel Component}
+The \texttt{TeachersCarousel} component provides a responsive horizontal scrolling container for displaying multiple teacher cards. Its primary goal is to create an interactive browsing experience for yoga instructors with intuitive navigation controls, dynamic card sizing based on screen width, and smooth scrolling behavior.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        \multicolumn{4}{|c|}{No direct props} \\
+        \hline
+    \end{tabular}
+    \caption{TeachersCarousel Component Props}
+\end{table}
+
+The component is used on the homepage and teachers listing page to showcase multiple instructors in a space-efficient, horizontally-scrollable interface with navigation arrows and enhanced mousewheel support. It dynamically adapts to screen size, showing between 1.5 (mobile) and 4 (desktop) cards at once.
+
+\subsection{TeacherSchedule Component}
+The \texttt{TeacherSchedule} component displays a teacher's class schedule in a compact, interactive card format. Its primary goal is to present scheduled activities with time, day information, and visual yoga icons in an easily scannable layout that supports navigation to detailed schedule views.
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2.2cm}|p{3.6cm}|p{1.5cm}|p{6cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Prop} & \textbf{Type} & \textbf{Required} & \textbf{Short Description} \\
+        \hline
+        id & number | string & Yes & Unique identifier for the schedule. \\
+        \hline
+        title & string & Yes & Title of the scheduled activity. \\
+        \hline
+        icon\_id & number & Yes & ID for the yoga icon to display. \\
+        \hline
+        time & string & Yes & Time of the scheduled activity (formatted string). \\
+        \hline
+        days & string[] & Yes & Array of days when the activity occurs. \\
+        \hline
+    \end{tabular}
+    \caption{TeacherSchedule Component Props}
+\end{table}
+
+The component is used on teacher profile pages to display class schedules and in schedule listing interfaces, providing users with interactive access to detailed schedule information with consistent visual representation.
 \section{Extra Modules}
 % List and describe any extra modules developed.
 
+In addition to the core Vue.js and Nuxt frameworks, the LotusHaven project utilizes several specialized modules and integrations to enhance functionality, improve developer experience, and extend the application's capabilities. These modules are integrated through Nuxt's modular architecture, providing seamless extensions to the core functionality.
+
+\subsection{Database and Backend Integration}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{3.5cm}|p{10.8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Module} & \textbf{Implementation and Usage} \\
+        \hline
+        Supabase & 
+        Integrated through the official \texttt{@nuxtjs/supabase} module to provide a serverless backend solution. The application uses Supabase for:
+        \begin{itemize}
+            \item \textbf{Database Services}: PostgreSQL database for storing teachers, activities, and scheduling information.
+            \item \textbf{Data Relationships}: Managing many-to-many relationships between teachers and activities via junction tables.
+            \item \textbf{Query API}: Custom queries with nested relationship data using Supabase's query builder in the \texttt{useActivities} and \texttt{useTeachers} composables.
+        \end{itemize}
+        The database design follows a normalized structure with foreign key relationships, and the Supabase client is used to fetch and transform data into typed domain models.
+        \\
+        \hline
+    \end{tabular}
+    \caption{Database and Backend Modules}
+\end{table}
+
+\subsection{Content Management}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{3.5cm}|p{10.8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Module} & \textbf{Implementation and Usage} \\
+        \hline
+        Nuxt Content & 
+        Implemented via \texttt{@nuxt/content} to provide a file-based content management system for static content. The module is used to:
+        \begin{itemize}
+            \item \textbf{Manage Markdown Content}: Store and render rich text content for static pages like About Us.
+            \item \textbf{Content Querying}: Enable dynamic fetching of content based on page requirements.
+            \item \textbf{Content Presentation}: Transform content into Vue components with proper formatting and styling.
+        \end{itemize}
+        This approach separates content from code, allowing for easier updates to text-heavy sections without requiring code changes.
+        \\
+        \hline
+    \end{tabular}
+    \caption{Content Management Modules}
+\end{table}
+
+\subsection{Asset and Media Management}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{3.5cm}|p{10.8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Module} & \textbf{Implementation and Usage} \\
+        \hline
+        Nuxt Image & 
+        Integrated through \texttt{@nuxt/image} to provide advanced image processing capabilities. The module is used for:
+        \begin{itemize}
+            \item \textbf{Responsive Images}: Automatically generating different image sizes for various device widths.
+            \item \textbf{Lazy Loading}: Optimizing page load performance by deferring image loading until visible.
+            \item \textbf{Format Optimization}: Converting images to modern formats like WebP when supported.
+        \end{itemize}
+        Particularly important for optimizing the numerous images used throughout the yoga studio website, including teacher photos, activity images, and decorative graphics.
+        \\
+        \hline
+        Nuxt Icon & 
+        Used via \texttt{@nuxt/icon} to manage icon assets throughout the application. This module:
+        \begin{itemize}
+            \item \textbf{Centralizes Icon Management}: Provides a consistent API for using SVG icons.
+            \item \textbf{Optimizes SVG Assets}: Reduces icon file sizes through optimizations.
+            \item \textbf{Simplifies Implementation}: Works with the custom \texttt{SvgIcon} component to standardize icon usage.
+        \end{itemize}
+        The website extensively uses icons for navigation, feature indicators, and visual communication of yoga poses.
+        \\
+        \hline
+    \end{tabular}
+    \caption{Asset and Media Management Modules}
+\end{table}
+
+\subsection{Development and Build Tooling}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{3.5cm}|p{10.8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Module} & \textbf{Implementation and Usage} \\
+        \hline
+        Tailwind CSS & 
+        Integrated using \texttt{@tailwindcss/vite} as a Vite plugin. Tailwind CSS is used throughout the application for:
+        \begin{itemize}
+            \item \textbf{Utility-First Styling}: All component styling uses Tailwind's utility classes.
+            \item \textbf{Responsive Design}: Viewport-based responsive layouts using Tailwind's breakpoint system.
+            \item \textbf{Theming}: Custom color palette and typography configuration to match yoga studio branding.
+        \end{itemize}
+        Tailwind significantly accelerated UI development by eliminating the need for custom CSS in most cases.
+        \\
+        \hline
+        Nuxt ESLint & 
+        Implemented via \texttt{@nuxt/eslint} to ensure code quality and consistency. The module provides:
+        \begin{itemize}
+            \item \textbf{Nuxt-Specific Rules}: Enforcing best practices specific to Nuxt applications.
+            \item \textbf{TypeScript Integration}: Enhanced linting for typed code, reducing potential errors.
+            \item \textbf{Consistent Code Style}: Enforcing style guidelines across the codebase.
+        \end{itemize}
+        ESLint configurations are extended with TypeScript-specific rules to ensure type safety in the codebase.
+        \\
+        \hline
+    \end{tabular}
+    \caption{Development and Build Tooling Modules}
+\end{table}
+
+\subsection{User Interface Enhancement}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{3.5cm}|p{10.8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Module} & \textbf{Implementation and Usage} \\
+        \hline
+        Nuxt UI & 
+        Utilized through \texttt{@nuxt/ui} to provide a foundation of accessible, pre-styled components. This module:
+        \begin{itemize}
+            \item \textbf{Extends Component Library}: Provides base components that are extended with custom styling.
+            \item \textbf{Ensures Accessibility}: Built-in accessibility features like proper ARIA attributes.
+            \item \textbf{Integrates with Tailwind}: Seamlessly works with Tailwind for custom styling.
+        \end{itemize}
+        While many components are custom-built, Nuxt UI provides a foundation for common UI elements and interactions.
+        \\
+        \hline
+        Nuxt Fonts & 
+        Integrated via \texttt{@nuxt/fonts} to manage web fonts throughout the application. The module:
+        \begin{itemize}
+            \item \textbf{Optimizes Font Loading}: Implements best practices for font loading performance.
+            \item \textbf{Manages Font Files}: Handles font file formats and browser compatibility.
+            \item \textbf{Implements Font Display Strategies}: Controls font rendering behavior.
+        \end{itemize}
+        Typography is an essential element of the yoga studio's visual identity, and this module ensures consistent, performant font rendering.
+        \\
+        \hline
+    \end{tabular}
+    \caption{UI Enhancement Modules}
+\end{table}
+
+The integration of these extra modules significantly enhances the application's capabilities beyond what's available in the core frameworks. Each module was selected to address specific requirements of the yoga studio website, from content management to visual presentation to backend integration, creating a cohesive and performant user experience.
+
 \section{External Libraries}
 % List and describe external libraries used in the project.
+
+The LotusHaven project leverages several external libraries and frameworks to enhance development efficiency, application performance, and user experience. These dependencies provide crucial functionality ranging from core framework capabilities to specialized UI components and development tools.
+
+\subsection{Core Framework and Runtime}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{3.5cm}|p{10.8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Library} & \textbf{Description} \\
+        \hline
+        Nuxt (v3.16.2) & Meta-framework for Vue.js that provides server-side rendering, automatic code splitting, static site generation, and other performance optimizations. Serves as the foundation of the application architecture. \\
+        \hline
+        Vue (v3.5.13) & Progressive JavaScript framework for building user interfaces, featuring a component-based architecture, reactive data binding, and compositional API. All UI components in the project are built with Vue. \\
+        \hline
+        Vue Router (v4.5.0) & Official router for Vue.js applications, providing navigation capabilities and dynamic route matching. Handles all client-side navigation between pages. \\
+        \hline
+    \end{tabular}
+    \caption{Core Framework Libraries}
+\end{table}
+
+\subsection{Nuxt Ecosystem}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{3.5cm}|p{10.8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Library} & \textbf{Description} \\
+        \hline
+        @nuxt/content (v3.4.0) & File-based CMS for Nuxt that allows reading and displaying content from Markdown, JSON, YAML and CSV files. Used for managing static content such as yoga descriptions and studio information. \\
+        \hline
+        @nuxt/image (v1.10.0) & Image optimization and transformation module for Nuxt applications. Provides responsive images, automatic optimization, and format conversion for improved performance and user experience. \\
+        \hline
+        @nuxt/ui (v3.0.2) & UI component library for Nuxt that provides pre-built accessible components. Offers a foundation for consistent styling and interactions. \\
+        \hline
+        @nuxt/fonts (v0.11.1) & Font management module for Nuxt applications, handling font loading optimization and configuration. \\
+        \hline
+        @nuxt/icon (v1.12.0) & Icon management module simplifying the use of SVG icons throughout the application. \\
+        \hline 
+        @nuxtjs/supabase (v1.5.0) & Official Supabase integration for Nuxt, providing simplified access to authentication, database, and storage features. Manages the connection to backend services. \\
+        \hline
+        @unhead/vue (v2.0.7) & Head management for Vue and Nuxt applications, allowing control of document \texttt{<head>} metadata for SEO optimization. \\
+        \hline
+    \end{tabular}
+    \caption{Nuxt Ecosystem Libraries}
+\end{table}
+
+\subsection{Development and Styling Tools}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{3.5cm}|p{10.8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Library} & \textbf{Description} \\
+        \hline
+        TypeScript (v5.8.3) & Superset of JavaScript that adds static types, enhancing code quality, developer experience, and maintainability. Used throughout the project for type safety. \\
+        \hline
+        Tailwind CSS (v4.1.4) & Utility-first CSS framework for rapid UI development. Provides low-level utility classes for building custom designs without leaving the HTML. Powers the site's responsive design and styling system. \\
+        \hline
+        @tailwindcss/vite (v4.1.4) & Vite plugin for Tailwind CSS, enabling efficient compilation and hot module replacement during development. \\
+        \hline
+        ESLint (v9.24.0) & Static code analysis tool for identifying problematic patterns in JavaScript and TypeScript code. Ensures code quality and consistency. \\
+        \hline
+        @nuxt/test-utils (v3.17.2) & Testing utilities for Nuxt applications, providing tools for unit and integration testing. \\
+        \hline
+    \end{tabular}
+    \caption{Development and Styling Tools}
+\end{table}
+
+\subsection{Utility Libraries}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.2} 
+    \begin{tabular}{|p{3.5cm}|p{10.8cm}|}
+        \hline
+        \rowcolor{bluepoli!20}
+        \textbf{Library} & \textbf{Description} \\
+        \hline
+        cookie (v0.7.2) & Basic cookie parsing and serialization library for handling client-side cookies. Used for managing user preferences and session data. \\
+        \hline
+    \end{tabular}
+    \caption{Utility Libraries}
+\end{table}
+
+The combination of these libraries creates a robust development environment that prioritizes performance, developer experience, and maintainability. The selection reflects modern web development best practices, with a focus on type safety (TypeScript), component-based architecture (Vue), server-side rendering (Nuxt), and utility-based styling (Tailwind CSS).
