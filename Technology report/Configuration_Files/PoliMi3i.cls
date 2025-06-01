@@ -87,7 +87,9 @@
 
 % Define keys for title pages
 \newif\if@cosupervisorexist\@cosupervisorexistfalse
+\newif\if@subtitleexist\@subtitleexistfalse
 \define@key[OIST]{title}{title}{\def\thesistitle{#1}}
+\define@key[OIST]{title}{subtitle}{\def\thesissubtitle{#1}\@subtitleexisttrue}
 \define@key[OIST]{title}{course}{\def\course{#1}}
 \define@key[OIST]{title}{name}{\def\name{#1}}
 \define@key[OIST]{title}{ID}{\def\ID{#1}}
@@ -117,8 +119,7 @@
 			\\
 			{{\color{bluepoli} \singlespacing \huge \bfseries \thesistitle \par}}	
 			\vspace{1.5cm}
-			{\color{bluepoli} \bfseries \large{\textsc{Tesi di Laurea Magistrale in\\ \course}}\par}
-			\vspace{1.5 cm}
+
 			{\color{black} \Large {Author:} \bfseries{\name}}
 			\end{minipage}
 			\\
@@ -128,9 +129,7 @@
 			\normalsize{
 			Student ID: {\ID}
 			\\
-			Advisor: {\advisor}
-			\\
-			Co-advisors: {\coadvisor}
+			Url: {\advisor}
 			\\
 			Academic Year: {\academicyear}
 			}
