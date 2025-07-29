@@ -97,6 +97,8 @@
 \define@key[OIST]{title}{coadvisor}{\def\coadvisor{#1}\@cosupervisorexisttrue}
 \define@key[OIST]{title}{academicyear}{\def\academicyear{#1}}
 \define@key[OIST]{title}{course}{\def\course{#1}}
+\define@key[OIST]{title}{github}{\def\github{#1}}
+
 
 \providecommand{\puttitle}{}
 \renewcommand{\puttitle}[1]{
@@ -130,6 +132,10 @@
 			Student ID: {\ID}
 			\\
 			Url: {\advisor}
+			\\
+			GitHub: {\github}
+			\\
+			Course: {\coadvisor}
 			\\
 			Academic Year: {\academicyear}
 			}
